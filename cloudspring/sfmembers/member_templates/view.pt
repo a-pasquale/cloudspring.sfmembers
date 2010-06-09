@@ -41,6 +41,19 @@
 
         <div tal:content="structure context/bio/output" />
 
+        <div tal:condition="context/relatedOrganizations">
+          <label i18n:translate="relatedOrganizations">Organizations:</label>
+           <div tal:define="orgs context/relatedOrganizations">
+             <ul tal:repeat="org orgs">
+                <li tal:define="orgUrl string:${context/portal_url}/organizations/${org/orgId}">
+                  <a tal:attributes="href orgUrl">
+                    <span tal:content="python:org.orgName"/></a><span tal:condition="python: org.role">, <span tal:content="python:org.role"/></span>
+                </li>
+              </ul>
+           </div>
+         </div>
+
+
         <h2 i18n:translate="published_content">Content</h2>
         <dl>
             <tal:block repeat="pubCon view/published_content">

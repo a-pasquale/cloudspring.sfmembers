@@ -32,6 +32,19 @@
 
         <div tal:content="structure context/detailedDescription/output" />
 
+        <div tal:condition="context/relatedMembers">
+          <label i18n:translate="relatedMembers">Members:</label>
+ 	   <div tal:define="members context/relatedMembers">
+ 	     <ul tal:repeat="member members">
+                <li tal:define="memberUrl string:${context/portal_url}/members/${member/memberId}">
+                  <img height="60px" tal:attributes="src string: ${memberUrl}/@@download/picture"/>
+                  <a tal:attributes="href memberUrl">
+                    <span tal:content="python:member.memberName"/></a><span tal:condition="python: member.role">, <span tal:content="python:member.role"/></span>
+                </li>
+              </ul>
+           </div>
+         </div>
+
         <div tal:replace="structure provider:plone.belowcontentbody" />
 
     </tal:main-macro>

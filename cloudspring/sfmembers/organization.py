@@ -5,10 +5,52 @@ from plone.directives import form, dexterity
 
 from plone.app.textfield import RichText
 
+from zope.interface import Interface
+from zope.interface import implements
+from zope.component import adapts
+from z3c.form.interfaces import IObjectFactory
+
 from Acquisition import aq_inner
 from Products.CMFCore.utils import getToolByName
 
 from cloudspring.sfmembers import _
+from cloudspring.sfmembers.member import IMember
+
+
+class IOrgMembers(Interface):
+
+    memberId = schema.TextLine(
+             title = _(u"Member ID"),
+             required = True)
+  
+    memberName = schema.TextLine(
+             title = _(u"Member Name"),
+             required = True)
+  
+    role = schema.TextLine(
+        title = _(u"Role"),
+        required = False)
+
+
+class OrgMembers(object):
+     implements(IOrgMembers)
+
+     def __init__(self, value):
+         self.memberId=value["memberId"]
+         self.memberName=value["memberName"]
+         self.role=value["role"]
+
+
+class OrgMembersFactory(object):
+     adapts(Interface, Interface, Interface, Interface)
+     implements(IObjectFactory)
+
+     def __init__(self, context, request, form, widget):
+         pass
+
+     def __call__(self, value):
+         return OrgMembers(value)
+
 
 class IOrganization(form.Schema):
     """A Salesforce Account representing a organization in Plone.
@@ -27,6 +69,15 @@ class IOrganization(form.Schema):
             title=_(u"Detailed description of the organization"),
             required=False
         )
+
+    relatedMembers = schema.List(
+        title =_(u'relatedMembers'),
+        description = _(u"Members of this organization"),
+        required = False,
+        value_type=schema.Object(
+            title=_(u"Member"),
+            schema=IOrgMembers),
+     )
 
 class View(grok.View):
     grok.context(IOrganization)
