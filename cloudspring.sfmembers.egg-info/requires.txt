@@ -1,1 +1,4 @@
 setuptools
+Plone
+plone.app.dexterity
+collective.autopermission

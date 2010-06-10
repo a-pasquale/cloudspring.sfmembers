@@ -2,13 +2,12 @@ Metadata-Version: 1.0
 Name: cloudspring.sfmembers
 Version: 1.0
 Summary: A project to synchronize SalesForce accounts and contacts with Plone.
-Home-page: http://svn.plone.org/svn/collective/
-Author: UNKNOWN
-Author-email: UNKNOWN
+Home-page: https://cloudspring.svn.beanstalkapp.com/cloudspring_sfmembers/
+Author: Andrew Pasquale
+Author-email: andrew@elytra.net
 License: GPL
 Description: Introduction
         ============
-        
         
         
         Changelog
