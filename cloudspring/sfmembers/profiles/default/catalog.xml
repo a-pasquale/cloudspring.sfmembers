@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<object name="portal_catalog">
+    <index name="sf_id" meta_type="FieldIndex">
+        <indexed_attr value="sf_id"/>
+    </index>
+    <column value="sf_id"/>
+</object>
