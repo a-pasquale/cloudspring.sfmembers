@@ -30,7 +30,8 @@
 
         <div tal:replace="structure provider:plone.abovecontentbody" />
 
-        <div tal:content="structure context/detailedDescription/output" />
+        <div tal:condition="context/detailedDescription"
+             tal:content="structure context/detailedDescription/output" />
 
         <div tal:condition="context/relatedMembers">
           <label i18n:translate="relatedMembers">Members:</label>
