@@ -39,7 +39,8 @@
                 />
         </div>
 
-        <div tal:content="structure context/bio/output" />
+        <div tal:condition="context/bio"
+             tal:content="structure context/bio/output" />
 
         <div tal:condition="context/relatedOrganizations">
           <label i18n:translate="relatedOrganizations">Organizations:</label>
