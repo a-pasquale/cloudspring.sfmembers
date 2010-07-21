@@ -2,6 +2,7 @@ from five import grok
 from zope import schema
 
 from plone.directives import form, dexterity
+from rwproperty import getproperty, setproperty
 
 from plone.app.textfield import RichText
 from plone.namedfile.field import NamedImage
@@ -10,6 +11,8 @@ from zope.interface import Interface
 from zope.interface import implements
 from zope.component import adapts
 from z3c.form.interfaces import IObjectFactory
+
+from plone.dexterity.content import Item
 
 from Acquisition import aq_inner
 from Products.CMFCore.utils import getToolByName
@@ -56,19 +59,33 @@ class IMember(form.Schema):
     """A Salesforce Contact representing a member in Plone.
     """
     
-    title = schema.TextLine(
-            title=_(u"Name"),
-        )
+    sf_id = schema.TextLine(
+        title=_(u"Salesforce ID"),
+    )
     
+    firstName = schema.TextLine(
+        title=_(u"First name"),
+    )
+
+    lastName = schema.TextLine(
+        title=_(u"Last name"),
+    )
+
+    name = schema.TextLine(
+        title=_(u"Full name"),
+        default=_(u"Full Name"),
+    )
+
     description = schema.Text(
-            title=_(u"A short summary"),
-        )
+        title=_(u"A short summary"),
+    )
     
     form.primary('bio')
     bio = RichText(
-            title=_(u"Bio"),
-            required=False
-        )
+        title=_(u"Bio"),
+        required=False
+    )
+
     form.primary('picture')
     picture = NamedImage(
             title=_(u"Picture"),
@@ -85,6 +102,20 @@ class IMember(form.Schema):
             schema=IMemberOrgs),
      )
 
+class Member(Item):
+    implements(IMember)
+
+    def __init__(self, context):
+        self.context = context
+
+    @getproperty
+    def name(self):
+        return self.name
+
+    @setproperty
+    def name(self, value):
+        self.context.name = value
+
 class View(grok.View):
     grok.context(IMember)
     grok.require('zope2.View')
@@ -96,5 +127,5 @@ class View(grok.View):
         context = aq_inner(self.context)
         catalog = getToolByName(context, 'portal_catalog')
         
-        return catalog(Creator=context.title,
+        return catalog(Creator=context.sf_id,
                        sort_order='sortable_title')
