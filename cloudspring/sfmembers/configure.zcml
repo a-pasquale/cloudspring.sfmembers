@@ -33,5 +33,13 @@
       class=".sfsync.UpdateMemberProfilesFromSalesforce"
       permission="zope2.View"
       />
+  <include package="plone.app.z3cform" />
+    <!-- Register the editProfile form -->
+    <browser:page
+        for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+        name="editProfile_form"
+        class=".editProfile.EditProfileView"
+        permission="zope2.View"
+        />
 
 </configure>
