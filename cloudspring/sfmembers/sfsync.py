@@ -72,7 +72,7 @@ class UpdateMemberProfilesFromSalesforce(BrowserView):
         try:
             directory = portal.unrestrictedTraverse(dir)
         except KeyError:
-            _createObjectByType('Large Plone Folder', portal, id=dir)
+            _createObjectByType('Folder', portal, id=dir)
             directory = getattr(portal, dir)
 
         return directory
