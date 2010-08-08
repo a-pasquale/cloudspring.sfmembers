@@ -130,11 +130,14 @@ class SFObject(object):
             self._load_data(query)
 
     def update(self, id=None, **kw):
+        logger.info("id = " + id)
+        logger.info("self._data['Id'] = " + self._data['Id'])
         if id is None:
             id = self._data['Id']
         rec = {
             'type': self._sObjectType,
-            'Id': id,
+            'sf_id__c': id,
+            'Id': 'apasquale',
         }
         for k, v in self._dirty.items():
             rec[self._py2sf[k]] = v

@@ -1,0 +1,3 @@
+<div id="profile">
+    <a tal:attributes="href view/url;" tal:content="view/name"/>
+</div>

@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<object>
+  <order manager="plone.belowcontenttitle" skinname="Cloudspring Community Theme" based-on="Plone Default">
+    <viewlet name="cloudspring.profile" />
+  </order>
+  <hidden manager="plone.belowcontenttitle" skinname="Cloudspring Community Theme">
+    <viewlet name="plone.belowcontenttitle.documentbyline" />
+  </hidden>
+</object>
+

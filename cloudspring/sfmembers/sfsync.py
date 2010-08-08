@@ -39,10 +39,9 @@ MEMBER_FIELDS_TO_FETCH = (
     'Name',
     'FirstName',
     'LastName',
-    'Biography__c',
     '(SELECT aff.npe5__Organization__r.Name, aff.npe5__Role__c FROM Contact.npe5__Affiliations__r aff)',
     )
-MEMBER_DIRECTORY_ID = 'members'
+MEMBER_DIRECTORY_ID = 'Members'
 MEMBER_PORTAL_TYPE = 'cloudspring.sfmembers.member'
 
 ORG_SOBJECT_TYPE = 'Account'
@@ -65,15 +64,16 @@ class UpdateMemberProfilesFromSalesforce(BrowserView):
         self.wftool = getToolByName(self.context, 'portal_workflow')
         self.normalizer = getUtility(IIDNormalizer)
 
-    def getDirectoryFolder(self, dir):
+    def getDirectoryFolder(self, dir, id):
         portal = getToolByName(self.context, 'portal_url').getPortalObject()
-
         # create the directory folder if it doesn't exist yet
         try:
-            directory = portal.unrestrictedTraverse(dir)
+            directory = portal.unrestrictedTraverse(id)
         except KeyError:
-            _createObjectByType('Folder', portal, id=dir)
-            directory = getattr(portal, dir)
+            dir = portal.unrestrictedTraverse(dir)
+            dir.invokeFactory("Folder", id)
+            #_createObjectByType('Folder', portal, id=dir)
+            directory = getattr(dir, id)
 
         return directory
 
@@ -88,11 +88,35 @@ class UpdateMemberProfilesFromSalesforce(BrowserView):
             # didn't match sf_id or UID: create new profile
             #name = safe_unicode(name)
             #profile_id = self.normalizer.normalize(name)
-            directory = self.getDirectoryFolder(MEMBER_DIRECTORY_ID)
-            profile_id = directory.invokeFactory(MEMBER_PORTAL_TYPE, sf_id)
+            directory = self.getDirectoryFolder(MEMBER_DIRECTORY_ID, sf_id)
+            dir = getattr(self.context, sf_id)
+            
+            # Change ownership and give local roles to member folder
+            acl_users = getToolByName(self, "acl_users")
+            user = acl_users.getUserById(sf_id)
+            dir.changeOwnership(user)
+            dir.__ac_local_roles__ = None
+            dir.manage_setLocalRoles(sf_id, ['Owner'])
+
+            # Change the title to the members fullname.
+            dir.setTitle(name)
+
+            # Default view should be the blog view.
+            dir.setLayout("blog-view")
+            blog_field = dir.getField('blog_folder')
+            if blog_field:
+                blog_field.set(dir, True)
+
+            dir.reindexObject(idxs=['Title'])
+
+            # Create the member profile object.
+            profile_id = directory.invokeFactory(MEMBER_PORTAL_TYPE, "profile")
             profile = getattr(directory, profile_id)
             profile.setTitle(name)
+            # Hide the profile from navigation.
+            profile.setExcludeFromNav(True)
             profile.reindexObject(idxs=['Title'])
+
             logger.info('Creating %s' % '/'.join(profile.getPhysicalPath()))
 
         return profile
@@ -104,7 +128,7 @@ class UpdateMemberProfilesFromSalesforce(BrowserView):
         profile.name = data.Name
         profile.firstName = data.FirstName
         profile.lastName = data.LastName
-        profile.bio = RichTextValue(data.Biography__c, 'text/structured', 'text/html')
+        #profile.bio = RichTextValue(data.Biography__c, 'text/structured', 'text/html')
         organizations = []
         orgs = data.npe5__Affiliations__r
         logger.info("about to go through orgs")
@@ -176,7 +200,9 @@ class UpdateMemberProfilesFromSalesforce(BrowserView):
             # didn't match sf_id or UID: create new profile
             name = safe_unicode(name)
             org_id = self.normalizer.normalize(name)
-            directory = self.getDirectoryFolder(ORG_DIRECTORY_ID)
+            portal_url = getToolByName(self.context, "portal_url")
+            portal = portal_url.getPortalObject()
+            directory = self.getDirectoryFolder(portal, ORG_DIRECTORY_ID)
             org_id = directory.invokeFactory(ORG_PORTAL_TYPE, org_id)
             org = getattr(directory, org_id)
             org.setTitle(name)

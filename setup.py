@@ -28,6 +28,7 @@ setup(name='cloudspring.sfmembers',
           'Plone',
           'plone.app.dexterity',
           'collective.autopermission',
+          'plone.app.z3cform',
           # -*- Extra requirements: -*-
       ],
       entry_points="""
