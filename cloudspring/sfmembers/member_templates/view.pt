@@ -12,6 +12,85 @@
             tal:define="navroot context/@@plone_portal_state/navigation_root_url"
             tal:attributes="href string:${navroot}/++resource++cloudspring.sfmembers/member.css"
             />
+<style>
+/* root element for tabs  */
+ul.tabs {
+	list-style:none; 
+	margin:0 !important; 
+	padding:0;	
+	border-bottom:1px solid #666;	
+	height:30px;
+}
+
+/* single tab */
+ul.tabs li { 
+	float:left;	 
+	text-indent:0;
+	padding:0;
+	margin:0 !important;
+	list-style-image:none !important; 
+}
+
+/* link inside the tab. uses a background image */
+ul.tabs a { 
+	background: url(/Plone/++resource++cloudspring.sfmembers/tabs.png) no-repeat -420px 0;
+	font-size:11px;
+	display:block;
+	height: 30px;  
+	line-height:30px;
+	width: 134px;
+	text-align:center;	
+	text-decoration:none;
+	color:#333;
+	padding:0px;
+	margin:0px;	
+	position:relative;
+	top:1px;
+}
+
+ul.tabs a:active {
+	outline:none;		
+}
+
+/* when mouse enters the tab move the background image */
+ul.tabs a:hover {
+	background-position: -420px -31px;	
+	color:#fff;	
+}
+
+/* active tab uses a class name "current". its highlight is also done by moving the background image. */
+ul.tabs a.current, ul.tabs a.current:hover, ul.tabs li.current a {
+	background-position: -420px -62px;		
+	cursor:default !important; 
+	color:#000 !important;
+}
+
+/* Different widths for tabs: use a class name: w1, w2, w3 or w2 */
+
+
+/* width 1 */
+ul.tabs a.s 			{ background-position: -553px 0; width:81px; }
+ul.tabs a.s:hover 	{ background-position: -553px -31px; }
+ul.tabs a.s.current  { background-position: -553px -62px; }
+
+/* width 2 */
+ul.tabs a.l 			{ background-position: -248px -0px; width:174px; }
+ul.tabs a.l:hover 	{ background-position: -248px -31px; }
+ul.tabs a.l.current  { background-position: -248px -62px; }
+
+
+/* width 3 */
+ul.tabs a.xl 			{ background-position: 0 -0px; width:248px; }
+ul.tabs a.xl:hover 	{ background-position: 0 -31px; }
+ul.tabs a.xl.current { background-position: 0 -62px; }
+
+
+/* initially all panes are hidden */ 
+.panes .pane {
+	display:none;		
+}
+
+</style>
     </metal:block>
 </head>
 
@@ -24,26 +103,196 @@
 
         <h1 class="documentFirstHeading" tal:content="context/title" />
         
-        <div tal:replace="structure provider:plone.belowcontenttitle" />
-
-        <p class="documentDescription" tal:content="context/description" />
-
-        <div tal:replace="structure provider:plone.abovecontentbody" />
-
         <div tal:define="picture nocall:context/picture"
              tal:condition="nocall:picture"
-             class="member-image">
-            <img tal:attributes="src string:${context/absolute_url}/@@download/picture/${picture/filename};
-                                 height picture/_height | nothing;
-                                 width picture/_width | nothing;"
-                />
+             class="picture">
+            <img tal:define="scales context/@@images"
+                 tal:replace="structure python:scales.scale('picture',width=100,height=100,direction='keep').tag()"/>
         </div>
 
-        <div tal:condition="context/bio"
-             tal:content="structure context/bio/output" />
+        <div class="academic_info">
+          <div class="masters_program" tal:condition="context/masters_program">
+            <h3>Master's Program</h3>
+            <span tal:content="context/masters_program"/>
+          </div>
+          <div class="academic_interests" tal:condition="context/academic_interests">
+            <h3>Academic Interests</h3>
+            <span tal:repeat="interest context/academic_interests">
+              <span tal:content="interest"/><span tal:condition="not:repeat/interest/end">,</span>
+            </span>
+          </div>
+        </div>
+
+        <div class="contact_info">
+          <h3>Contact Information</h3>
+          <div class="phone" tal:condition="context/home_phone">
+            Home Phone:
+            <span tal:content="context/home_phone"/>
+          </div>
+
+          <div class="phone" tal:condition="context/cell_phone">
+            Cell Phone:
+            <span tal:content="context/cell_phone"/>
+          </div>
+
+          <div class="email" tal:condition="context/email">
+            Email:
+            <a tal:attributes="href string:mailto:${context/email}"  tal:content="context/email"/>
+          </div>
+
+          <div class="facebook" tal:condition="context/facebook">
+            <img tal:define="navroot context/@@plone_portal_state/navigation_root_url"
+                 tal:attributes="src string:${navroot}/++resource++cloudspring.sfmembers/fb.png"/> 
+            <a tal:attributes="href context/facebook">
+              <span>Visit me on Facebook</span>
+            </a>
+          </div>
+
+          <div class="twitter" tal:condition="context/twitter">
+            <img tal:define="navroot context/@@plone_portal_state/navigation_root_url"
+                 tal:attributes="src string:${navroot}/++resource++cloudspring.sfmembers/twitter.png"/> 
+            <a tal:attributes="href context/twitter">
+              <span>Follow me on twitter</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="address_info">
+          <div class="address">
+            <h3>Current Address</h3>
+            <span tal:content="context/current_street"/><br/>
+            <span tal:content="context/current_city"/>,
+            <span tal:content="context/current_state"/>
+            <span tal:content="context/current_postal_code"/>
+          </div>
+
+          <div class="address">
+            <h3>Home Address</h3>
+            <span tal:condition="context/home_city" tal:content="string:${context/home_city},"/>
+            <span tal:condition="context/home_state" tal:content="context/home_state"/><br/>
+            <span tal:condition="context/home_country" tal:content="context/home_country"/>
+          </div>
+        </div>
+
+        <br clear="both"/>
+
+        <ul class="tabs">
+          <li><a class="l" href="#cv">Curriculum Vitae</a></li>
+          <li><a class="xl" href="#purpose">Statement of Purpose</a></li>
+          <li><a class="s" href="#bio">Bio</a></li>
+        </ul>
+      
+        <div class="panes">
+        <div>
+          
+          <span tal:condition="context/education">
+            <h3>Education</h3>
+            <span tal:content="structure context/education/output" />
+          </span>
+          <span tal:condition="context/honors">
+            <h3>Honors and Awards</h3>
+            <span tal:content="structure context/honors/output" />
+          </span>
+          <span tal:condition="context/fellowships">
+            <h3>Fellowships and Grants</h3>
+            <span tal:content="structure context/fellowships/output" />
+          </span>
+          <span tal:condition="context/research">
+            <h3>Research Experience</h3>
+            <span tal:content="structure context/research/output" />
+          </span>
+          <span tal:condition="context/training">
+            <h3>Training Development and Mentoring Experience</h3>
+            <span tal:content="structure context/training/output" />
+          </span>
+          <span tal:condition="context/presentations">
+            <h3>Presentations</h3>
+            <span tal:content="structure context/presentations/output" />
+          </span>
+          <span tal:condition="context/publications">
+            <h3>Other Publications and Dissemination</h3>
+            <span tal:content="structure context/publications/output" />
+          </span>
+          <span tal:condition="context/collaborations">
+            <h3>Collaborating Researchers and Institutions</h3>
+            <span tal:content="structure context/collaborations/output" />
+          </span>
+          <span tal:condition="context/affiliations">
+            <h3>Professional Memberships and Affiliations</h3>
+            <span tal:content="structure context/affiliations/output" />
+          </span>
+          <span tal:condition="context/skills">
+            <h3>Skills</h3>
+            <span tal:content="structure context/skills/output" />
+          </span>
+        </div>
+
+        <div>
+          <span tal:condition="context/contributions_within_discipline">
+            <h3>Contributions within Discipline</h3>
+            <span tal:content="structure context/contributions_within_discipline/output" />
+          </span>
+          <span tal:condition="context/contributions_to_other_disciplines">
+            <h3>Contributions to other Disciplines</h3>
+            <span tal:content="structure context/contributions_to_other_disciplines/output" />
+          </span>
+          <span tal:condition="context/contributions_to_hr">
+            <h3>Contributions to Human Resource Development</h3>
+            <span tal:content="structure context/contributions_to_hr/output" />
+          </span>
+          <span tal:condition="context/contributions_to_resources">
+            <h3>Contributions to Resources for Research and Education</h3>
+            <span tal:content="structure context/contributions_to_resources/output" />
+          </span>
+          <span tal:condition="context/contributions_beyond">
+            <h3>Contributions beyond Science and Engineering</h3>
+            <span tal:content="structure context/contributions_beyond/output" />
+          </span>
+          <span tal:condition="context/aspirations">
+            <h3>Future Goals, Research Interests and Aspirations</h3>
+            <span tal:content="structure context/aspirations/output" />
+          </span>
+        </div>
+         
+        <div>
+        <span tal:condition="context/favorite_quote">
+          <h3>Favorite Quote</h3>
+          <span tal:content="structure context/favorite_quote/output"/>
+        </span>
+
+        <span tal:condition="context/personal_interests">
+          <h3>Personal Interests</h3>
+          <span tal:content="structure context/personal_interests/output"/>
+        </span>
+        </div>
+
+
+	<style>
+	
+/* tab pane styling */
+.panes div {
+	display:none;		
+	padding:15px 10px;
+	border:1px solid #999;
+	border-top:0;
+}
+
+	</style>
+
+<xsl:text disable-output-escaping="yes">
+<!-- This JavaScript snippet activates the tabs -->
+<script>
+
+// perform JavaScript after the document is scriptable.
+$(function() {
+	// setup ul.tabs to work as tabs for each div directly under div.panes
+	$("ul.tabs").tabs("div.panes > div");
+});
+</script>
+</xsl:text>
 
         <div tal:condition="context/relatedOrganizations">
-          <label i18n:translate="relatedOrganizations">Organizations:</label>
+          <h3 i18n:translate="relatedOrganizations">Group Affiliations:</h3>
            <div tal:define="orgs context/relatedOrganizations">
              <ul tal:repeat="org orgs">
                 <li tal:define="orgUrl string:${context/portal_url}/organizations/${org/orgId}">
@@ -55,7 +304,7 @@
          </div>
 
 
-        <h2 i18n:translate="published_content">Content</h2>
+        <h3 i18n:translate="published_content">Content</h3>
         <dl>
             <tal:block repeat="pubCon view/published_content">
                 <dt>

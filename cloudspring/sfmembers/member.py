@@ -60,31 +60,184 @@ class IMember(form.Schema):
     """
     
     sf_id = schema.TextLine(
-        title=_(u"Salesforce ID"),
-    )
+            title=_(u"Salesforce ID"),
+        )
     
     firstName = schema.TextLine(
-        title=_(u"First name"),
-    )
+            title=_(u"First name"),
+        )
 
     lastName = schema.TextLine(
-        title=_(u"Last name"),
-    )
+            title=_(u"Last name"),
+        )
 
     name = schema.TextLine(
-        title=_(u"Full name"),
-        default=_(u"Full Name"),
-    )
+            title=_(u"Full name"),
+            default=_(u"Full Name"),
+        )
 
-    description = schema.Text(
-        title=_(u"A short summary"),
-    )
+    current_street = schema.TextLine(
+            title=_(u"Street"),
+        )
+
+    current_city = schema.TextLine(
+            title=_(u"City"),
+        )
+
+    current_state = schema.TextLine(
+            title=_(u"State")
+        )
+
+    current_postal_code = schema.TextLine(
+            title=_(u"Postal Code")
+        )
+
+    current_country = schema.TextLine(
+            title=_(u"Country")
+        )
+     
+    home_city = schema.TextLine(
+            title=_(u"Hometown"),
+            required=False
+        )
+
+    home_state = schema.TextLine(
+            title=_(u"Home State"),
+            required=False
+        )
+
+    home_country = schema.TextLine(
+            title=_(u"Country of origin"),
+            required=False
+        )
+     
+    home_phone = schema.TextLine(
+            title=_(u"Home Phone"),
+            required=False,
+        )
     
-    form.primary('bio')
-    bio = RichText(
-        title=_(u"Bio"),
-        required=False
-    )
+    cell_phone = schema.TextLine(
+            title=_(u"Cell Phone"),
+            required=False,
+        )
+
+
+    email = schema.TextLine(
+            title=_(u"Email"),
+            required=False,
+        )
+
+    facebook = schema.TextLine(
+            title=_(u"Facebook"),
+            required=False,
+        )
+
+    twitter = schema.TextLine(
+            title=_(u"Twitter"),
+            required=False,
+        )
+
+    masters_program = schema.Choice(
+            title=_(u"Master's Program"),
+            values=[_(u"Astronomy"), _(u"Biology"), _(u"Chemistry"), _(u"Physics"),],
+            required=False,
+        )
+
+    academic_interests = schema.List(
+            title=_(u"Academic Interests"),
+            value_type=schema.Choice(values=[_(u"Research"), _(u"Teaching"),]),
+            required=False,
+        )
+
+    education = RichText (
+            title=_(u"Education"),
+            required=False,
+        )
+
+    honors = RichText (
+            title=_(u"Honors and Awards"),
+            required=False,
+        )
+
+    fellowships = RichText (
+            title=_(u"Fellowships and Grants"),
+            required=False,
+        )
+
+    research = RichText (
+            title=_(u"Research Experience"),
+            required=False,
+        )
+
+    training = RichText (
+            title=_(u"Training, Development and Mentoring Experience"),
+            required=False,
+        )
+
+    presentations = RichText (
+           title=_(u"Presentations"),
+           required=False,
+        )
+
+    publications = RichText (
+           title=_(u"Other Publications and Dissemination"),
+           required=False,
+        )
+
+    collaborations = RichText (
+           title=_(u"Collaborating Researchers and Institutions"),
+           required=False,
+        )
+
+    affiliations = RichText (
+           title=_(u"Professional Memberships and Affiliations"),
+           required=False,
+        )
+
+    skills = RichText (
+           title=_(u"Skills"),
+           required=False,
+        )
+
+    contributions_within_discipline = RichText (
+           title=_(u"Contributions within Discipline"),
+           required=False,
+        )
+
+    contributions_to_other_disciplines = RichText (
+           title=_(u"Contributions to other Disciplines"),
+           required=False,
+        )
+
+    contributions_to_hr = RichText (
+           title=_(u"Contributions to Human Resource Development"),
+           required=False,
+        )
+
+    contributions_to_resources = RichText (
+           title=_(u"Contributions to Resources for Research and Education"),
+           required=False,
+        )
+
+    contributions_beyond = RichText (
+           title=_(u"Contributions beyond Science and Engineering"),
+           required=False,
+        )
+
+    aspirations = RichText(
+            title=_(u"Future Goals, Research Interests and Aspirations"),
+            required=False,
+        )
+
+    favorite_quote = RichText(
+            title=_(u"Favorite quote"),
+            required=False,
+        )
+
+    personal_interests = RichText(
+            title=_(u"Personal Interests"),
+            required=False,
+        )
 
     form.primary('picture')
     picture = NamedImage(
