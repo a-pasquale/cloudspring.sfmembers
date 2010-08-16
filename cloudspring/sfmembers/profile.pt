@@ -1,0 +1,34 @@
+<dl class="portlet portletProfilePortlet"
+    i18n:domain="cloudspring.sfmembers"
+    id="portlet-profile">
+
+<metal:block use-macro="here/global_defines/macros/defines" />
+
+    <dt class="portletHeader">
+        <span class="portletTopLeft"></span>
+        <a tal:attributes="href view/getUrl" 
+           tal:content="view/getName" />
+        <span class="portletTopRight"></span>
+    </dt>
+
+    <dd class="portletItem">
+      <div>
+        <img tal:attributes="src python:'%s/profile/@@images/picture' % view.getUrl(); height string:150; width string:150;" style="float:left">
+        <ul>
+          <li tal:condition="view/getProgram" tal:content="view/getProgram"/>
+          <li tal:condition="view/getEmail">
+            <a tal:attributes="href string:mailto:${view/getEmail}" 
+               tal:content="view/getEmail" /></li>
+          <li tal:condition="view/getFacebook">
+            <a tal:attributes="href view/getFacebook">Visit me on Facebook</a></li>
+          <li><a tal:attributes="href view/getUrl">My profile</a></li>
+          <br clear="both" />
+      </div>
+    </dd>
+
+    <dd class="portletFooter">
+        <span class="portletBottomLeft"></span>
+        <span class="portletBottomRight"></span>
+    </dd>
+
+</dl>
