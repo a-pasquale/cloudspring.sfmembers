@@ -41,7 +41,7 @@ MEMBER_FIELDS_TO_FETCH = (
     'LastName',
     '(SELECT aff.npe5__Organization__r.Name, aff.npe5__Role__c FROM Contact.npe5__Affiliations__r aff)',
     )
-MEMBER_DIRECTORY_ID = 'Members'
+MEMBER_DIRECTORY_ID = 'community'
 MEMBER_PORTAL_TYPE = 'cloudspring.sfmembers.member'
 
 ORG_SOBJECT_TYPE = 'Account'
@@ -66,14 +66,25 @@ class UpdateMemberProfilesFromSalesforce(BrowserView):
 
     def getDirectoryFolder(self, dir, id):
         portal = getToolByName(self.context, 'portal_url').getPortalObject()
-        # create the directory folder if it doesn't exist yet
+
+        # look for the global member folder
+        try:
+           member_dir = portal.unrestrictedTraverse(dir)
+        except KeyError:
+           # global member folder doesn't exist yet, so create it.
+           portal.invokeFactory("Folder", dir)
+           member_dir = getattr(portal, dir)
+           member_dir.setTitle('Community')
+           member_dir.reindexObject(idxs=['Title'])
+
+        # look for the member's folder
         try:
             directory = portal.unrestrictedTraverse(id)
         except KeyError:
-            dir = portal.unrestrictedTraverse(dir)
-            dir.invokeFactory("Folder", id)
-            #_createObjectByType('Folder', portal, id=dir)
-            directory = getattr(dir, id)
+            # member folder doesn't exist yet
+            # create the member folder in the global member directory.
+            member_dir.invokeFactory("Folder", id)
+            directory = getattr(member_dir, id)
 
         return directory
 
@@ -89,7 +100,7 @@ class UpdateMemberProfilesFromSalesforce(BrowserView):
             #name = safe_unicode(name)
             #profile_id = self.normalizer.normalize(name)
             directory = self.getDirectoryFolder(MEMBER_DIRECTORY_ID, sf_id)
-            dir = getattr(self.context, sf_id)
+            dir = getattr(directory, sf_id)
             
             # Change ownership and give local roles to member folder
             acl_users = getToolByName(self, "acl_users")
@@ -106,15 +117,27 @@ class UpdateMemberProfilesFromSalesforce(BrowserView):
             blog_field = dir.getField('blog_folder')
             if blog_field:
                 blog_field.set(dir, True)
-
+            
+            # publish and reindex
+            try:
+                logger.info("Publishing %s's folder" % name )
+                self.wftool.doActionFor(dir, 'publish')
+            except:
+                logger.info("Failed to publish %s's folder" % name)
+                pass
             dir.reindexObject(idxs=['Title'])
 
             # Create the member profile object.
             profile_id = directory.invokeFactory(MEMBER_PORTAL_TYPE, "profile")
             profile = getattr(directory, profile_id)
-            profile.setTitle(name)
+            profile.setTitle("profile")
             # Hide the profile from navigation.
             profile.setExcludeFromNav(True)
+            # Change ownership and give local roles to member profile
+            profile.changeOwnership(user)
+            profile.__ac_local_roles__ = None
+            profile.manage_setLocalRoles(sf_id, ['Owner'])
+
             profile.reindexObject(idxs=['Title'])
 
             logger.info('Creating %s' % '/'.join(profile.getPhysicalPath()))
@@ -288,9 +311,9 @@ class UpdateMemberProfilesFromSalesforce(BrowserView):
         #for sf_id in sf_ids_not_found:
         #    logger.info("Hiding " + sf_id)
         #    self.hideProfileBySfId(sf_id)
-        for i, data in enumerate(queryOrgs(self)):
-            logger.info('i = ' + str(i) + " Name = " + data.Name)
-            org = self.findOrCreateOrgByName(name = data.Name)
-            logger.info("org.Title: " + org.title)
-            self.updateOrg(org, data)
+        #for i, data in enumerate(queryOrgs(self)):
+        #    logger.info('i = ' + str(i) + " Name = " + data.Name)
+        #    org = self.findOrCreateOrgByName(name = data.Name)
+        #    logger.info("org.Title: " + org.title)
+        #    self.updateOrg(org, data)
 
