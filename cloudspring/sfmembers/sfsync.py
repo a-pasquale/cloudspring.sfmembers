@@ -78,13 +78,12 @@ class UpdateMemberProfilesFromSalesforce(BrowserView):
            member_dir.reindexObject(idxs=['Title'])
 
         # look for the member's folder
-        try:
-            directory = portal.unrestrictedTraverse(id)
-        except KeyError:
-            # member folder doesn't exist yet
-            # create the member folder in the global member directory.
-            member_dir.invokeFactory("Folder", id)
-            directory = getattr(member_dir, id)
+        try: 
+            directory = member_dir.unrestrictedTraverse(id)
+        except:
+             member_dir.invokeFactory("Folder", id)
+
+        directory = getattr(member_dir, id)
 
         return directory
 
@@ -127,9 +126,13 @@ class UpdateMemberProfilesFromSalesforce(BrowserView):
                 pass
             dir.reindexObject(idxs=['Title'])
 
-            # Create the member profile object.
-            profile_id = directory.invokeFactory(MEMBER_PORTAL_TYPE, "profile")
-            profile = getattr(directory, profile_id)
+            try: 
+                profile = getattr(dir, "profile")
+            except:
+                # Create the member profile object.
+                profile_id = dir.invokeFactory(MEMBER_PORTAL_TYPE, "profile")
+                profile = getattr(dir, profile_id)
+            
             profile.setTitle("profile")
             # Hide the profile from navigation.
             profile.setExcludeFromNav(True)
