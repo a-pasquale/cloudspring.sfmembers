@@ -3,25 +3,56 @@
     id="portlet-profile">
 
 <metal:block use-macro="here/global_defines/macros/defines" />
+<div tal:condition="python: not context.id == 'community'"> 
+        <link rel="stylesheet" type="text/css" 
+            tal:define="navroot context/@@plone_portal_state/navigation_root_url"
+            tal:attributes="href string:${navroot}/++resource++cloudspring.sfmembers/member.css"
+            />
 
     <dt class="portletHeader">
         <span class="portletTopLeft"></span>
-        <a tal:attributes="href view/getUrl" 
-           tal:content="view/getName" />
+        <div class="_overlay">
+        <a tal:attributes="href view/getUrl">
+           <h2 tal:content="view/getName" />
+        </a>
+        </div>
         <span class="portletTopRight"></span>
     </dt>
 
     <dd class="portletItem">
       <div>
-        <img tal:attributes="src python:'%s/profile/@@images/picture' % view.getUrl(); height string:150; width string:150;" style="float:left">
-        <ul>
-          <li tal:condition="view/getProgram" tal:content="view/getProgram"/>
-          <li tal:condition="view/getEmail">
-            <a tal:attributes="href string:mailto:${view/getEmail}" 
-               tal:content="view/getEmail" /></li>
-          <li tal:condition="view/getFacebook">
-            <a tal:attributes="href view/getFacebook">Visit me on Facebook</a></li>
-          <li><a tal:attributes="href view/getUrl">My profile</a></li>
+        <a rel="profilePicture" tal:attributes="href string:${view/getUrl}/@@images/picture/large" title="View Profile Picture">
+          <img tal:attributes="src python:'%s/profile/@@images/picture/mini' % view.getUrl(); ">
+        </a>
+
+        <div id="accordion">
+
+          <h3 class="current">Academic Info</h3>
+          <div class="pane" style="display:block">
+            <ul>
+            <li tal:condition="view/getDiscipline" tal:content="view/getDiscipline"/>
+            <li>
+              <div class="_overlay">
+                <a tal:attributes="href view/getUrl" title="Curriculum Vitae">Curriculum Vitae</a>
+              </div>
+            </li>
+          </div>
+
+          <h3>Contact</h3>
+          <div class="pane">
+            <div tal:condition="view/getHomePhone" tal:content="string:Home Phone: ${view/getHomePhone}"></div>
+            <div tal:condition="view/getCellPhone" tal:content="string:Cell Phone: ${view/getCellPhone}"></div>
+            <div>
+              <a tal:condition="view/getFacebook" 
+                 tal:attributes="href view/getFacebook">Visit me on Facebook</a>
+            </div>
+            <div>
+              <a tal:condition="view/getTwitter" 
+                 tal:attributes="href view/getTwitter">Follow me on Twitter</a>
+            </div>
+          </div>
+        </div>
+
           <br clear="both" />
       </div>
     </dd>
@@ -30,5 +61,5 @@
         <span class="portletBottomLeft"></span>
         <span class="portletBottomRight"></span>
     </dd>
-
+</div>
 </dl>
