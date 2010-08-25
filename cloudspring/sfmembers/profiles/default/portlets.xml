@@ -4,9 +4,17 @@
  <!-- Portlet type registrations -->
 
  <portlet
+   name="cloudspring.sfmembers.ProfilePortlet"
    addview="cloudspring.sfmembers.ProfilePortlet"
    title="Profile Portlet"
    description="A portlet that displays member profiles"
    />
+
+  <assignment
+    type="cloudspring.sfmembers.ProfilePortlet"
+    manager="plone.leftcolumn"
+    category="context"
+    key="/community">
+  </assignment>
 
 </portlets>
