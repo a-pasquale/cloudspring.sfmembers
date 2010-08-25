@@ -15,15 +15,6 @@ from Products.CMFPlone import PloneMessageFactory as _
 class Assignment(base.Assignment):
     implements(IProfilePortlet)
 
-    def __init__(self, context):
-       sf_id = context.getId()
-       catalog = getToolByName(context, 'portal_catalog')
-       results = catalog(id=sf_id)
-
-       for member in results:
-           self.name = member.Title
-           self.url = "%s/profile" % member.getURL()
-
     @property
     def title(self):
         return _(u"Profile Portlet")
@@ -61,9 +52,9 @@ class Renderer(base.Renderer):
         member = self._member()
         return member.name
 
-    def getProgram(self):
+    def getDiscipline(self):
         member = self._member()
-        return member.masters_program
+        return member.discipline
 
     def getEmail(self):
         member = self._member()
@@ -72,6 +63,18 @@ class Renderer(base.Renderer):
     def getFacebook(self):
         member = self._member()
         return member.facebook
+
+    def getHomePhone(self):
+        member = self._member()
+        return member.home_phone
+
+    def getCellPhone(self):
+        member = self._member()
+        return member.cell_phone
+
+    def getTwitter(self):
+        member = self._member()
+        return member.twitter
 
     def render(self):
         return self._template()
