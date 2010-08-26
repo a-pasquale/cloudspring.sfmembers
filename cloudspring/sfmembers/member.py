@@ -56,13 +56,34 @@ class MemberOrgsFactory(object):
          return MemberOrgs(value)
 
 class IMember(form.Schema):
-    """A Salesforce Contact representing a member in Plone.
+    """
     """
     
+    form.omitted('sf_id')
     sf_id = schema.TextLine(
             title=_(u"Salesforce ID"),
         )
+
+    form.fieldset('personal',
+            label=(u'Personal'),
+            fields=['firstName','lastName','name','picture','discipline','academic_interests','personal_interests','favorite_quote']
+        )
+
+    form.fieldset('contact',
+            label=(u'Contact Information'),
+            fields=['home_phone','cell_phone','email','facebook','twitter']
+        )
     
+    form.fieldset('cv',
+            label=(u'Curriculum Vitae'),
+            fields=['education','honors','fellowships','research','training','presentations','publications','collaborations','affiliations','skills']
+        )
+
+    form.fieldset('statement_of_purpose',
+            label=(u'Statement of Purpose'),
+            fields=['statement_of_purpose']
+        )
+
     firstName = schema.TextLine(
             title=_(u"First name"),
         )
@@ -76,54 +97,18 @@ class IMember(form.Schema):
             default=_(u"Full Name"),
         )
 
-    current_street = schema.TextLine(
-            title=_(u"Street"),
-        )
-
-    current_city = schema.TextLine(
-            title=_(u"City"),
-        )
-
-    current_state = schema.TextLine(
-            title=_(u"State")
-        )
-
-    current_postal_code = schema.TextLine(
-            title=_(u"Postal Code")
-        )
-
-    current_country = schema.TextLine(
-            title=_(u"Country")
-        )
-     
-    home_city = schema.TextLine(
-            title=_(u"Hometown"),
-            required=False
-        )
-
-    home_state = schema.TextLine(
-            title=_(u"Home State"),
-            required=False
-        )
-
-    home_country = schema.TextLine(
-            title=_(u"Country of origin"),
-            required=False
-        )
-     
     home_phone = schema.TextLine(
-            title=_(u"Home Phone"),
-            required=False,
+            title=_(u"Home Phone (will not be publically available)"),
+            required=False
         )
     
     cell_phone = schema.TextLine(
-            title=_(u"Cell Phone"),
+            title=_(u"Cell Phone (will not be publically available)"),
             required=False,
         )
 
-
     email = schema.TextLine(
-            title=_(u"Email"),
+            title=_(u"Email (will not be publically available)"),
             required=False,
         )
 
@@ -137,9 +122,16 @@ class IMember(form.Schema):
             required=False,
         )
 
-    masters_program = schema.Choice(
-            title=_(u"Master's Program"),
-            values=[_(u"Astronomy"), _(u"Biology"), _(u"Chemistry"), _(u"Physics"),],
+    form.omitted('community_role')
+    community_role = schema.Choice(
+            title=_(u"Community Role"),
+            values=[_(u"Administrator"), _(u"Alumni"), _(u"Collaborator"), _(u"Faculty"), _(u"Staff"), _(u"Student"),],
+            required=True,
+    )
+
+    discipline= schema.Choice(
+            title=_(u"Discipline"),
+            values=[_(u"Astronomy"), _(u"Biology"), _(u"Chemistry"), _(u"Materials"), _(u"Physics"),],
             required=False,
         )
 
@@ -198,35 +190,10 @@ class IMember(form.Schema):
            title=_(u"Skills"),
            required=False,
         )
-
-    contributions_within_discipline = RichText (
-           title=_(u"Contributions within Discipline"),
+          
+    statement_of_purpose = RichText (
+           title=_(u"Statement of Purpose"),
            required=False,
-        )
-
-    contributions_to_other_disciplines = RichText (
-           title=_(u"Contributions to other Disciplines"),
-           required=False,
-        )
-
-    contributions_to_hr = RichText (
-           title=_(u"Contributions to Human Resource Development"),
-           required=False,
-        )
-
-    contributions_to_resources = RichText (
-           title=_(u"Contributions to Resources for Research and Education"),
-           required=False,
-        )
-
-    contributions_beyond = RichText (
-           title=_(u"Contributions beyond Science and Engineering"),
-           required=False,
-        )
-
-    aspirations = RichText(
-            title=_(u"Future Goals, Research Interests and Aspirations"),
-            required=False,
         )
 
     favorite_quote = RichText(
@@ -246,6 +213,7 @@ class IMember(form.Schema):
             required=False,
         )
 
+    form.omitted('relatedOrganizations')
     relatedOrganizations = schema.List(
         title =_(u'Organizations'),
         description = _(u"This person is a member of the following organizations:"),
@@ -282,3 +250,9 @@ class View(grok.View):
         
         return catalog(Creator=context.sf_id,
                        sort_order='sortable_title')
+
+class EditForm(dexterity.EditForm):
+    grok.context(IMember)
+
+    description = _(u"")
+    label = _(u"Edit your profile")   
