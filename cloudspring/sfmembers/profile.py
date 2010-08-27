@@ -37,7 +37,7 @@ class Renderer(base.Renderer):
     @memoize
     def _member(self):
         import re
-        pattern = 'community/(.*)/'
+        pattern = 'community/(\w*)'
         match = re.search(pattern, self.context.absolute_url())
         sf_id = match.group(1)
 
