@@ -7,7 +7,6 @@ from zope.formlib import form
 
 from plone.memoize.instance import memoize
 from zope.component import getMultiAdapter
-from Acquisition import aq_inner
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from Products.CMFPlone import PloneMessageFactory as _
 
@@ -37,7 +36,11 @@ class Renderer(base.Renderer):
 
     @memoize
     def _member(self):
-        sf_id = self.context.getId()       
+        import re
+        pattern = 'community/(.*)/'
+        match = re.search(pattern, self.context.absolute_url())
+        sf_id = match.group(1)
+
         catalog = getToolByName(self.context, 'portal_catalog')
         results = catalog(id=sf_id)
         for result in results:
