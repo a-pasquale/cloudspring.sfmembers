@@ -1,0 +1,125 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    i18n_domain="actionbar.panel">
+
+    <browser:resourceDirectory
+        name="actionbar.panel.images"
+        directory="images"
+        layer=".interfaces.IActionbarPanelLayer"
+        />
+
+    <browser:resourceDirectory
+        name="actionbar.panel.stylesheets"
+        directory="stylesheets"
+        layer=".interfaces.IActionbarPanelLayer"
+        />
+
+    <browser:viewletManager
+        name="actionbar.panel"
+        provides=".interfaces.IActionbarPanel"
+        permission="zope2.View"
+        class=".viewlets.ActionbarPanelViewletManager"
+        layer=".interfaces.IActionbarPanelLayer"
+        />
+
+    <browser:viewlet  
+        for="*"
+        name="actionbar.panel.viewlet"
+        manager="plone.app.layout.viewlets.interfaces.IPortalFooter"
+        class=".viewlets.ActionbarPanelViewlet"
+        layer=".interfaces.IActionbarPanelLayer"
+        permission="zope2.View" 
+        />
+
+    <browser:viewlet  
+        name="actionbar.panel.home"
+        manager=".interfaces.IActionbarPanel"
+        class=".viewlets.ActionViewlet"
+        permission="zope2.View" 
+        layer=".interfaces.IActionbarPanelLayer"
+        template="./templates/home_viewlet.pt"
+        />
+
+  <browser:viewlet
+        name="actionbar.panel.members"
+        manager=".interfaces.IActionbarPanel"
+        class=".viewlets.ActionViewlet"
+        permission="zope2.View"
+        layer=".interfaces.IActionbarPanelLayer"
+        template="./templates/members_viewlet.pt"
+        />
+
+    <browser:viewlet  
+        name="actionbar.panel.user"
+        manager=".interfaces.IActionbarPanel"
+        class=".viewlets.ActionViewlet"
+        permission="zope2.View" 
+        layer=".interfaces.IActionbarPanelLayer"
+        template="./templates/user_viewlet.pt"
+        />
+
+    <browser:viewlet  
+        name="actionbar.panel.personalize"
+        manager=".interfaces.IActionbarPanel"
+        class=".viewlets.ActionViewlet"
+        permission="zope2.View" 
+        layer=".interfaces.IActionbarPanelLayer"
+        template="./templates/personalize_viewlet.pt"
+        />
+
+    <browser:viewlet  
+        name="actionbar.panel.news"
+        manager=".interfaces.IActionbarPanel"
+        class=".viewlets.ActionViewlet"
+        permission="zope2.View" 
+        layer=".interfaces.IActionbarPanelLayer"
+        template="./templates/news_viewlet.pt"
+        />
+
+    <browser:viewlet  
+        name="actionbar.panel.changePassword"
+        manager=".interfaces.IActionbarPanel"
+        class=".viewlets.ActionViewlet"
+        permission="zope2.View" 
+        layer=".interfaces.IActionbarPanelLayer"
+        template="./templates/changePassword_viewlet.pt"
+        />
+
+    <browser:viewlet  
+        name="actionbar.panel.logout"
+        manager=".interfaces.IActionbarPanel"
+        class=".viewlets.ActionViewlet"
+        permission="zope2.View" 
+        layer=".interfaces.IActionbarPanelLayer"
+        template="./templates/logout_viewlet.pt"
+        />
+
+    <browser:viewlet  
+        name="actionbar.panel.studentZone"
+        manager=".interfaces.IActionbarPanel"
+        class=".viewlets.ActionViewlet"
+        permission="zope2.View" 
+        layer=".interfaces.IActionbarPanelLayer"
+        template="./templates/studentZone_viewlet.pt"
+        />
+
+    <browser:viewlet  
+        name="actionbar.panel.facultyZone"
+        manager=".interfaces.IActionbarPanel"
+        class=".viewlets.ActionViewlet"
+        permission="zope2.View" 
+        layer=".interfaces.IActionbarPanelLayer"
+        template="./templates/facultyZone_viewlet.pt"
+        />
+
+    <browser:viewlet  
+        name="actionbar.panel.blogPost"
+        manager=".interfaces.IActionbarPanel"
+        class=".viewlets.ActionViewlet"
+        permission="zope2.View" 
+        layer=".interfaces.IActionbarPanelLayer"
+        template="./templates/blogPost_viewlet.pt"
+        />
+
+</configure>

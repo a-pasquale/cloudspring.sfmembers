@@ -1,0 +1,7 @@
+<div id="footpanel">
+    <ul id="mainpanel">
+        <tal:viewlets repeat="viewlet options/viewlets">
+            <tal:render tal:condition="not:viewlet/isAnon" replace="structure viewlet/render"/>
+        </tal:viewlets>
+    </ul>
+</div>

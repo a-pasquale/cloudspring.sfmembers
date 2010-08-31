@@ -1,0 +1,16 @@
+<tal:get define="member view/member">
+    <li tal:condition="member/getId">
+        <a href="#" 
+            title="View My Feed"
+            class="profile"
+            tal:attributes="href string:${view/portal_url}/community/${member/getId}">
+        </a>
+    </li>
+    <li tal:condition="not: member/getId">
+        <a href="#" 
+            title="Login to view your profile"
+            class="profile"
+            tal:attributes="href string:${view/portal_url}/login_form">
+        </a>
+    </li>
+</tal:get>

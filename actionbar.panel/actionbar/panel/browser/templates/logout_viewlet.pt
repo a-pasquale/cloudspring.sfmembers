@@ -1,0 +1,9 @@
+<tal:get define="member view/member">
+    <li tal:condition="member/getId">
+        <a href="#" 
+            title="Log out"
+            class="logout"
+            tal:attributes="href string:${view/portal_url}/logout">
+        </a>
+    </li>
+</tal:get>

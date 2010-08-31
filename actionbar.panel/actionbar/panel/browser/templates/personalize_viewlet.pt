@@ -1,0 +1,9 @@
+<tal:get tal:define="member view/member">
+<li>
+    <a href="#" 
+        class="editprofile"
+        title="Edit my profile"
+        tal:attributes="href string:${view/portal_url}/community/${member/getId}/profile/edit">
+    </a>
+</li>
+</tal:get>

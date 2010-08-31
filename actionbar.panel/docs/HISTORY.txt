@@ -1,0 +1,18 @@
+Changelog
+=========
+
+1.2 (2010-05-05)
+----------------
+
+- Fixed the 'User Profile' widget to point to the login_form when view
+  anonymously [jcbrand]
+
+1.1 (2010-03-23)
+----------------
+
+- Fixed the package name in the INSTALL.txt and LICENSE.txt files [jcbrand]
+
+1.0 (2010-03-18)
+----------------
+
+- Initial release [jcbrand]
