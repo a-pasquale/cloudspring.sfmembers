@@ -1,8 +1,0 @@
-<li>
-    <a href="#" 
-        class="facultyZone"
-        title="Faculty Zone"
-        tal:condition="view/isFaculty"
-        tal:attributes="href string:${view/portal_url}/faculty-zone">
-    </a>
-</li>

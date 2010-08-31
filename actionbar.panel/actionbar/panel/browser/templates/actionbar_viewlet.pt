@@ -1,2 +1,0 @@
-<div 
-     tal:replace="structure provider:actionbar.panel" />

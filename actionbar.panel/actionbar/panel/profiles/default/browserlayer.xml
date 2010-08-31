@@ -1,6 +1,0 @@
-<layers>
-    <layer
-        name="actionbar.panel"
-        interface="actionbar.panel.browser.interfaces.IActionbarPanelLayer"
-     />
-</layers>

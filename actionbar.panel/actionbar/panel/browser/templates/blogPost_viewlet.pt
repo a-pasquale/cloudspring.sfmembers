@@ -1,9 +1,0 @@
-<tal:get define="member view/member">
-    <li class="overlayBlogPost" tal:condition="member/getId">
-        <a href="#" 
-            title="Post to my blog"
-            class="blogPost"
-            tal:attributes="href string:${view/portal_url}/community/${member/getId}/createObject?type_name=Blog+Entry">
-        </a>
-    </li>
-</tal:get>

@@ -1,7 +1,0 @@
-<li>
-    <a href="#" 
-        class="home"
-        title="Home"
-        tal:attributes="href string:${view/portal_url}">
-    </a>
-</li>

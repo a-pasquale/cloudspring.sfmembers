@@ -1,7 +1,0 @@
-<li>
-    <a href="#" 
-        class="alerts"
-        title="Feeds"
-        tal:attributes="href string:${view/portal_url}/feeds">
-    </a>
-</li>
