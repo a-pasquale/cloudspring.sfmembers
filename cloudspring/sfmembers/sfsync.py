@@ -100,36 +100,79 @@ class UpdateMemberProfilesFromSalesforce(BrowserView):
             #profile_id = self.normalizer.normalize(name)
             directory = self.getDirectoryFolder(MEMBER_DIRECTORY_ID, sf_id)
             dir = getattr(directory, sf_id)
-            
-            # Change ownership and give local roles to member folder
-            acl_users = getToolByName(self, "acl_users")
-            user = acl_users.getUserById(sf_id)
-            dir.changeOwnership(user)
-            dir.__ac_local_roles__ = None
-            dir.manage_setLocalRoles(sf_id, ['Owner'])
 
             # Change the title to the members fullname.
             dir.setTitle(name)
 
-            # Default view should be the blog view.
-            dir.setLayout("blog-view")
-            blog_field = dir.getField('blog_folder')
-            if blog_field:
-                blog_field.set(dir, True)
-            
             # publish and reindex
             try:
-                logger.info("Publishing %s's folder" % name )
+                logger.info("Publishing %s's home folder" % name )
                 self.wftool.doActionFor(dir, 'publish')
             except:
-                logger.info("Failed to publish %s's folder" % name)
+                logger.info("Failed to publish %s's home folder" % name)
                 pass
             dir.reindexObject(idxs=['Title'])
+            
+            # look for the member's blog folder
+            try:
+                blog_folder = dir.unrestrictedTraverse('blog')
+            except:
+                dir.invokeFactory("Folder", 'blog')
+            blog_folder = getattr(dir, 'blog')
 
+            # Change ownership and give local roles to member folder
+            acl_users = getToolByName(self, "acl_users")
+            user = acl_users.getUserById(sf_id)
+            blog_folder.changeOwnership(user)
+            blog_folder.__ac_local_roles__ = None
+            blog_folder.manage_setLocalRoles(sf_id, ['Owner'])
+
+            # Default view should be the blog view.
+            blog_folder.setLayout("blog-view")
+            blog_field = blog_folder.getField('blog_folder')
+            if blog_field:
+                blog_field.set(blog_folder, True)
+            
+            # Hide the blog folder from navigation.
+            blog_folder.setExcludeFromNav(True)
+            # publish and reindex
+
+            try:
+                logger.info("Publishing %s's blog folder" % name )
+                self.wftool.doActionFor(blog_folder, 'publish')
+            except:
+                logger.info("Failed to publish %s's blog folder" % name)
+                pass
+            blog_folder.reindexObject()
+
+            # get the blog collection
+            try:
+                blog_collection = dir.unrestrictedTraverse('blog-collection')
+            except:
+                dir.invokeFactory(id="blog-collection", type_name="Topic", title="My Blog")
+            blog_collection = getattr(blog_folder, "blog-collection")
+            theCriteria = blog_collection.addCriterion('path','ATRelativePathCriterion')
+            theCriteria.setRelativePath("../blog")
+            # Hide the collection from navigation.
+            blog_collection.setExcludeFromNav(True)
+            # publish and reindex
+            try:
+                logger.info("Publishing %s's blog collection" % name )
+                self.wftool.doActionFor(blog_collection, 'publish')
+            except:
+                logger.info("Failed to publish %s's blog collection" % name)
+                pass
+            blog_collection.reindexObject()
+
+            # set the default page for the home folder to the collection
+            dir.setDefaultPage("blog-collection")
+
+
+            # get the member profile object, if it exists.
             try: 
                 profile = getattr(dir, "profile")
             except:
-                # Create the member profile object.
+                # The profile doesn't exists, so create it.
                 profile_id = dir.invokeFactory(MEMBER_PORTAL_TYPE, "profile")
                 profile = getattr(dir, profile_id)
             
@@ -201,7 +244,7 @@ class UpdateMemberProfilesFromSalesforce(BrowserView):
         """ Returns an iterator over the records of active members from Salesforce.com """
         sfbc = getToolByName(self.context, 'portal_salesforcebaseconnector')
         where = '(' + FETCH_CRITERIA + ')'
-        soql = "SELECT %s FROM %s WHERE %s" % (
+        soql = "SELECT %s FROM %s WHERE %s ORDER BY lastName, firstName" % (
             ','.join(MEMBER_FIELDS_TO_FETCH),
             MEMBER_SOBJECT_TYPE,
             where)
