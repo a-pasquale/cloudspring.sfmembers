@@ -8,114 +8,122 @@
   margin-right: 20px;
 }
 
-/* the overlayed element */
-._overlay {
-        display:none;
-        background-color: #fff;
-        z-index:10000;
-        width:600px;
-        min-height: 400px;
-        padding:15px;
-        padding-right:0px;
-        /* CSS3 styling for latest browsers */
-        -moz-box-shadow:0 0 90px 5px #000;
-        -webkit-box-shadow: 0 0 90px #000;
-}
-
-/* default close button positioned on upper right corner */
-._overlay .close {
-        background-image:url(/Plone/++resource++cloudspring.sfmembers/pb_close.png);
-        position:absolute; right:-15px; top:-15px;
-        cursor:pointer;
-        height:30px;
-        width:30px;
-}
-        /* container for external content. uses vertical scrollbar, if needed */
-        div.contentWrap {
-                height:441px;
-                overflow-y:auto;
-        }:
-
 /* root element for tabs  */
-.tabs { 
-	list-style:none; 
-	margin:0 !important; 
-	padding:0;
-	height:30px;
-	border-bottom:1px solid #666;	
+ul.tabs {
+        list-style:none;
+        margin:0 !important;
+        padding:0;
+        border-bottom:1px solid #666;
+        height:30px;
 }
 
 /* single tab */
-.tabs li { 
-	float:left;	 
-	text-indent:0;
-	padding:0;
-	margin:0 !important;
-	list-style-image:none !important; 
+ul.tabs li {
+        float:left;
+        text-indent:0;
+        padding:0;
+        margin:0 !important;
+        list-style-image:none !important;
 }
 
 /* link inside the tab. uses a background image */
-.tabs a { 
-	background: url(++resource++cloudspring.sfmembers/tabs.png) no-repeat -652px 0;
-	font-size:11px;
-	display:block;
-	height: 30px;  
-	line-height:30px;
-	width: 111px;
-	text-align:center;	
-	text-decoration:none;
-	color:#000;
-	padding:0px;
-	margin:0px;	
-	position:relative;
-	top:1px;
+ul.tabs a {
+        background: url(/Plone/++resource++cloudspring.sfmembers/tabs.png) no-repeat -420px 0;
+        font-size:11px;
+        display:block;
+        height: 30px;
+        line-height:30px;
+        width: 134px;
+        text-align:center;
+        text-decoration:none;
+        color:#333;
+        padding:0px;
+        margin:0px;
+        position:relative;
+        top:1px;
 }
 
-.tabs a:active {
-	outline:none;		
+ul.tabs a:active {
+        outline:none;
 }
 
 /* when mouse enters the tab move the background image */
-.tabs a:hover {
-	background-position: -652px -31px;	
-	color:#fff;	
+ul.tabs a:hover {
+        background-position: -420px -31px;
+        color:#fff;
 }
 
-/* active tab uses a class name "current". it's highlight is also done by moving the background image. */
-.tabs .current, .tabs .current:hover, .tabs li.current a {
-	background-position: -652px -62px;		
-	cursor:default !important; 
-	color:#000 !important;
+/* active tab uses a class name "current". its highlight is also done by moving the background image. */
+ul.tabs a.current, ul.tabs a.current:hover, ul.tabs li.current a {
+        background-position: -420px -62px;
+        cursor:default !important;
+        color:#000 !important;
 }
 
 /* Different widths for tabs: use a class name: w1, w2, w3 or w2 */
 
-
 /* width 1 */
-.tabs .w1 			{ background-position: -519px 0; width:134px; }
-.tabs .w1:hover 	{ background-position: -519px -31px; }
-.tabs .w1.current { background-position: -519px -62px; }
+ul.tabs a.s                     { background-position: -553px 0; width:81px; }
+ul.tabs a.s:hover       { background-position: -553px -31px; }
+ul.tabs a.s.current  { background-position: -553px -62px; }
 
 /* width 2 */
-.tabs .w2 			{ background-position: -366px -0px; width:154px; }
-.tabs .w2:hover 	{ background-position: -366px -31px; }
-.tabs .w2.current { background-position: -366px -62px; }
+ul.tabs a.l                     { background-position: -247px -0px; width:174px; }
+ul.tabs a.l:hover       { background-position: -247px -31px; }
+ul.tabs a.l.current  { background-position: -247px -62px; }
 
 
 /* width 3 */
-.tabs .w3 			{ background-position: -193px -0px; width:174px; }
-.tabs .w3:hover 	{ background-position: -193px -31px; }
-.tabs .w3.current { background-position: -193px -62px; }
+ul.tabs a.xl                    { background-position: 0 -0px; width:248px; }
+ul.tabs a.xl:hover      { background-position: 0 -31px; }
+ul.tabs a.xl.current { background-position: 0 -62px; }
 
-/* width 4 */
-.tabs .w4 			{ background-position: -0px -0px; width:194px; }
-.tabs .w4:hover 	{ background-position: -0px -31px; }
-.tabs .w4.current { background-position: -0px -62px; }
-
-
-/* initially all panes are hidden */ 
-.panes .pane {
-	display:none;		
+/* tab pane styling */
+.pane {
+        display:none;
+        padding:15px 10px;
+        border:1px solid #999;
+        border-top:0;
+}
+/* root element for accordion. decorated with rounded borders and gradient background image */
+#accordion {
+	background:#fff url(/Plone/++resource++cloudspring.sfmembers/h300.png) 0 0;
+	width: 250px;
+        margin-top:20px;
+	-background:#666;
 }
 
+/* accordion header */
+#accordion h3 {
+	background:#ccc url(/Plone/++resource++cloudspring.sfmembers/h30.png);
+	margin:0;
+	padding:0px 5px; 
+	font-weight:normal;
+        font: bold 1.8em "museo-slab-1","museo-slab-2";
+        color: #797979;
+	cursor:pointer;		
+}
+
+/* currently active header */
+#accordion h3.current {
+	cursor:default;
+	background-color:#fff;
+}
+
+/* accordion pane */
+#accordion .pane {
+	display:none;
+	padding:5px 15px 5px 15px;
+	color:#fff;
+	font-size:10px;
+        border:0;
+}
+
+/* a title inside pane */
+#accordion .pane {
+	font-weight:normal;
+	margin:0 0 -5px 0;
+	font-size:12px;
+	color:#999;
+}
 
