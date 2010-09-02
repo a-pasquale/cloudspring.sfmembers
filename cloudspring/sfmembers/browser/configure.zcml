@@ -9,6 +9,7 @@
       name="Cloudspring Community Theme"
     />
 
+<!--  Disable the viewlet for now.  Using the portlet instead.
     <browser:viewlet
         for="collective.blogging.interfaces.IBlog"
         name="cloudspring.profile"
@@ -17,5 +18,6 @@
         permission="zope2.View"
         layer="collective.blogging.interfaces.IBloggingSpecific"
     />
+-->
 
 </configure>
