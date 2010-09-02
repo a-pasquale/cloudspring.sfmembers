@@ -49,7 +49,7 @@ class Renderer(base.Renderer):
 
     def getUrl(self):
         member = self._member()
-        return "%s/profile" % member.getURL()
+        return member.getURL()
 
     def getName(self):
         member = self._member()
