@@ -9,21 +9,22 @@
             tal:attributes="href string:${navroot}/++resource++cloudspring.sfmembers/member.css"
             />
 
+        <link rel="stylesheet" type="text/css" 
+            tal:define="navroot context/@@plone_portal_state/navigation_root_url"
+            tal:attributes="href string:${navroot}/++resource++cloudspring.sfmembers/member.css"
+            />
+
     <dt class="portletHeader">
         <span class="portletTopLeft"></span>
-        <div class="_overlay">
         <a tal:attributes="href view/getUrl">
            <h2 tal:content="view/getName" />
         </a>
-        </div>
         <span class="portletTopRight"></span>
     </dt>
 
     <dd class="portletItem">
       <div>
-        <a rel="profilePicture" tal:attributes="href string:${view/getUrl}/@@images/picture/large" title="View Profile Picture">
-          <img tal:attributes="src python:'%s/profile/@@images/picture/mini' % view.getUrl(); ">
-        </a>
+        <img tal:attributes="src python:'%s/profile/@@images/picture/mini' % view.getUrl(); ">
 
         <div id="accordion">
 
@@ -33,15 +34,13 @@
             <li tal:condition="view/getDiscipline" tal:content="view/getDiscipline"/>
             <li>
               <div class="_overlay">
-                <a tal:attributes="href view/getUrl" title="Curriculum Vitae">Curriculum Vitae</a>
+                <a tal:attributes="href string:${view/getUrl}/profile" title="Curriculum Vitae">Curriculum Vitae</a>
               </div>
             </li>
           </div>
 
           <h3>Contact</h3>
           <div class="pane">
-            <div tal:condition="view/getHomePhone" tal:content="string:Home Phone: ${view/getHomePhone}"></div>
-            <div tal:condition="view/getCellPhone" tal:content="string:Cell Phone: ${view/getCellPhone}"></div>
             <div>
               <a tal:condition="view/getFacebook" 
                  tal:attributes="href view/getFacebook">Visit me on Facebook</a>
