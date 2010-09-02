@@ -26,125 +26,88 @@
           <img tal:replace="structure context/@@images/picture/mini" />
         </div>
 
-        <div id="">
-
-          <div style="float:left; margin-left: 15px">
-          <div class="">
-            <div tal:condition="context/discipline">
-              <h4>Discipline</h4>
-              <span tal:content="context/discipline"/>
-            </div>
-            <div tal:condition="context/academic_interests">
-              <h4>Academic Interests</h4>
-              <span tal:repeat="interest context/academic_interests">
-                <span tal:content="interest"/><span tal:condition="not:repeat/interest/end">,</span>
-              </span>
-            </div>
+        <div style="float:left">
+          <div tal:condition="context/cell_phone">
+            <h4>Cell Phone:</h4>
+            <span tal:content="context/cell_phone"/>
           </div>
+          <div tal:condition="context/email">
+            <h4>Email:</h4>
+            <a tal:attributes="href string:mailto:${context/email}">
+              <span tal:content="context/email"/>
+            </a>
           </div>
-
-          <div style="float:left; margin-left: 15px">
-          <div class="" style="display:block">
-            <div tal:condition="context/home_phone">
-              <h4>Home Phone:</h4>
-              <span tal:content="context/home_phone"/>
-            </div>
-
-            <div tal:condition="context/cell_phone">
-              <h4>Cell Phone:</h4>
-              <span tal:content="context/cell_phone"/>
-            </div>
-
-            <div tal:condition="context/facebook">
-              <img tal:define="navroot context/@@plone_portal_state/navigation_root_url"
-                   tal:attributes="src string:${navroot}/++resource++cloudspring.sfmembers/fb.png"/> 
-              <a tal:attributes="href context/facebook">
-                <span>Visit me on Facebook</span>
-              </a>
-            </div>
-
-            <div tal:condition="context/twitter">
-              <img tal:define="navroot context/@@plone_portal_state/navigation_root_url"
-                   tal:attributes="src string:${navroot}/++resource++cloudspring.sfmembers/twitter.png"/> 
-              <a tal:attributes="href context/twitter">
-                <span>Follow me on twitter</span>
-              </a>
-            </div>
+          <div tal:condition="context/website">
+            <h4>Website:</h4>
+            <a tal:attributes="href context/website">
+              <span tal:content="context/website"/>
+            </a>
           </div>
+          <div tal:omit-tag=""
+               tal:condition="context/food_preferences/output">
+            <h4>Food preferences and allergies:</h4>
+            <span tal:content="structure context/food_preferences/output"/>
           </div>
-
         </div>
-
-        <br clear="both"/>
-
+        <br clear="both" />
+        <div class="contentWrap"> 
         <ul class="tabs">
-          <li><a class="l" href="#cv">Curriculum Vitae</a></li>
-          <li><a class="xl" href="#purpose">Statement of Purpose</a></li>
-          <li><a class="s" href="#bio">Bio</a></li>
+          <li><a class="l" href="#biography">Biography</a></li>
+          <li><a class="l" href="#education">Education</a></li>
         </ul>
-      
+
         <div class="pane">
-          <div tal:condition="context/education">
-            <h3>Education</h3>
-            <span tal:content="structure context/education/output" />
+          <div tal:omit-tag=""
+               tal:condition="context/place_of_birth">
+            <h3>Place of Birth</h3>
+            <span tal:content="context/place_of_birth" />
           </div>
-          <div tal:condition="context/honors">
-            <h3>Honors and Awards</h3>
-            <span tal:content="structure context/honors/output" />
+          <div tal:omit-tag=""
+               tal:condition="context/college_major">
+            <h3>College Major:</h3>
+            <span tal:content="context/college_major" />
           </div>
-          <div tal:condition="context/fellowships">
-            <h3>Fellowships and Grants</h3>
-            <span tal:content="structure context/fellowships/output" />
+          <div tal:condition="context/background/output">
+            <h3>Pre-law school relevant background: academic, personal or work experiences:</h3>
+            <span tal:content="structure context/background/output" />
           </div>
-          <div tal:condition="context/research">
-            <h3>Research Experience</h3>
-            <span tal:content="structure context/research/output" />
+          <div tal:condition="context/work_experiences/output">
+            <h3>Work experiences in law school:</h3>
+            <span tal:content="structure context/work_experiences/output" />
           </div>
-          <div tal:condition="context/training">
-            <h3>Training Development and Mentoring Experience</h3>
-            <span tal:content="structure context/training/output" />
+          <div tal:condition="context/writing_projects/output">
+            <h3>Writing projects or articles in law school</h3>
+            <span tal:content="structure context/writing_projects/output" />
           </div>
-          <div tal:condition="context/presentations">
-            <h3>Presentations</h3>
-            <span tal:content="structure context/presentations/output" />
+          <div tal:condition="context/interests/output">
+            <h3>Interests and aspirations</h3>
+            <span tal:content="structure context/interests/output" />
           </div>
-          <div tal:condition="context/publications">
-            <h3>Other Publications and Dissemination</h3>
-            <span tal:content="structure context/publications/output" />
-          </div>
-          <div tal:condition="context/collaborations">
-            <h3>Collaborating Researchers and Institutions</h3>
-            <span tal:content="structure context/collaborations/output" />
-          </div>
-          <div tal:condition="context/affiliations">
-            <h3>Professional Memberships and Affiliations</h3>
-            <span tal:content="structure context/affiliations/output" />
-          </div>
-          <div tal:condition="context/skills">
-            <h3>Skills</h3>
-            <span tal:content="structure context/skills/output" />
+          <div tal:condition="context/leadership/output">
+            <h3>Leadership and/or team experience</h3>
+            <span tal:content="structure context/leadership/output" />
           </div>
         </div>
 
         <div class="pane">
-          <span tal:condition="context/statement_of_purpose">
-            <h3>Statement of Purpose</h3>
-            <span tal:content="structure context/statement_of_purpose/output" />
+          <span tal:condition="context/high_school">
+            <h3>High School:</h3>
+            <span tal:content="context/high_school" />
+          </span>
+          <span tal:condition="context/college">
+            <h3>College:</h3>
+            <span tal:content="context/college" />
+          </span>
+          <span tal:condition="context/thesis">
+            <h3>Thesis or major paper in revelant areas:</h3>
+            <span tal:content="context/thesis" />
+          </span>
+          <span tal:condition="context/grad_school">
+            <h3>Grad School:</h3>
+            <span tal:content="context/grad_school" />
           </span>
         </div>
-         
-        <div class="pane">
-        <span tal:condition="context/favorite_quote">
-          <h3>Favorite Quote</h3>
-          <span tal:content="structure context/favorite_quote/output"/>
-        </span>
-
-        <span tal:condition="context/personal_interests">
-          <h3>Personal Interests</h3>
-          <span tal:content="structure context/personal_interests/output"/>
-        </span>
-        </div>
-
+        </div> 
         <script>
           /* <![CDATA[ */
           jQuery(function() {

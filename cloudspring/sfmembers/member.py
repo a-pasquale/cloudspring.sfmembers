@@ -21,40 +21,6 @@ from zope.component import queryUtility
 from cloudspring.sfmembers import _
 
 
-class IMemberOrgs(Interface):
-
-    orgId = schema.TextLine(
-             title = _(u"Organization ID"),
-             required = True)
-
-    orgName = schema.TextLine(
-             title = _(u"Organization Name"),
-             required = True)
-
-    role = schema.TextLine(
-        title = _(u"Role"),
-        required = False)
-
-
-class MemberOrgs(object):
-     implements(IMemberOrgs)
-
-     def __init__(self, value):
-         self.orgId=value["orgId"]
-         self.orgName=value["orgName"]
-         self.role=value["role"]
-
-
-class MemberOrgsFactory(object):
-     adapts(Interface, Interface, Interface, Interface)
-     implements(IObjectFactory)
-
-     def __init__(self, context, request, form, widget):
-         pass
-
-     def __call__(self, value):
-         return MemberOrgs(value)
-
 class IMember(form.Schema):
     """
     """
@@ -64,24 +30,19 @@ class IMember(form.Schema):
             title=_(u"Salesforce ID"),
         )
 
-    form.fieldset('personal',
-            label=(u'Personal'),
-            fields=['firstName','lastName','name','picture','discipline','academic_interests','personal_interests','favorite_quote']
+    form.fieldset('general',
+            label=(u'General'),
+            fields=['firstName','lastName','name','picture','email','cell_phone','website','food_preferences']
         )
 
-    form.fieldset('contact',
-            label=(u'Contact Information'),
-            fields=['home_phone','cell_phone','email','facebook','twitter']
+    form.fieldset('biography',
+            label=(u'Biography'),
+            fields=['place_of_birth','college_major','background','work_experiences','writing_projects','interests','leadership']
         )
     
-    form.fieldset('cv',
-            label=(u'Curriculum Vitae'),
-            fields=['education','honors','fellowships','research','training','presentations','publications','collaborations','affiliations','skills']
-        )
-
-    form.fieldset('statement_of_purpose',
-            label=(u'Statement of Purpose'),
-            fields=['statement_of_purpose']
+    form.fieldset('education',
+            label=(u'Education'),
+            fields=['high_school','college','thesis','grad_school']
         )
 
     firstName = schema.TextLine(
@@ -97,112 +58,78 @@ class IMember(form.Schema):
             default=_(u"Full Name"),
         )
 
-    home_phone = schema.TextLine(
-            title=_(u"Home Phone (will not be publically available)"),
-            required=False
-        )
-    
     cell_phone = schema.TextLine(
-            title=_(u"Cell Phone (will not be publically available)"),
+            title=_(u"Cell Phone"),
             required=False,
         )
 
     email = schema.TextLine(
-            title=_(u"Email (will not be publically available)"),
+            title=_(u"Email"),
             required=False,
         )
 
-    facebook = schema.TextLine(
-            title=_(u"Facebook"),
+    website = schema.TextLine(
+            title=_(u"Website (if you have one)"),
             required=False,
         )
 
-    twitter = schema.TextLine(
-            title=_(u"Twitter"),
+    food_preferences = RichText(
+            title=_(u"Food preferences and allergies"),
             required=False,
         )
 
-    form.omitted('community_role')
-    community_role = schema.Choice(
-            title=_(u"Community Role"),
-            values=[_(u"Administrator"), _(u"Alumni"), _(u"Collaborator"), _(u"Faculty"), _(u"Staff"), _(u"Student"),],
-            required=True,
-    )
-
-    discipline= schema.Choice(
-            title=_(u"Discipline"),
-            values=[_(u"Astronomy"), _(u"Biology"), _(u"Chemistry"), _(u"Materials"), _(u"Physics"),],
+    place_of_birth = schema.TextLine(
+            title=_(u"Place of birth"),
             required=False,
         )
 
-    academic_interests = schema.List(
-            title=_(u"Academic Interests"),
-            value_type=schema.Choice(values=[_(u"Research"), _(u"Teaching"),]),
+    college_major = schema.TextLine(
+            title=_(u"College Major"),
             required=False,
         )
 
-    education = RichText (
-            title=_(u"Education"),
-            required=False,
+    background = RichText(
+            title=_(u"Pre-law school relevant background: academic, personal or work experiences"),
+            required=False
         )
 
-    honors = RichText (
-            title=_(u"Honors and Awards"),
-            required=False,
-        )
-
-    fellowships = RichText (
-            title=_(u"Fellowships and Grants"),
-            required=False,
-        )
-
-    research = RichText (
-            title=_(u"Research Experience"),
-            required=False,
-        )
-
-    training = RichText (
-            title=_(u"Training, Development and Mentoring Experience"),
-            required=False,
-        )
-
-    presentations = RichText (
-           title=_(u"Presentations"),
+    work_experiences = RichText(
+           title=_(u"Work experiences in law school"),
            required=False,
         )
 
-    publications = RichText (
-           title=_(u"Other Publications and Dissemination"),
+    writing_projects = RichText(
+           title=_(u"Writing projects or articles in law school (other than this class)"),
            required=False,
         )
 
-    collaborations = RichText (
-           title=_(u"Collaborating Researchers and Institutions"),
+    interests = RichText(
+           title=_(u"Interests and aspirations"),
            required=False,
         )
 
-    affiliations = RichText (
-           title=_(u"Professional Memberships and Affiliations"),
+    leadership = RichText(
+           title=_(u"Leadership and/or team experience"),
            required=False,
         )
 
-    skills = RichText (
-           title=_(u"Skills"),
-           required=False,
-        )
-          
-    statement_of_purpose = RichText (
-           title=_(u"Statement of Purpose"),
-           required=False,
-        )
-
-    favorite_quote = RichText(
-            title=_(u"Favorite quote"),
+    high_school = schema.TextLine (
+            title=_(u"High school (was it public or private)"),
             required=False,
         )
 
-    personal_interests = RichText(
-            title=_(u"Personal Interests"),
+    college = schema.TextLine (
+            title=_(u"College (including your major)"),
+            required=False,
+        )
+
+    thesis = schema.TextLine (
+            title=_(u"Thesis or major paper in relevant areas (if any)"),
+            required=False,
+        )
+
+    grad_school = schema.TextLine (
+            title=_(u"Grad school (if any)"),
             required=False,
         )
 
@@ -212,16 +139,6 @@ class IMember(form.Schema):
             description=_(u"Please upload an image"),
             required=False,
         )
-
-    form.omitted('relatedOrganizations')
-    relatedOrganizations = schema.List(
-        title =_(u'Organizations'),
-        description = _(u"This person is a member of the following organizations:"),
-        required = False,
-        value_type=schema.Object(
-            title=_(u"Organization"),
-            schema=IMemberOrgs),
-     )
 
 class Member(Item):
     implements(IMember)

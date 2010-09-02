@@ -37,7 +37,7 @@ class Renderer(base.Renderer):
     @memoize
     def _member(self):
         import re
-        pattern = 'community/(\w*)'
+        pattern = 'community/members/(\w*)'
         match = re.search(pattern, self.context.absolute_url())
         sf_id = match.group(1)
 
@@ -49,35 +49,27 @@ class Renderer(base.Renderer):
 
     def getUrl(self):
         member = self._member()
-        return "%s/profile" % member.getURL()
+        return member.getURL()
+
+    def getFirstName(self):
+        member = self._member()
+        return member.firstName
 
     def getName(self):
         member = self._member()
         return member.name
 
-    def getDiscipline(self):
+    def getCellPhone(self):
         member = self._member()
-        return member.discipline
+        return member.cell_phone
 
     def getEmail(self):
         member = self._member()
         return member.email
 
-    def getFacebook(self):
+    def getWebsite(self):
         member = self._member()
-        return member.facebook
-
-    def getHomePhone(self):
-        member = self._member()
-        return member.home_phone
-
-    def getCellPhone(self):
-        member = self._member()
-        return member.cell_phone
-
-    def getTwitter(self):
-        member = self._member()
-        return member.twitter
+        return member.website
 
     def render(self):
         return self._template()

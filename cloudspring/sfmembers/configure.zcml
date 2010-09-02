@@ -23,10 +23,6 @@
       />
   <!-- -*- extra stuff goes here -*- -->
   
-  <adapter factory=".organization.OrgMembersFactory"
-      name="cloudspring.sfmembers.organization.IOrgMembers" />  
-  <adapter factory=".member.MemberOrgsFactory"
-      name="cloudspring.sfmembers.member.IMemberOrgs" />  
   <browser:page
       for="*"
       name="sfsync"

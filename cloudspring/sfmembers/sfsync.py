@@ -29,30 +29,133 @@ from Products.CMFPlone.utils import safe_unicode
 from Products.CMFPlone.utils import _createObjectByType
 from plone.app.textfield.value import RichTextValue
 from cloudspring.sfmembers.member import IMember
-from cloudspring.sfmembers.organization import OrgMembers
-from cloudspring.sfmembers.member import MemberOrgs
+
+MEMBERS = [
+{
+'sf_id__c': 'agarcia',
+'FirstName': 'Adriana',
+'LastName': 'Garcia',
+'Name': 'Adriana Garcia',
+'Email': 'adriana.garcia42@gmail.com'
+},
+{
+'sf_id__c': 'abaker',
+'FirstName': 'Adya',
+'LastName': 'Baker',
+'Name': 'Adya Baker',
+'Email': 'adya.baker@gmail.com',
+},
+{
+'sf_id__c': 'awashington',
+'FirstName': 'Alex',
+'LastName': 'Washington',
+'Name': 'Alex Washington',
+'Email': 'awashington713@gmail.com',
+},
+{
+'sf_id__c': 'bcummings',
+'FirstName': 'Briana',
+'LastName': 'Cummings',
+'Name': 'Briana Cummings',
+'Email': 'briana.cummings@gmail.com',
+},
+{
+'sf_id__c': 'dtoaltoan',
+'FirstName': 'Danielle',
+'LastName': 'Toaltoan',
+'Name': 'Danielle Toaltoan',
+'Email': 'danielle.toaltoan@gmail.com',
+},
+{
+'sf_id__c': 'jcibarra',
+'FirstName': 'Juan Carlos',
+'LastName': 'Ibarra',
+'Name': 'Juan Carlos Ibarra',
+'Email': 'ibarra.juancarlos@gmail.com',
+},
+{
+'sf_id__c': 'lgabry',
+'FirstName': 'Leora',
+'LastName': 'Gabry',
+'Name': 'Leora Gabry',
+'Email': 'leora.gabry@gmail.com',
+},
+{
+'sf_id__c': 'mhulden',
+'FirstName': 'Maren',
+'LastName': 'Hulden',
+'Name': 'Maren Hulden',
+'Email': 'mrh2145@columbia.edu',
+},
+{
+'sf_id__c': 'mmorgan',
+'FirstName': 'Marti',
+'LastName': 'Morgan',
+'Name': 'Marti Morgan',
+'Email': 'marti.morgan@gmail.com',
+},
+{
+'sf_id__c': 'mholloway',
+'FirstName': 'Michael',
+'LastName': 'Holloway',
+'Name': 'Michael Holloway',
+'Email': 'mhollo@law.columbia.edu',
+},
+{
+'sf_id__c': 'mratakonda',
+'FirstName': 'Maithreyi',
+'LastName': 'Ratakonda',
+'Name': 'Maithreyi Ratakonda',
+'Email': 'mr2857@columbia.edu',
+},
+{
+'sf_id__c': 'pgadson',
+'FirstName': 'Patrick',
+'LastName': 'Gadson',
+'Name': 'Patrick Gadson',
+'Email': 'patrick.gadson@gmail.com',
+},
+{
+'sf_id__c': 'psmith',
+'FirstName': 'Paul',
+'LastName': 'Smith',
+'Name': 'Paul Smith',
+'Email': 'paul.ed.smith@gmail.com',
+},
+{
+'sf_id__c': 'yroman',
+'FirstName': 'Yleana',
+'LastName': 'Roman',
+'Name': 'Yleana Roman',
+'Email': 'yleanaroman@gmail.com',
+},
+{
+'sf_id__c': 'celkin',
+'FirstName': 'Caroline',
+'LastName': 'Elkin',
+'Name': 'Caroline Elkin',
+'Email': 'celkin@gmail.com',
+},
+{
+'sf_id__c': 'dguthrie',
+'FirstName': 'Diarra',
+'LastName': 'Guthrie',
+'Name': 'Diarra Guthrie',
+'Email': 'diarra.guthrie@gmail.com',
+},
+{
+'sf_id__c': 'ssturm',
+'FirstName': 'Susan',
+'LastName': 'Sturm',
+'Name': 'Susan Sturm',
+'Email': 'ssturm@law.columbia.edu',
+},
+]
 
 
 MEMBER_SOBJECT_TYPE = 'Contact'
-MEMBER_FIELDS_TO_FETCH = (
-    'sf_id__c',
-    'Name',
-    'FirstName',
-    'LastName',
-    '(SELECT aff.npe5__Organization__r.Name, aff.npe5__Role__c FROM Contact.npe5__Affiliations__r aff)',
-    )
-MEMBER_DIRECTORY_ID = 'community'
+MEMBER_DIRECTORY_ID = 'members'
 MEMBER_PORTAL_TYPE = 'cloudspring.sfmembers.member'
-
-ORG_SOBJECT_TYPE = 'Account'
-ORG_FIELDS_TO_FETCH = (
-    'Name',
-    '(SELECT aff.npe5__Contact__r.sf_id__c, aff.npe5__Contact__r.Name, aff.npe5__Role__c FROM Account.npe5__Affiliations__r aff)',
-    )
-ORG_DIRECTORY_ID = 'organizations'
-ORG_PORTAL_TYPE = 'cloudspring.sfmembers.organization'
-
-FETCH_CRITERIA = "Member_Status__c = 'Current' OR Member_Status__c = 'Grace Period'" 
 
 logger = logging.getLogger('SFDC Import')
 
@@ -74,7 +177,7 @@ class UpdateMemberProfilesFromSalesforce(BrowserView):
            # global member folder doesn't exist yet, so create it.
            portal.invokeFactory("Folder", dir)
            member_dir = getattr(portal, dir)
-           member_dir.setTitle('Community')
+           member_dir.setTitle('Members')
            member_dir.reindexObject(idxs=['Title'])
 
         # look for the member's folder
@@ -153,6 +256,9 @@ class UpdateMemberProfilesFromSalesforce(BrowserView):
             blog_collection = getattr(blog_folder, "blog-collection")
             theCriteria = blog_collection.addCriterion('path','ATRelativePathCriterion')
             theCriteria.setRelativePath("../blog")
+
+            blog_collection.setLayout('blog-view')
+
             # Hide the collection from navigation.
             blog_collection.setExcludeFromNav(True)
             # publish and reindex
@@ -191,37 +297,14 @@ class UpdateMemberProfilesFromSalesforce(BrowserView):
         return profile
 
     def updateProfile(self, profile, data):
-        logger.info("Updating " + data.Name)
+        logger.info("Updating " + data['Name'])
         #profile.setTitle(data.sf_id__c)
-        profile.sf_id = data.sf_id__c
-        profile.name = data.Name
-        profile.firstName = data.FirstName
-        profile.lastName = data.LastName
+        profile.sf_id = data['sf_id__c']
+        profile.name = data['Name']
+        profile.firstName = data['FirstName']
+        profile.lastName = data['LastName']
+        profile.email = data['Email']
         #profile.bio = RichTextValue(data.Biography__c, 'text/structured', 'text/html')
-        organizations = []
-        orgs = data.npe5__Affiliations__r
-        logger.info("about to go through orgs")
-        for org in orgs:
-            name = org.npe5__Organization__r.Name
-            id = safe_unicode(name)
-            id = self.normalizer.normalize(id)
-
-            role = org.npe5__Role__c
-            logger.info("related org: " + name)
-            organization = dict({"orgId": id,
-                                 "orgName": name,
-                                 "role": role})
-            organizations.append(MemberOrgs(organization))
-
-        profile.relatedOrganizations = organizations
-
-        logger.info('profile.name: ' + profile.name)
-        #profile.name(data.Name)
-        #if not profile.getText():
-        #    profile.setText(data.Description, mimetype='text/x-web-intelligent')
-        #profile.setMailingAddress("%sn%s, %s %s" % (data.BillingStreet, data.BillingCity,
-         #                                            data.BillingState, data.BillingPostalCode))
-        # etc...
 
         # publish and reindex
         try:
@@ -334,9 +417,8 @@ class UpdateMemberProfilesFromSalesforce(BrowserView):
 
         # 1. fetch active Member Profile records, update ones that match,
         #    and create new ones
-        for i, data in enumerate(queryMembers(self)):
-            logger.info('i = ' + str(i) + " sf_id = " + data.sf_id__c + " name = " + data.Name)
-            profile = self.findOrCreateProfileBySfId(name = data.Name, sf_id = data.sf_id__c)
+        for i, data in enumerate(MEMBERS):
+            profile = self.findOrCreateProfileBySfId(name = data['Name'], sf_id = data['sf_id__c'])
             logger.info("profile.Title: " + profile.title)
             self.updateProfile(profile, data)
 
