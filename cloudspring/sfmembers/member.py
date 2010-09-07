@@ -32,7 +32,7 @@ class IMember(form.Schema):
 
     form.fieldset('general',
             label=(u'General'),
-            fields=['firstName','lastName','name','picture','email','cell_phone','website','food_preferences']
+            fields=['firstName','lastName','name','picture','email','cell_phone','website','food_preferences','role']
         )
 
     form.fieldset('biography',
@@ -139,6 +139,13 @@ class IMember(form.Schema):
             description=_(u"Please upload an image"),
             required=False,
         )
+
+    role = schema.Choice(
+            title=_(u"Role"),
+            values=[_(u"Students"), _(u"Faculty"), _(u"Staff"), _(u"Collaborators"), _(u"Teaching Fellows"), _(u"Center Fellows"), _(u"Research Fellows"), _(u"Teaching Assistants"),],
+            required=False,
+        )
+
 
 class Member(Item):
     implements(IMember)
