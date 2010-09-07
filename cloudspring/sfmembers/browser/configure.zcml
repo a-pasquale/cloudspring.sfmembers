@@ -1,5 +1,6 @@
 <configure
     xmlns="http://namespaces.zope.org/zope"
+    xmlns:five="http://namespaces.zope.org/five"
     xmlns:browser="http://namespaces.zope.org/browser"
     i18n_domain="cloudspring.sfmembers">
 
@@ -9,6 +10,33 @@
       name="Cloudspring Community Theme"
     />
 
+   <browser:page
+      name="member_summary_view"
+      for="Products.ATContentTypes.interface.folder.IATFolder"
+      class=".views.MemberSummaryView"
+      template="member_summary_view.pt"
+      allowed_interface=".interfaces.IMemberSummaryView"
+      permission="zope2.View"
+      />
+
+    <browser:menuItem
+        for="Products.ATContentTypes.interface.folder.IATFolder"
+        menu="plone_displayviews"
+        title="Member view"
+        action="member_summary_view"
+        description="Member view"
+    />
+
+    <class class="Products.ATContentTypes.interface.folder.IATFolder">
+        <allow interface=".interfaces.IMemberSummaryView" />
+    </class>
+
+    <five:implements
+        class="Products.ATContentTypes.interface.folder.IATFolder"
+        interface=".interfaces.IMemberSummaryView"
+    />
+
+<!-- Hide the viewlet for now.  Using the portlet instead.
     <browser:viewlet
         for="collective.blogging.interfaces.IBlog"
         name="cloudspring.profile"
@@ -17,5 +45,6 @@
         permission="zope2.View"
         layer="collective.blogging.interfaces.IBloggingSpecific"
     />
+-->
 
 </configure>

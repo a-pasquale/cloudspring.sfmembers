@@ -1,0 +1,103 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      lang="en"
+      metal:use-macro="here/main_template/macros/master"
+      i18n:domain="cloudspring.sfmembers">
+<body>
+  <div metal:fill-slot="main">
+    <tal:main-macro metal:define-macro="main"
+         tal:define="kssClassesView context/@@kss_field_decorator_view;
+                     getKssClasses nocall:kssClassesView/getKssClassesInlineEditable;
+                     ">
+
+      <div tal:replace="structure provider:plone.abovecontenttitle" />
+
+        <h1 metal:use-macro="here/kss_generic_macros/macros/generic_title_view">
+                Title or id
+        </h1>
+
+        <div tal:replace="structure provider:plone.belowcontenttitle" />
+
+          <p metal:use-macro="here/kss_generic_macros/macros/generic_description_view">
+              Description
+          </p>
+
+          <div tal:replace="structure provider:plone.abovecontentbody" />
+
+            <tal:listing define="batch view/contents; 
+                                 role nocall:">
+
+              <tal:block tal:repeat="item batch">
+                <div class="tileItem visualIEFloatFix vevent"
+                     tal:define="item_url item/getURL|item/absolute_url;
+                                 item_title_or_id item/pretty_title_or_id;
+                                 member python: item.profile;
+                                 "
+                     tal:attributes="class string:tileItem visualIEFloatFix vevent member;">
+                  <h1>
+                    <span tal:condition="python: not member.role==role"
+                          tal:replace="member/role">Role</span>
+                  </h1> 
+
+                  <tal:block tal:define="global role member/role"/>
+                    <div style="float:left">
+                      <a href="#"
+                         tal:attributes="href item_url">
+                        <img class="picture" src="" alt="" 
+                             tal:condition="nocall:member/picture"
+                             tal:attributes="src string:${item_url}/profile/@@images/picture/tile;
+" />
+                      </a>
+                      <div class="tooltip">
+                        <h4><span tal:replace="member/name">name</span></h4>
+                        <div class="tile">
+                          <a tal:attributes="href string:${item_url}">
+                            <img tal:attributes="src string:${item_url}/profile/@@images/picture/thumb;"/>
+                          </a>
+                        </div>
+                        <div class="tile">
+                          <div>
+                            <a style="color:yellow; 1px dotted yellow !important"
+                               tal:attributes="href string:mailto:${member/email}">
+                              Email <span tal:replace="member/firstName">first name</span>
+                            </a>
+                          </div>
+                          <div class='_overlay'>
+                            <a style="color:yellow"
+                               tal:attributes="href string:${item_url}/profile">
+                              <span tal:replace="string:View ${member/firstName}'s profile">url</span>
+                            </a>
+                          </div>
+                        </div>
+                      </div> <!-- end tooltip -->
+
+                    </div>
+                    <div style="float:left">
+                    <h2 class="tileHeadline"
+                        metal:define-macro="listitem">
+
+                      <a href="#"
+                         class="summary url"
+                         tal:attributes="href item_url;
+                                         title string:Read ${member/firstName}&#146s blog"
+                         tal:content="item_title_or_id">
+                            Item Title
+                      </a>
+
+                    </h2>
+
+                  </div>                        
+                  <div class="visualClear"><!-- --></div>
+                </div>
+              </tal:block>
+
+              <!-- Navigation -->
+              <div metal:use-macro="here/batch_macros/macros/navigation" />
+
+            </tal:listing>
+
+          <div tal:replace="structure provider:plone.belowcontentbody" />
+
+        </tal:main-macro>
+    </div>
+</body>
+</html>
