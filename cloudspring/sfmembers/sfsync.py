@@ -29,6 +29,7 @@ from Products.CMFPlone.utils import safe_unicode
 from Products.CMFPlone.utils import _createObjectByType
 from plone.app.textfield.value import RichTextValue
 from cloudspring.sfmembers.member import IMember
+from cloudspring.sfmembers import _
 
 MEMBERS = [
 {
@@ -149,6 +150,41 @@ MEMBERS = [
 'LastName': 'Sturm',
 'Name': 'Susan Sturm',
 'Email': 'ssturm@law.columbia.edu',
+},
+{
+'sf_id__c': 'aknee',
+'FirstName': 'Amber',
+'LastName': 'Knee',
+'Name': 'Amber Knee',
+'Email': 'amber.knee@law.columbia.edu',
+},
+{
+'sf_id__c': 'twu',
+'FirstName': 'Tina',
+'LastName': 'Wu',
+'Name': 'Tina Wu',
+'Email': 'tina.wu@la.columbia.edu',
+},
+{
+'sf_id__c': 'rfester',
+'FirstName': 'Rachel',
+'LastName': 'Fester',
+'Name': 'Rachel Fester',
+'Email': 'rachel.fester@law.columbia.edu',
+},
+{
+'sf_id__c': 'khomstead',
+'FirstName': 'Kyle',
+'LastName': 'Homstead',
+'Name': 'Kyle Homstead',
+'Email': 'khomstead@groundshift.org',
+},
+{
+'sf_id__c': 'jlerner',
+'FirstName': 'Jane',
+'LastName': 'Lerner',
+'Name': 'Jane Lerner',
+'Email': 'jlerner@chronicletech.com',
 },
 ]
 
