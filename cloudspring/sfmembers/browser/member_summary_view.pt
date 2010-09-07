@@ -67,7 +67,14 @@
                               <span tal:replace="string:View ${member/firstName}'s profile">url</span>
                             </a>
                           </div>
+                          <div>
+                            <a style="color: yellow"
+                               tal:attributes="href item_url">
+                              <span tal:replace="string:Read ${member/firstName}'s blog">blog link</span>
+                            </a>
+                          </div>
                         </div>
+              
                       </div> <!-- end tooltip -->
 
                     </div>
