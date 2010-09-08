@@ -49,4 +49,7 @@
          addview=".profile.AddForm"
          />
 
+    <include package="archetypes.schemaextender" />
+    <adapter factory=".extender.BlogExtender" />
+
 </configure>
