@@ -10,11 +10,13 @@
    description="A portlet that displays member profiles"
    />
 
+<!--  Add the portlet to the members folder by hand, instead.
   <assignment
     type="cloudspring.sfmembers.ProfilePortlet"
     manager="plone.leftcolumn"
     category="context"
     key="/community">
   </assignment>
+-->
 
 </portlets>
