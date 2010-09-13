@@ -16,15 +16,21 @@
 
     <dt class="portletHeader">
         <span class="portletTopLeft"></span>
-        <a tal:attributes="href view/getUrl">
-           <h2 tal:content="view/getName" />
-        </a>
+        <div>
+          <a tal:attributes="href view/getUrl">
+            <h2 tal:content="view/getName" />
+          </a>
+        </div>
         <span class="portletTopRight"></span>
     </dt>
 
     <dd class="portletItem">
       <div>
-        <img tal:attributes="src python:'%s/profile/@@images/picture/mini' % view.getUrl(); ">
+        <div class="_overlay">
+          <a tal:attributes="href string:${view/getUrl}/profile" title="View Profile">
+            <img tal:attributes="src python:'%s/profile/@@images/picture/mini' % view.getUrl(); ">
+          </a>
+        </div>
 
         <div id="accordion">
 
@@ -50,9 +56,10 @@
                  tal:attributes="href view/getTwitter">Follow me on Twitter</a>
             </div>
           </div>
-        </div>
 
-          <br clear="both" />
+        </div> <!-- end accordion -->
+
+        <br clear="both" />
       </div>
     </dd>
 
