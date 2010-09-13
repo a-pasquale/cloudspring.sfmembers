@@ -39,6 +39,7 @@ MEMBER_FIELDS_TO_FETCH = (
     'Name',
     'FirstName',
     'LastName',
+    'role__c',
     '(SELECT aff.npe5__Organization__r.Name, aff.npe5__Role__c FROM Contact.npe5__Affiliations__r aff)',
     )
 MEMBER_DIRECTORY_ID = 'community'
@@ -127,8 +128,6 @@ class UpdateMemberProfilesFromSalesforce(BrowserView):
             blog_folder.__ac_local_roles__ = None
             blog_folder.manage_setLocalRoles(sf_id, ['Owner'])
 
-            # Default view should be the blog view.
-            blog_folder.setLayout("blog-view")
             blog_field = blog_folder.getField('blog_folder')
             if blog_field:
                 blog_field.set(blog_folder, True)
@@ -153,6 +152,9 @@ class UpdateMemberProfilesFromSalesforce(BrowserView):
             blog_collection = getattr(blog_folder, "blog-collection")
             theCriteria = blog_collection.addCriterion('path','ATRelativePathCriterion')
             theCriteria.setRelativePath("../blog")
+
+            blog_collection.setLayout('blog_view')
+
             # Hide the collection from navigation.
             blog_collection.setExcludeFromNav(True)
             # publish and reindex
@@ -197,6 +199,7 @@ class UpdateMemberProfilesFromSalesforce(BrowserView):
         profile.name = data.Name
         profile.firstName = data.FirstName
         profile.lastName = data.LastName
+        profile.role = data.role__c
         #profile.bio = RichTextValue(data.Biography__c, 'text/structured', 'text/html')
         organizations = []
         orgs = data.npe5__Affiliations__r
@@ -244,7 +247,7 @@ class UpdateMemberProfilesFromSalesforce(BrowserView):
         """ Returns an iterator over the records of active members from Salesforce.com """
         sfbc = getToolByName(self.context, 'portal_salesforcebaseconnector')
         where = '(' + FETCH_CRITERIA + ')'
-        soql = "SELECT %s FROM %s WHERE %s ORDER BY lastName, firstName" % (
+        soql = "SELECT %s FROM %s WHERE %s ORDER BY role__c, lastName, firstName" % (
             ','.join(MEMBER_FIELDS_TO_FETCH),
             MEMBER_SOBJECT_TYPE,
             where)
