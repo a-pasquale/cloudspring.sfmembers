@@ -66,7 +66,7 @@ class IMember(form.Schema):
 
     form.fieldset('personal',
             label=(u'Personal'),
-            fields=['firstName','lastName','name','picture','discipline','academic_interests','personal_interests','favorite_quote']
+            fields=['firstName','lastName','name','picture','discipline','academic_interests','personal_interests','favorite_quote','role']
         )
 
     form.fieldset('contact',
@@ -222,6 +222,12 @@ class IMember(form.Schema):
             title=_(u"Organization"),
             schema=IMemberOrgs),
      )
+
+    role = schema.Choice(
+            title=_(u"Role"),
+            values=[_(u"Students"), _(u"Faculty"), _(u"Staff"), _(u"Collaborators"), _(u"Teaching Fellows"), _(u"Center Fellows"), _(u"Research Fellows"), _(u"Teaching Assistants"),],
+            required=False,
+        )
 
 class Member(Item):
     implements(IMember)
