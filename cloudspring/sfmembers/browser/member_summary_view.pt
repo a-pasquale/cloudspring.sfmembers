@@ -28,7 +28,7 @@
 
               <tal:block tal:repeat="item batch">
                 <div class="tileItem visualIEFloatFix vevent"
-                     tal:define="item_url item/getURL|item/absolute_url;
+                     tal:define="item_url python: item.aq_parent.absolute_url;
                                  item_title_or_id item/pretty_title_or_id;
                                  member python: item.profile;
                                  "
@@ -93,7 +93,7 @@
                          class="summary url"
                          tal:attributes="href item_url;
                                          title string:Read ${member/firstName}'s blog"
-                         tal:content="item_title_or_id">
+                         tal:content="member/name">
                             Item Title
                       </a>
 
