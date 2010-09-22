@@ -5,13 +5,11 @@
 <metal:block use-macro="here/global_defines/macros/defines" />
 <div tal:condition="python: not context.id == 'community'"> 
         <link rel="stylesheet" type="text/css" 
-            tal:define="navroot context/@@plone_portal_state/navigation_root_url"
-            tal:attributes="href string:${navroot}/++resource++cloudspring.sfmembers/member.css"
+            tal:attributes="href string:++resource++cloudspring.sfmembers/member.css"
             />
 
         <link rel="stylesheet" type="text/css" 
-            tal:define="navroot context/@@plone_portal_state/navigation_root_url"
-            tal:attributes="href string:${navroot}/++resource++cloudspring.sfmembers/member.css"
+            tal:attributes="href string:++resource++cloudspring.sfmembers/member.css"
             />
 
     <dt class="portletHeader">
@@ -28,7 +26,10 @@
       <div>
         <div class="_overlay">
           <a tal:attributes="href string:${view/getUrl}/profile" title="View Profile">
-            <img tal:attributes="src python:'%s/profile/@@images/picture/mini' % view.getUrl(); ">
+            <img tal:define="member view/_member; scale member/@@images"
+                 tal:replace="structure python: scale.scale('picture', width=250, height=250).tag()" 
+                 tal:condition="python: view.getPicture()">
+            <img tal:attributes="src string: ++resource++cloudspring.sfmembers/default_profile.jpg" alt="" tal:condition="python: not view.getPicture()" width="250"/>
           </a>
         </div>
 
@@ -37,23 +38,47 @@
           <h3 class="current">Academic Info</h3>
           <div class="pane" style="display:block">
             <ul>
-            <li tal:condition="view/getDiscipline" tal:content="view/getDiscipline"/>
-            <li>
-              <div class="_overlay">
-                <a tal:attributes="href string:${view/getUrl}/profile" title="Curriculum Vitae">Curriculum Vitae</a>
-              </div>
-            </li>
+              <li tal:condition="view/getDiscipline" tal:content="view/getDiscipline"/>
+              <li>
+                Interested in
+                <span tal:repeat="interest view/getAcademicInterests">
+                  <span tal:condition="repeat/interest/end">and</span>
+                  <span tal:content="interest"/><span tal:condition="python: repeat['interest'].index &lt; repeat['interest'].end">,</span>
+                </span>
+              </li>
+              <li>
+                <div class="_overlay">
+                  <a tal:attributes="href string:${view/getUrl}/profile" title="Curriculum Vitae">Curriculum Vitae</a>
+                </div>
+              </li>
+            </ul>
           </div>
 
           <h3>Contact</h3>
           <div class="pane">
             <div>
+              <a tal:attributes="href string: mailto:${view/getPublicEmail}">
+                <span tal:replace="view/getPublicEmail">email</span>
+              </a>
+            </div>
+            <div>
+              <span tal:replace="view/getWorkPhone">phone</span>
+            </div>
+            <div>
+              <span tal:replace="view/getAddress">address</span><br />
+              <span tal:replace="view/getCity">city</span>, 
+              <span tal:replace="view/getState">state</span>
+              <span tal:replace="view/getZipcode">zip</span>
+            </div>
+            <div>
               <a tal:condition="view/getFacebook" 
-                 tal:attributes="href view/getFacebook">Visit me on Facebook</a>
+                 tal:attributes="href view/getFacebook">
+                 Visit me on Facebook</a>
             </div>
             <div>
               <a tal:condition="view/getTwitter" 
-                 tal:attributes="href view/getTwitter">Follow me on Twitter</a>
+                 tal:attributes="href string: http://twitter.com/${view/getTwitter}">
+                 Follow me on Twitter</a>
             </div>
           </div>
 
