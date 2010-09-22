@@ -34,42 +34,53 @@
               <h4>Discipline</h4>
               <span tal:content="context/discipline"/>
             </div>
+
             <div tal:condition="context/academic_interests">
               <h4>Academic Interests</h4>
               <span tal:repeat="interest context/academic_interests">
                 <span tal:content="interest"/><span tal:condition="not:repeat/interest/end">,</span>
               </span>
             </div>
+
+            <div>
+              <h4>Address:</h4>
+              <span tal:replace="context/address">Address</span><br />
+              <span tal:replace="context/city">City</span>,
+              <span tal:replace="context/state">State</span><br />
+              <span tal:replace="context/zipcode">Zip</span>
+            </div>
+
           </div>
           </div>
 
           <div style="float:left; margin-left: 15px">
           <div class="" style="display:block">
-            <div tal:condition="context/home_phone">
-              <h4>Home Phone:</h4>
-              <span tal:content="context/home_phone"/>
+            <div> 
+              <h4 tal:condition="context/work_phone">Phone:</h4>
+              <span tal:content="context/work_phone"/>
             </div>
 
-            <div tal:condition="context/cell_phone">
-              <h4>Cell Phone:</h4>
-              <span tal:content="context/cell_phone"/>
+            <div>
+              <h4>Email:</h4>
+              <a tal:attributes="href string:mailto:${context/public_email}">
+                <span tal:replace="context/public_email">email</span>
+              </a>
             </div>
-
+          
             <div tal:condition="context/facebook">
-              <img tal:define="navroot context/@@plone_portal_state/navigation_root_url"
-                   tal:attributes="src string:${navroot}/++resource++cloudspring.sfmembers/fb.png"/> 
+              <img tal:attributes="src string:++resource++cloudspring.sfmembers/fb.png"/> 
               <a tal:attributes="href context/facebook">
                 <span>Visit me on Facebook</span>
               </a>
             </div>
 
             <div tal:condition="context/twitter">
-              <img tal:define="navroot context/@@plone_portal_state/navigation_root_url"
-                   tal:attributes="src string:${navroot}/++resource++cloudspring.sfmembers/twitter.png"/> 
-              <a tal:attributes="href context/twitter">
+              <img tal:attributes="src string:++resource++cloudspring.sfmembers/twitter.png"/> 
+              <a tal:attributes="href string:http://twitter.com/${context/twitter}">
                 <span>Follow me on twitter</span>
               </a>
             </div>
+
           </div>
           </div>
 
