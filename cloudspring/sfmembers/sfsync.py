@@ -39,10 +39,11 @@ MEMBER_FIELDS_TO_FETCH = (
     'Name',
     'FirstName',
     'LastName',
+    'Email',
     'role__c',
     '(SELECT aff.npe5__Organization__r.Name, aff.npe5__Role__c FROM Contact.npe5__Affiliations__r aff)',
     )
-MEMBER_DIRECTORY_ID = 'community'
+MEMBER_DIRECTORY_ID = 'members'
 MEMBER_PORTAL_TYPE = 'cloudspring.sfmembers.member'
 
 ORG_SOBJECT_TYPE = 'Account'
@@ -68,14 +69,16 @@ class UpdateMemberProfilesFromSalesforce(BrowserView):
     def getDirectoryFolder(self, dir, id):
         portal = getToolByName(self.context, 'portal_url').getPortalObject()
 
+        community_dir = portal.unrestrictedTraverse('community')
+ 
         # look for the global member folder
         try:
-           member_dir = portal.unrestrictedTraverse(dir)
+           member_dir = community_dir.unrestrictedTraverse(dir)
         except KeyError:
            # global member folder doesn't exist yet, so create it.
            portal.invokeFactory("Folder", dir)
            member_dir = getattr(portal, dir)
-           member_dir.setTitle('Community')
+           member_dir.setTitle('Members')
            member_dir.reindexObject(idxs=['Title'])
 
         # look for the member's folder
@@ -148,7 +151,8 @@ class UpdateMemberProfilesFromSalesforce(BrowserView):
             try:
                 blog_collection = dir.unrestrictedTraverse('blog-collection')
             except:
-                dir.invokeFactory(id="blog-collection", type_name="Topic", title="My Blog")
+                blog_title = "%s's blog" % name
+                dir.invokeFactory(id="blog-collection", type_name="Topic", title=blog_title)
             blog_collection = getattr(blog_folder, "blog-collection")
             theCriteria = blog_collection.addCriterion('path','ATRelativePathCriterion')
             theCriteria.setRelativePath("../blog")
@@ -177,8 +181,9 @@ class UpdateMemberProfilesFromSalesforce(BrowserView):
                 # The profile doesn't exists, so create it.
                 profile_id = dir.invokeFactory(MEMBER_PORTAL_TYPE, "profile")
                 profile = getattr(dir, profile_id)
-            
-            profile.setTitle("profile")
+           
+            profile_title = "%s's profile" % name 
+            profile.setTitle(profile_title)
             # Hide the profile from navigation.
             profile.setExcludeFromNav(True)
             # Change ownership and give local roles to member profile
@@ -199,6 +204,7 @@ class UpdateMemberProfilesFromSalesforce(BrowserView):
         profile.name = data.Name
         profile.firstName = data.FirstName
         profile.lastName = data.LastName
+        profile.email = data.Email
         profile.role = data.role__c
         #profile.bio = RichTextValue(data.Biography__c, 'text/structured', 'text/html')
         organizations = []
@@ -260,6 +266,29 @@ class UpdateMemberProfilesFromSalesforce(BrowserView):
             res = sfbc.queryMore(res['queryLocator'])
             for member in res:
                 yield member
+
+    def createPloneMember(self, member):
+        regtool = getToolByName(self.context, 'portal_registration')
+        username = member.sf_id__c
+        password = 'hello123'
+        if not member.Email:
+            email = 'andrew@elytra.net'
+        else:     
+            email = member.Email
+
+        fullname = member.Name
+
+        props = {"username": username,
+                 "fullname": fullname,
+                 "password": password,
+                 "email"   : email,
+                }
+        try:
+            regtool.addMember(username, password, properties=props)
+            logger.info('Created plone member %s' % username)
+        except:
+            logger.info('Failed to create plone member %s' % username)
+ 
 
     def findOrCreateOrgByName(self, name):
         res = self.catalog.searchResults(Title = name)
@@ -342,7 +371,7 @@ class UpdateMemberProfilesFromSalesforce(BrowserView):
             profile = self.findOrCreateProfileBySfId(name = data.Name, sf_id = data.sf_id__c)
             logger.info("profile.Title: " + profile.title)
             self.updateProfile(profile, data)
-
+            self.createPloneMember(data)
             # commit periodically (every 10) to avoid conflicts
             #if not i % 10:
             #    transaction.commit()
