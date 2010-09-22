@@ -4,4 +4,14 @@
         <indexed_attr value="sf_id"/>
     </index>
     <column value="sf_id"/>
+
+    <index name="role" meta_type="FieldIndex">
+        <indexed_attr value="role"/>
+    </index>
+    <column value="role"/>
+
+    <index name="BlogTypeField" meta_type="KeywordIndex">
+        <indexed_attr value="BlogTypeField" />
+    </index>
+    <column value="BlogTypeField" />
 </object>
