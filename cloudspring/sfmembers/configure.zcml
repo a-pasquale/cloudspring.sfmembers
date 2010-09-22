@@ -23,10 +23,6 @@
       />
   <!-- -*- extra stuff goes here -*- -->
   
-  <adapter factory=".organization.OrgMembersFactory"
-      name="cloudspring.sfmembers.organization.IOrgMembers" />  
-  <adapter factory=".member.MemberOrgsFactory"
-      name="cloudspring.sfmembers.member.IMemberOrgs" />  
   <browser:page
       for="*"
       name="sfsync"
@@ -52,5 +48,8 @@
          renderer=".profile.Renderer"
          addview=".profile.AddForm"
          />
+
+    <include package="archetypes.schemaextender" />
+    <adapter factory=".extender.BlogExtender" />
 
 </configure>
