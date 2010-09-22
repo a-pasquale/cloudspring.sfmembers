@@ -7,6 +7,8 @@ from rwproperty import getproperty, setproperty
 from plone.app.textfield import RichText
 from plone.namedfile.field import NamedImage
 
+from OFS.Image import Image
+
 from zope.interface import Interface
 from zope.interface import implements
 from zope.component import adapts
@@ -71,7 +73,7 @@ class IMember(form.Schema):
 
     form.fieldset('contact',
             label=(u'Contact Information'),
-            fields=['home_phone','cell_phone','email','facebook','twitter']
+            fields=['home_phone','cell_phone','work_phone','private_email','public_email','facebook','twitter','address','city','state','zipcode']
         )
     
     form.fieldset('cv',
@@ -107,9 +109,41 @@ class IMember(form.Schema):
             required=False,
         )
 
-    email = schema.TextLine(
-            title=_(u"Email (will not be publically available)"),
-            required=False,
+    work_phone = schema.TextLine(
+            title=_(u"Work phone"),
+            required=True,
+        )
+
+    private_email = schema.TextLine(
+            title=_(u"Private email"),
+            required=True,
+        )
+
+    public_email = schema.TextLine(
+            title=_(u"Public email"),
+            required=True,
+        )
+
+    address = schema.Text(
+            title=_(u"Street address"),
+            required=True,
+        )
+
+    city = schema.TextLine(
+            title=_(u"City"),
+            required=True,
+        )
+
+    state = schema.TextLine(
+           title=_(u"State"),
+           required=True,
+           min_length=2,
+           max_length=2,
+        )
+
+    zipcode = schema.TextLine(
+           title=_(u"Zip code"),
+           required=True,
         )
 
     facebook = schema.TextLine(
@@ -118,7 +152,7 @@ class IMember(form.Schema):
         )
 
     twitter = schema.TextLine(
-            title=_(u"Twitter"),
+            title=_(u"Your Twitter username"),
             required=False,
         )
 
@@ -262,3 +296,23 @@ class EditForm(dexterity.EditForm):
 
     description = _(u"")
     label = _(u"Edit your profile")   
+
+    def applyChanges(self, data):
+        changes = super(EditForm, self).applyChanges(data)
+        props = { "email"    : self.context.public_email,
+                  "fullname" : self.context.name,
+                }  
+
+        mt = getToolByName(self.context, 'portal_membership')
+        member = mt.getAuthenticatedMember()
+        member.setMemberProperties(mapping=props)
+
+        #picture = Image(id=self.context.picture.filename, file=self.context.picture.read(), title=self.context.picture.filename)
+        #picture.filename = self.context.picture.filename
+
+        #if picture: 
+            #mt.changeMemberPortrait(picture, str(member.getId()))
+            #transaction.commit()
+
+        return changes
+
