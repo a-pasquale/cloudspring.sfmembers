@@ -1,6 +1,10 @@
 from five import grok
 from zope import schema
 
+import z3c.form.form
+import z3c.form.button
+from Products.statusmessages.interfaces import IStatusMessage
+
 from plone.directives import form, dexterity
 from rwproperty import getproperty, setproperty
 
@@ -148,6 +152,7 @@ class IMember(form.Schema):
 
     facebook = schema.TextLine(
             title=_(u"Facebook"),
+            description=_(u"Please use the whole url for your facebook (e.g. http://www.facebook.com/kyle.homstead)"),
             required=False,
         )
 
@@ -297,6 +302,17 @@ class EditForm(dexterity.EditForm):
     description = _(u"")
     label = _(u"Edit your profile")   
 
+    @z3c.form.button.buttonAndHandler(_('Update profile'), name='update')
+    def handleApply(self, action):
+        data, errors = self.extractData()
+        if errors:
+            self.status = self.formErrorsMessage
+            return
+        self.applyChanges(data)
+        IStatusMessage(self.request).addStatusMessage(_(u"Changes saved"), "info")
+        self.request.response.redirect(self.context.aq_parent.absolute_url())
+
+
     def applyChanges(self, data):
         changes = super(EditForm, self).applyChanges(data)
         props = { "email"    : self.context.public_email,
@@ -313,6 +329,5 @@ class EditForm(dexterity.EditForm):
         #if picture: 
             #mt.changeMemberPortrait(picture, str(member.getId()))
             #transaction.commit()
-
         return changes
 
