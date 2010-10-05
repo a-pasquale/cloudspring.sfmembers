@@ -14,4 +14,12 @@
         <indexed_attr value="BlogTypeField" />
     </index>
     <column value="BlogTypeField" />
+
+    <index name="lastName" meta_type="FieldIndex">
+        <indexed_attr value="lastName"/>
+    </index>
+    <column value="lastName"/>
+
+
+
 </object>

@@ -36,5 +36,25 @@
         enabled="True"
         friendlyName="Blog type"/>
  </topic_metadata>
+
+  <topic_indexes>
+  <index
+    name="lastName"
+    description="Last Name"
+    enabled="True"
+    friendlyName="Last Name">
+   <criteria>ATSelectionCriterion</criteria>
+   <criteria>ATSimpleStringCriterion</criteria>
+  </index>
+
+ </topic_indexes>
+ <topic_metadata>
+  <metadata
+    name="lastName"
+        description="Last Name"
+        enabled="True"
+        friendlyName="Last Name"/>
+ </topic_metadata>
+
 </atcttool>
 
