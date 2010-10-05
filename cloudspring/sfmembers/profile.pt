@@ -42,8 +42,8 @@
               <li>
                 Interested in
                 <span tal:repeat="interest view/getAcademicInterests">
-                  <span tal:condition="repeat/interest/end">and</span>
-                  <span tal:content="interest"/><span tal:condition="python: repeat['interest'].index &lt; repeat['interest'].end">,</span>
+                  <span tal:condition="python: repeat['interest'].end and not repeat['interest'].start">and</span>
+                  <span tal:content="interest"/><span tal:condition="python: repeat['interest'].index &lt; repeat['interest'].end and not repeat['interest'].start">,</span>
                 </span>
               </li>
               <li>
