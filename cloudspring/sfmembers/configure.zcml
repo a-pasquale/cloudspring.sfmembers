@@ -1,5 +1,6 @@
 <configure
     xmlns="http://namespaces.zope.org/zope"
+    xmlns:cmf="http://namespaces.zope.org/cmf"
     xmlns:grok="http://namespaces.zope.org/grok"
     xmlns:plone="http://namespaces.plone.org/plone"
     xmlns:five="http://namespaces.zope.org/five"
@@ -21,14 +22,25 @@
       description="Installs the cloudspring.sfmembers package"
       provides="Products.GenericSetup.interfaces.EXTENSION"
       />
-  <!-- -*- extra stuff goes here -*- -->
-  
+
+  <!-- The name of the uninstall profile must be alphabetically after the install profile --> 
+  <genericsetup:registerProfile 
+      name="uninstall" 
+      title="Uninstall Cloudspring Membership" 
+      directory="profiles/uninstall" 
+      description="Remove support for the Cloudspring membership product." 
+      provides="Products.GenericSetup.interfaces.EXTENSION" 
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot" 
+      />
+
+ <!-- 
   <browser:page
       for="*"
       name="createMemberArea"
       class=".createMemberArea.CreateMemberArea"
       permission="zope2.View"
       />
+-->
   <include package="plone.app.z3cform" />
 
     <include package=".browser" />
@@ -44,5 +56,7 @@
 
     <include package="archetypes.schemaextender" />
     <adapter factory=".extender.BlogExtender" />
+
+    <cmf:registerDirectory name="skin_custom_templates"/>
 
 </configure>

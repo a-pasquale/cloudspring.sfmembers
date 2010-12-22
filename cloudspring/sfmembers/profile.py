@@ -39,17 +39,15 @@ class Renderer(base.Renderer):
         import re
         pattern = 'community/members/(\w*)'
         match = re.search(pattern, self.context.absolute_url())
-        sf_id = match.group(1)
+        uid = match.group(1)
 
-        catalog = getToolByName(self.context, 'portal_catalog')
-        results = catalog(id=sf_id)
-        for result in results:
-            member = result.profile
-            return member
+        portal = getToolByName(self.context, 'portal_url').getPortalObject()
+        profile = portal.community.members[uid].profile
+        return profile
 
     def getUrl(self):
         member = self._member()
-        return member.getURL()
+        return member.absolute_url()
 
     def getFirstName(self):
         member = self._member()

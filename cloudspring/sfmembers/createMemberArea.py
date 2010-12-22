@@ -14,165 +14,157 @@ from Products.CMFCore.utils import getToolByName
 from plone.i18n.normalizer.interfaces import IIDNormalizer
 from Products.CMFPlone.utils import safe_unicode
 from Products.CMFPlone.utils import _createObjectByType
+from zope.app.component.hooks import getSite
 from cloudspring.sfmembers.member import IMember
+
+from AccessControl import allow_module
+allow_module('cloudspring.sfmembers.createMemberArea')
 
 MEMBER_SOBJECT_TYPE = 'Contact'
 MEMBER_DIRECTORY = 'community/members'
 MEMBER_DIRECTORY_ID = 'members'
-MEMBER_PORTAL_TYPE = 'cloudspring.sfmembers.member'
+MEMBER_PORTAL_TYPE = 'cloudspring.sfmembers.Member'
 PUBLISH_ACTION = 'publish'
 logger = logging.getLogger('Create Member Area')
 
-class CreateMemberArea(BrowserView):
 
-    def __init__(self, context, request):
-        BrowserView.__init__(self, context, request)
-        self.catalog = getToolByName(self.context, 'portal_catalog')
-        self.wftool = getToolByName(self.context, 'portal_workflow')
-        self.normalizer = getUtility(IIDNormalizer)
+def publish(context, item):
+    wftool = getToolByName(context, 'portal_workflow')
+    # publish and reindex
+    try:
+        logger.info("Publishing %s... " % item.Title)
+        wftool.doActionFor(item, PUBLISH_ACTION)
+    except:
+        logger.info("Failed to publish %s" % item.Title)
+        pass
+    item.reindexObject(idxs=['Title'])
 
-    def publish(self, item):
-        # publish and reindex
+def getDirectoryFolder(context, dir):
+    portal = getToolByName(context, 'portal_url').getPortalObject()
+    cur_dir = portal.unrestrictedTraverse('')
+    for d in dir:
+        logger.info("d %s " % d)
+        logger.info("curdir: %s" % cur_dir ) 
         try:
-            self.wftool.doActionFor(item, PUBLISH_ACTION)
-        except:
-            logger.info("Failed to publish %s" % item.Title)
-            pass
-        item.reindexObject(idxs=['Title'])
+            cur_dir = cur_dir.unrestrictedTraverse(d)
+        except (AttributeError, KeyError):
+            logger.info("cur_dir: %s" % cur_dir)
+            logger.info("Folder %s doesn't exist yet, so create it." % d)
+            cur_dir.invokeFactory("Folder", d)
+            logger.info("InvokeFactory %s " % d)
+            cur_dir = getattr(cur_dir, d)
+            cur_dir.setTitle(cur_dir.id.title())
+            cur_dir.reindexObject(idxs=['Title'])
+            publish(context, cur_dir)
 
+    return cur_dir
 
-    def getDirectoryFolder(self, dir, id):
-        portal = getToolByName(self.context, 'portal_url').getPortalObject()
+def findOrCreateProfileById(context, name, id):
 
-        member_dir_path = MEMBER_DIRECTORY.split("/")
-        cur_dir = portal.unrestrictedTraverse('/')
-        for dir in member_dir_path:
-            try:
-                cur_dir = cur_dir.unrestrictedTravers(dir)
-            except KeyError:
-               # folder doesn't exist yet, so create it.
-               cur_dir.invokeFactory("Folder", dir)
-               cur_dir = getattr(cur_dir, dir)
-               cur_dir.setTitle(cur_dir.id.capwords())
-               cur_dir.reindexObject(idxs=['Title'])
-            publish(cur_dir)
+    member_dir_path = MEMBER_DIRECTORY.split("/")
+    member_dir_path.append(id)
+ 
+    directory = getDirectoryFolder(context, member_dir_path)
+    dir = getattr(directory, id)
 
-        member_dir = cur_dir
+    # Change the title to the members fullname.
+    home_dir = getattr(dir, id)
+    home_dir.setTitle(name)
 
-        # look for the member's folder
-        try:
-            directory = member_dir.unrestrictedTraverse(id)
-        except:
-             # Doesn't exist.  Create it!
-             member_dir.invokeFactory("Folder", id)
+    # publish and reindex
+    publish(context, home_dir)
 
-        directory = getattr(member_dir, id)
+    # look for the member's blog folder
+    try:
+        blog_folder = dir.unrestrictedTraverse('blog')
+    except:
+        dir.invokeFactory("Folder", 'blog')
+    blog_folder = getattr(dir, 'blog')
 
-        return directory
+    # Change ownership and give local roles to member folder
+    acl_users = getToolByName(context, "acl_users")
+    user = acl_users.getUserById(id)
+    blog_folder.changeOwnership(user)
+    blog_folder.__ac_local_roles__ = None
+    blog_folder.manage_setLocalRoles(id, ['Owner'])
 
-    def findOrCreateProfileById(self, name, id):
-        res = self.catalog.searchResults(id = id)
-        if res:
-            # update existing profile
-            profile = res[0].getObject()
-            logger.info('Updating %s' % '/'.join(profile.getPhysicalPath()))
-            return profile
-        else:
-            # didn't match ID: create new profile
-            #name = safe_unicode(name)
-            #profile_id = self.normalizer.normalize(name)
-            directory = self.getDirectoryFolder(MEMBER_DIRECTORY, id)
-            dir = getattr(directory, id)
+    # This enables collective.blogging (I think).
+    # Probably not necessary anymore?
+    blog_field = blog_folder.getField('blog_folder')
+    if blog_field:
+        blog_field.set(blog_folder, True)
 
-            # Change the title to the members fullname.
-            dir.setTitle(name)
+    # Hide the blog folder from navigation.
+    blog_folder.setExcludeFromNav(True)
 
-            # publish and reindex
-            publish(dir)
+    # publish and reindex
+    publish(context, blog_folder)
 
-            # look for the member's blog folder
-            try:
-                blog_folder = dir.unrestrictedTraverse('blog')
-            except:
-                dir.invokeFactory("Folder", 'blog')
-            blog_folder = getattr(dir, 'blog')
+    # get the blog collection
+    try:
+       blog_collection = dir.unrestrictedTraverse('blog-collection')
+    except:
+        blog_title = "%s's blog" % name
+        dir.invokeFactory(id="blog-collection", type_name="Topic", title=blog_title)
+    blog_collection = getattr(blog_folder, "blog-collection")
+    theCriteria = blog_collection.addCriterion('path','ATRelativePathCriterion')
+    theCriteria.setRelativePath("../blog")
 
-            # Change ownership and give local roles to member folder
-            acl_users = getToolByName(self, "acl_users")
-            user = acl_users.getUserById(id)
-            blog_folder.changeOwnership(user)
-            blog_folder.__ac_local_roles__ = None
-            blog_folder.manage_setLocalRoles(id, ['Owner'])
+    blog_collection.setLayout('blog_view')
 
-            blog_field = blog_folder.getField('blog_folder')
-            if blog_field:
-                blog_field.set(blog_folder, True)
+    # Hide the collection from navigation.
+    blog_collection.setExcludeFromNav(True)
+    # publish and reindex
+    publish(context, blog_collection)
 
-            # Hide the blog folder from navigation.
-            blog_folder.setExcludeFromNav(True)
+    # set the default page for the home folder to the collection
+    dir.setDefaultPage("blog-collection")
 
-            # publish and reindex
-            publish(blog_folder)
+    # get the member profile object, if it exists.
+    try:
+        logger.info("Looking for the member profile...")
+        profile = getattr(dir, "profile")
+    except:
+        logger.info("The profile doesn't exist, so create it.")
+        profile_id = dir.invokeFactory("cloudspring.sfmembers.member", "profile")
+        logger.info("Profile created.")
+        profile = getattr(dir, profile_id)
 
-            # get the blog collection
-            try:
-                blog_collection = dir.unrestrictedTraverse('blog-collection')
-            except:
-                blog_title = "%s's blog" % name
-                dir.invokeFactory(id="blog-collection", type_name="Topic", title=blog_title)
-            blog_collection = getattr(blog_folder, "blog-collection")
-            theCriteria = blog_collection.addCriterion('path','ATRelativePathCriterion')
-            theCriteria.setRelativePath("../blog")
+    profile_title = "%s's profile" % name
+    profile.setTitle(profile_title)
+    logger.info("Profile.Title: %s" % profile.Title)
+    # Hide the profile from navigation.
+    profile.setExcludeFromNav(True)
+    # Change ownership and give local roles to member profile
+    profile.changeOwnership(user)
+    profile.__ac_local_roles__ = None
+    profile.manage_setLocalRoles(id, ['Owner'])
 
-            blog_collection.setLayout('blog_view')
+    logger.info('Creating %s' % '/'.join(profile.getPhysicalPath()))
 
-            # Hide the collection from navigation.
-            blog_collection.setExcludeFromNav(True)
-            # publish and reindex
-            publish(blog_collection)
+    return profile
 
-            # set the default page for the home folder to the collection
-            dir.setDefaultPage("blog-collection")
+def updateProfile(context, profile, name, firstName, lastName, id, email, role):
+    logger.info("Updating " + name)
+    profile.id = id
+    profile.name = name
+    profile.firstName = firstName
+    profile.lastName = lastName
+    profile.email = email
+    profile.role = role
 
-            # get the member profile object, if it exists.
-            try:
-                profile = getattr(dir, "profile")
-            except:
-                # The profile doesn't exists, so create it.
-                profile_id = dir.invokeFactory(MEMBER_PORTAL_TYPE, "profile")
-                profile = getattr(dir, profile_id)
+    # publish and reindex
+    publish(context, profile)
 
-            profile_title = "%s's profile" % name
-            profile.setTitle(profile_title)
-            # Hide the profile from navigation.
-            profile.setExcludeFromNav(True)
-            # Change ownership and give local roles to member profile
-            profile.changeOwnership(user)
-            profile.__ac_local_roles__ = None
-            profile.manage_setLocalRoles(id, ['Owner'])
-
-            logger.info('Creating %s' % '/'.join(profile.getPhysicalPath()))
-
-        return profile
-
-    def updateProfile(self, profile, data):
-        logger.info("Updating " + data.Name)
-        profile.id = data.id
-        profile.name = data.Name
-        profile.firstName = data.FirstName
-        profile.lastName = data.LastName
-        profile.email = data.Email
-        profile.role = data.role
-
-        # publish and reindex
-        publish(profile)
-
-    def __call__(self, member=member):
+def createMemberArea(context, name, firstName, lastName, id, email, role):
         """ Creates a member area including blog and profile
             for a plone memember 
         """
+        logger.info('Starting CreateMemberArea')
 
-        profile = self.findOrCreateProfileById(name = member.Name, id = member.id)
+        logger.info("Member name: %s, id: %s" % (name, id))
+
+        profile = findOrCreateProfileById(context, name, id)
         logger.info("profile.Title: " + profile.title)
-        self.updateProfile(profile, data)
+        updateProfile(context, profile, name, firstName, lastName, id, email, role)
  
