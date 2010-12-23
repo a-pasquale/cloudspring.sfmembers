@@ -146,7 +146,7 @@ def findOrCreateProfileById(context, name, id):
 
 def updateProfile(context, profile, name, firstName, lastName, id, email, role):
     logger.info("Updating " + name)
-    profile.id = id
+    profile.sf_id = id
     profile.name = name
     profile.firstName = firstName
     profile.lastName = lastName
