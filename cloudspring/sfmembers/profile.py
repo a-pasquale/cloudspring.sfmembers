@@ -47,7 +47,7 @@ class Renderer(base.Renderer):
 
     def getUrl(self):
         member = self._member()
-        return member.absolute_url()
+        return member.aq_inner.aq_parent.absolute_url_path()
 
     def getFirstName(self):
         member = self._member()
