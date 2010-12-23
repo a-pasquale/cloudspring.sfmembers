@@ -83,10 +83,10 @@ def findOrCreateProfileById(context, name, id):
 
     # Change ownership and give local roles to member folder
     acl_users = getToolByName(context, "acl_users")
-    user = acl_users.getUserById(id)
+    user = acl_users.getUserById('khomstead')
     blog_folder.changeOwnership(user)
     blog_folder.__ac_local_roles__ = None
-    blog_folder.manage_setLocalRoles(id, ['Owner'])
+    blog_folder.manage_setLocalRoles(id, ['Editor'])
 
     # This enables collective.blogging (I think).
     # Probably not necessary anymore?
@@ -111,6 +111,7 @@ def findOrCreateProfileById(context, name, id):
     theCriteria.setRelativePath("../blog")
 
     blog_collection.setLayout('blog_view')
+    blog_collection.changeOwnership(user)
 
     # Hide the collection from navigation.
     blog_collection.setExcludeFromNav(True)
@@ -137,8 +138,9 @@ def findOrCreateProfileById(context, name, id):
     profile.setExcludeFromNav(True)
     # Change ownership and give local roles to member profile
     profile.changeOwnership(user)
+    logger.info("Changing profile ownership to %s " % user.id)
     profile.__ac_local_roles__ = None
-    profile.manage_setLocalRoles(id, ['Owner'])
+    profile.manage_setLocalRoles(id, ['Editor'])
 
     logger.info('Creating %s' % '/'.join(profile.getPhysicalPath()))
 
