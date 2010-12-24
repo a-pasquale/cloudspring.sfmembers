@@ -109,6 +109,9 @@ def findOrCreateProfileById(context, name, id):
     blog_collection = getattr(blog_folder, "blog-collection")
     theCriteria = blog_collection.addCriterion('path','ATRelativePathCriterion')
     theCriteria.setRelativePath("../blog")
+    # Most recent content is on top.
+    sort_criteria = blog_collection.addCriterion('modified','ATSortCriterion')
+    sort_criteria.setReversed(True)
 
     blog_collection.setLayout('blog_view')
     blog_collection.changeOwnership(user)
@@ -120,6 +123,27 @@ def findOrCreateProfileById(context, name, id):
 
     # set the default page for the home folder to the collection
     dir.setDefaultPage("blog-collection")
+
+    # get the draft collection
+    try:
+       draft_collection = dir.unrestrictedTraverse('drafts')
+    except:
+        dir.invokeFactory(id="drafts", type_name="Topic", title="Drafts")
+    drafts_collection = getattr(blog_folder, "drafts")
+    # Set path to the blog directory
+    theCriteria = drafts_collection.addCriterion('path','ATRelativePathCriterion')
+    theCriteria.setRelativePath("../blog")
+    # Only show drafts 
+    theCriteria = drafts_collection.addCriterion('review_state','ATSimpleStringCriterion')
+    theCriteria.setValue('private')
+    # Sort the drafts so the most recent are first.
+    sort_criteria = drafts_collection.addCriterion('modified','ATSortCriterion')
+    sort_criteria.setReversed(True)
+
+    drafts_collection.setLayout('blog_view')
+    drafts_collection.changeOwnership(user)
+    drafts_collection.__ac_local_roles__ = None
+    drafts_collection.manage_setLocalRoles(id, ['member'])
 
     # get the member profile object, if it exists.
     try:
