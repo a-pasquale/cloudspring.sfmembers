@@ -33,14 +33,15 @@
       for="Products.CMFPlone.interfaces.IPloneSiteRoot" 
       />
 
- <!-- 
-  <browser:page
-      for="*"
-      name="createMemberArea"
-      class=".createMemberArea.CreateMemberArea"
-      permission="zope2.View"
-      />
--->
+
+    <!-- Register the import step -->
+    <genericsetup:importStep
+        name="cloudspring.sfmembers"
+        title="cloudspring.sfmembers special import handlers"
+        description=""
+        handler="cloudspring.sfmembers.setuphandlers.setupVarious" />
+        />
+
   <include package="plone.app.z3cform" />
 
     <include package=".browser" />
