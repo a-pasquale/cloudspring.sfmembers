@@ -39,7 +39,7 @@ def createFolderStructure(portal):
             'title': 'Members',
             'description': '',
             'type': 'Folder',
-            'excludeFromNav': True,
+            'excludeFromNav': False,
             'criteria': [],
             'children': members_children,
             },
