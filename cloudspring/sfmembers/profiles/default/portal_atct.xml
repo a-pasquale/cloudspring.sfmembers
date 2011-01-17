@@ -9,13 +9,26 @@
    <criteria>ATSelectionCriterion</criteria>
    <criteria>ATSimpleStringCriterion</criteria>
   </index>
- </topic_indexes>
+  <index
+    name="AssignmentNumberField"
+    description="A field that contains the assignment number."
+    enabled="True"
+    friendlyName="Assignment number">
+   <criteria>ATSelectionCriterion</criteria>
+   <criteria>ATSimpleStringCriterion</criteria>
+  </index> 
+</topic_indexes>
  <topic_metadata>
   <metadata
     name="BlogTypeField"
         description="A field that describes the type of blog entry."
         enabled="True"
         friendlyName="Blog type"/>
+  <metadata
+    name="AssignmentNumberField"
+        description="A field that contains the assignment number."
+        enabled="True"
+        friendlyName="Assignment number"/>
  </topic_metadata>
 </atcttool>
 

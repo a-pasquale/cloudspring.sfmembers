@@ -9,4 +9,9 @@
         <indexed_attr value="BlogTypeField" />
     </index>
     <column value="BlogTypeField" />
+
+    <index name="AssignmentNumberField" meta_type="FieldIndex">
+        <indexed_attr value="AssignmentNumberField" />
+    </index>
+    <column value="AssignmentNumberField" />
 </object>
