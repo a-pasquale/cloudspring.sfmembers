@@ -192,8 +192,8 @@ MEMBERS = [
 MEMBER_SOBJECT_TYPE = 'Contact'
 MEMBER_DIRECTORY_ID = 'members'
 MEMBER_PORTAL_TYPE = 'cloudspring.sfmembers.member'
-
-logger = logging.getLogger('SFDC Import')
+PUBLISH_ACTION = 'publish-internally'
+logger = logging.getLogger('Cloudspring Members')
 
 class UpdateMemberProfilesFromSalesforce(BrowserView):
 
@@ -203,6 +203,26 @@ class UpdateMemberProfilesFromSalesforce(BrowserView):
         self.wftool = getToolByName(self.context, 'portal_workflow')
         self.normalizer = getUtility(IIDNormalizer)
 
+    def publish(self, item):
+        #wftool = getToolByName(self.context, 'portal_workflow')
+        # publish and reindex
+	try: 
+            # Retract first, then re-publish
+            logger.info("workflows: %s" % self.wftool.getWorkflowsFor(item))
+            logger.info("Review state: %s " % self.wftool.getInfoFor(item, "review_state"))
+            self.wftool.doActionFor(item, "hide")
+        except:
+            logger.info("Failed to hide %s " % item.title)
+            # Probably hasn't been published yet.
+            pass
+        try:
+            logger.info("Publishing %s... " % item.title)
+            self.wftool.doActionFor(item, PUBLISH_ACTION)
+        except:
+            logger.info("Failed to publish %s" % item.title)
+            pass
+        item.reindexObject(idxs=['Title'])
+ 
     def getDirectoryFolder(self, dir, id):
         portal = getToolByName(self.context, 'portal_url').getPortalObject()
 
@@ -227,13 +247,13 @@ class UpdateMemberProfilesFromSalesforce(BrowserView):
         return directory
 
     def findOrCreateProfileBySfId(self, name, sf_id):
-        res = self.catalog.searchResults(sf_id = sf_id)
-        if res:
-            # update existing profile
-            profile = res[0].getObject()
-            logger.info('Updating %s' % '/'.join(profile.getPhysicalPath()))
-            return profile
-        else:
+        #res = self.catalog.searchResults(sf_id = sf_id)
+        #if res:
+        #    # update existing profile
+        #    profile = res[0].getObject()
+        #    logger.info('Updating %s' % '/'.join(profile.getPhysicalPath()))
+        #    return profile
+        #else:
             # didn't match sf_id or UID: create new profile
             #name = safe_unicode(name)
             #profile_id = self.normalizer.normalize(name)
@@ -244,13 +264,10 @@ class UpdateMemberProfilesFromSalesforce(BrowserView):
             dir.setTitle(name)
 
             # publish and reindex
-            try:
-                logger.info("Publishing %s's home folder" % name )
-                self.wftool.doActionFor(dir, 'publish')
-            except:
-                logger.info("Failed to publish %s's home folder" % name)
-                pass
-            dir.reindexObject(idxs=['Title'])
+            logger.info("workflows: %s" % self.wftool.getWorkflowsFor(dir))
+            self.wftool.doActionFor(dir, "hide")
+            logger.info("Review state: %s " % self.wftool.getInfoFor(dir, "review_state"))
+            self.publish(dir)
             
             # look for the member's blog folder
             try:
@@ -258,31 +275,19 @@ class UpdateMemberProfilesFromSalesforce(BrowserView):
             except:
                 dir.invokeFactory("Folder", 'blog')
             blog_folder = getattr(dir, 'blog')
+            blog_folder.title = "blog folder"
 
             # Change ownership and give local roles to member folder
             acl_users = getToolByName(self, "acl_users")
-            user = acl_users.getUserById(sf_id)
+            user = acl_users.getUserById('admin')
             blog_folder.changeOwnership(user)
             blog_folder.__ac_local_roles__ = None
-            blog_folder.manage_setLocalRoles(sf_id, ['Owner'])
+            blog_folder.manage_setLocalRoles(sf_id, ['Contributor'])
 
-            # Default view should be the blog view.
-            blog_folder.setLayout("blog-view")
-            blog_field = blog_folder.getField('blog_folder')
-            if blog_field:
-                blog_field.set(blog_folder, True)
-            
             # Hide the blog folder from navigation.
             blog_folder.setExcludeFromNav(True)
             # publish and reindex
-
-            try:
-                logger.info("Publishing %s's blog folder" % name )
-                self.wftool.doActionFor(blog_folder, 'publish')
-            except:
-                logger.info("Failed to publish %s's blog folder" % name)
-                pass
-            blog_folder.reindexObject()
+            self.publish(blog_folder)
 
             # get the blog collection
             try:
@@ -290,25 +295,30 @@ class UpdateMemberProfilesFromSalesforce(BrowserView):
             except:
                 dir.invokeFactory(id="blog-collection", type_name="Topic", title="My Blog")
             blog_collection = getattr(blog_folder, "blog-collection")
-            theCriteria = blog_collection.addCriterion('path','ATRelativePathCriterion')
-            theCriteria.setRelativePath("../blog")
+            try:
+                theCriteria = blog_collection.addCriterion('path','ATRelativePathCriterion')
+                theCriteria.setRelativePath("../blog")
+            except:
+                # The Criteria already exists
+                pass
 
-            blog_collection.setLayout('blog-view')
+            try: 
+                blog_collection.deleteCriterion('crit__modified_ATSortCriterion')
+            except:
+                pass
+	    sort_crit = blog_collection.addCriterion('modified',"ATSortCriterion") 
+            sort_crit.setReversed(True)
+
+            blog_collection.setLayout('folder_summary_view')
 
             # Hide the collection from navigation.
             blog_collection.setExcludeFromNav(True)
             # publish and reindex
-            try:
-                logger.info("Publishing %s's blog collection" % name )
-                self.wftool.doActionFor(blog_collection, 'publish')
-            except:
-                logger.info("Failed to publish %s's blog collection" % name)
-                pass
-            blog_collection.reindexObject()
+            self.publish(blog_collection)
 
             # set the default page for the home folder to the collection
             dir.setDefaultPage("blog-collection")
-
+            
 
             # get the member profile object, if it exists.
             try: 
@@ -324,13 +334,13 @@ class UpdateMemberProfilesFromSalesforce(BrowserView):
             # Change ownership and give local roles to member profile
             profile.changeOwnership(user)
             profile.__ac_local_roles__ = None
-            profile.manage_setLocalRoles(sf_id, ['Owner'])
+            profile.manage_setLocalRoles(sf_id, ['Editor'])
 
             profile.reindexObject(idxs=['Title'])
 
-            logger.info('Creating %s' % '/'.join(profile.getPhysicalPath()))
+            logger.info('Touching %s' % '/'.join(profile.getPhysicalPath()))
 
-        return profile
+            return profile
 
     def updateProfile(self, profile, data):
         logger.info("Updating " + data['Name'])
@@ -343,13 +353,7 @@ class UpdateMemberProfilesFromSalesforce(BrowserView):
         #profile.bio = RichTextValue(data.Biography__c, 'text/structured', 'text/html')
 
         # publish and reindex
-        try:
-            logger.info("Publishing " + profile.name)
-            self.wftool.doActionFor(profile, 'publish')
-        except:
-            logger.info("Failed to publish " + profile.name)
-            pass
-        profile.reindexObject()
+        self.publish(profile)
 
     def hideProfileBySfId(self, sf_id):
         res = self.catalog.searchResults(Title = sf_id)
@@ -418,13 +422,7 @@ class UpdateMemberProfilesFromSalesforce(BrowserView):
         logger.info('org.Title: ' + org.title)
 
         # publish and reindex
-        try:
-            logger.info("Publishing " + org.title)
-            self.wftool.doActionFor(org, 'publish')
-        except:
-            logger.info("Failed to publish " + org.title)
-            pass
-        org.reindexObject()
+        self.publish(org)
 
     def queryOrgs(self):
         """ Returns an iterator over the records of active members from Salesforce.com """
@@ -453,10 +451,24 @@ class UpdateMemberProfilesFromSalesforce(BrowserView):
 
         # 1. fetch active Member Profile records, update ones that match,
         #    and create new ones
+        #from collective.blogging.interfaces import IEntryMarker, IBlogMarker
+        #from zope.interface import alsoProvides, noLongerProvides
+        #blogs = self.catalog(object_provides=IBlogMarker.__identifier__)
+        #for blog in blogs:
+        #    obj = blog.getObject()
+        #    noLongerProvides(obj, IBlogMarker)
+        #logger.info('Unmarked %d blogs.' % len(blogs))
+    
+        #entries = self.catalog(object_provides=IEntryMarker.__identifier__)
+        #for entry in entries:
+        #    obj = entry.getObject()
+        #    noLongerProvides(obj, IEntryMarker)
+        #    logger.info('Unmarked %d entries.' % len(entries))
+
         for i, data in enumerate(MEMBERS):
             profile = self.findOrCreateProfileBySfId(name = data['Name'], sf_id = data['sf_id__c'])
             logger.info("profile.Title: " + profile.title)
-            self.updateProfile(profile, data)
+            #self.updateProfile(profile, data)
 
             # commit periodically (every 10) to avoid conflicts
             #if not i % 10:
