@@ -14,6 +14,9 @@ class BlogTypeField(ExtensionField, StringField):
 class AssignmentNumberField(ExtensionField, StringField):
     pass
 
+class ProjectField(ExtensionField, StringField):
+    pass
+
 class BlogExtender(object):
     adapts(ATNewsItem)
     implements(ISchemaExtender)
@@ -21,7 +24,7 @@ class BlogExtender(object):
 
     fields = [ 
         BlogTypeField(name='BlogTypeField',
-                  vocabulary=[_(u'Assignment'),_(u'Pre-class reflection'), _(u'Post-class reflection'), _(u'Seminar feed'), _(u'Personal blog')],
+                  vocabulary=[_(u'Assignment'),_(u'Pre-class reflection'), _(u'Post-class reflection'), _(u'Project'), _(u'Seminar feed'), _(u'Personal blog')],
                   widget=SelectionWidget(
                       label=_(u'Blog type:'),
                       format='radio'
@@ -32,6 +35,15 @@ class BlogExtender(object):
             widget=StringWidget(
                 label=_(u"Assignment number:"),            
                 description=_(u"Enter the relevant class number."),
+            ),
+        ),
+
+        ProjectField(
+            name=_(u"ProjectField"),
+            vocabulary=[_(u'Syracuse'), _(u'Rutgers Future Scholars'), _(u'Innovative Lawyering'), _(u'Higher Education and Immigration'), _(u'College Initiative')],
+            widget=SelectionWidget(
+                label=_(u"Select a project:"),            
+                format='radio',
             ),
         ),
     ]

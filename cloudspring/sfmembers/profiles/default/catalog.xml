@@ -14,4 +14,8 @@
         <indexed_attr value="AssignmentNumberField" />
     </index>
     <column value="AssignmentNumberField" />
+    <index name="ProjectField" meta_type="FieldIndex">
+        <indexed_attr value="ProjectField" />
+    </index>
+    <column value="ProjectField" />
 </object>

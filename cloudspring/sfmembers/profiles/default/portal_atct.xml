@@ -17,6 +17,14 @@
    <criteria>ATSelectionCriterion</criteria>
    <criteria>ATSimpleStringCriterion</criteria>
   </index> 
+  <index
+    name="ProjectField"
+    description="A field that contains the project name."
+    enabled="True"
+    friendlyName="Project">
+   <criteria>ATSelectionCriterion</criteria>
+   <criteria>ATSimpleStringCriterion</criteria>
+   </index>
 </topic_indexes>
  <topic_metadata>
   <metadata
@@ -29,6 +37,11 @@
         description="A field that contains the assignment number."
         enabled="True"
         friendlyName="Assignment number"/>
+  <metadata
+    name="ProjectField"
+        description="A field that contains the project name."
+        enabled="True"
+        friendlyName="Project"/>
  </topic_metadata>
 </atcttool>
 
