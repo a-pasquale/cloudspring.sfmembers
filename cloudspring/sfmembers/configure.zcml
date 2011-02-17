@@ -52,4 +52,36 @@
     <include package="archetypes.schemaextender" />
     <adapter factory=".extender.BlogExtender" />
 
+    <!-- Configure content rules for different project types -->
+
+    <include package="plone.contentrules" />
+    <include package="plone.contentrules" file="meta.zcml" />
+    
+    <!-- the project condition -->
+    <adapter factory=".project.ProjectConditionExecutor" />
+
+    <browser:page 
+      for="plone.app.contentrules.browser.interfaces.IRuleConditionAdding"
+      name="cloudspring.sfmembers.Project"
+      class=".project.ProjectAddForm"
+      permission="cmf.ManagePortal"
+      />
+
+    <browser:page 
+      for="cloudspring.sfmembers.project.IProjectCondition"
+      name="edit"
+      class=".project.ProjectEditForm"
+      permission="cmf.ManagePortal"
+      />
+
+    <plone:ruleCondition
+        name="cloudspring.sfmembers.Project"
+        title="Project"
+        description="Apply only when the current content object is related to one of these projects"
+        for="*"
+        event="zope.component.interfaces.IObjectEvent"
+        addview="cloudspring.sfmembers.Project"
+        editview="edit"
+        />
+
 </configure>
