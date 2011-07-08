@@ -193,4 +193,6 @@ def createMemberArea(context, name, firstName, lastName, id, email, role):
         profile = findOrCreateProfileById(context, name, id)
         logger.info("profile.Title: " + profile.title)
         updateProfile(context, profile, name, firstName, lastName, id, email, role)
+        portal = getToolByName(context, 'portal_url').getPortalObject()
+        portal.community.setLayout("member_summary_view")
  

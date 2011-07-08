@@ -18,4 +18,17 @@
     key="/community/members">
   </assignment>
 
+ <portlet
+   name="cloudspring.sfmembers.quickPostPortlet"
+   addview="cloudspring.sfmembers.quickPostPortlet"
+   title="Quick-Post Portlet"
+   description="A portlet that allows members to make quick posts."
+   />
+
+  <assignment
+    name="QuickPostPortlet"
+    type="cloudspring.sfmembers.quickPostPortlet"
+    manager="ContentWellPortlets.FooterPortletManager6"
+    category="context"
+  />
 </portlets>

@@ -55,9 +55,17 @@
          addview=".profile.AddForm"
          />
 
+    <plone:portlet
+         name="cloudspring.sfmembers.quickPostPortlet"
+         interface=".quickPost.IQuickPostPortlet"
+         assignment=".quickPost.Assignment"
+         renderer=".quickPost.Renderer"
+         addview=".quickPost.AddForm"
+         />
+
     <include package="archetypes.schemaextender" />
     <adapter factory=".extender.BlogExtender" />
 
-    <cmf:registerDirectory name="skin_custom_templates"/>
+    <cmf:registerDirectory name="skin_custom_templates" directory="skins" recursive="True"/>
 
 </configure>

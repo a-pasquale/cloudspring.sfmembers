@@ -3,6 +3,7 @@
     xmlns:browser="http://namespaces.zope.org/browser">
 
     <!-- Override the blogview template from collective.blogging -->
+<!--
     <browser:page
         name="blog-view"
         for="collective.blogging.interfaces.IBlogMarker"
@@ -11,5 +12,5 @@
         template="browser/blogview.pt"
         layer="collective.blogging.interfaces.IBloggingSpecific"
         />
-
+-->
 </configure>
