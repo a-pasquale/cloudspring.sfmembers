@@ -88,9 +88,10 @@ ul.tabs a.xl.current { background-position: 0 -62px; }
 /* root element for accordion. decorated with rounded borders and gradient background image */
 #accordion {
 	background:#fff url(/Plone/++resource++cloudspring.sfmembers/h300.png) 0 0;
-	width: 250px;
-        margin-top:20px;
-	-background:#666;
+	width: 200px;
+  margin-top:20px;
+  box-shadow: 2px 2px 2px #999;
+  border-radius: 4px;
 }
 
 /* accordion header */
@@ -99,8 +100,8 @@ ul.tabs a.xl.current { background-position: 0 -62px; }
 	margin:0;
 	padding:0px 5px; 
 	font-weight:normal;
-        font: bold 1.8em "museo-slab-1","museo-slab-2";
-        color: #797979;
+  font: bold 1.8em "museo-slab-1","museo-slab-2";
+  color: #797979;
 	cursor:pointer;		
 }
 

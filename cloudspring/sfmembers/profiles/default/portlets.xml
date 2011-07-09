@@ -13,7 +13,7 @@
   <assignment
     name="Profile Portlet"
     type="cloudspring.sfmembers.ProfilePortlet"
-    manager="plone.leftcolumn"
+    manager="plone.rightcolumn"
     category="context"
     key="/community/members">
   </assignment>
