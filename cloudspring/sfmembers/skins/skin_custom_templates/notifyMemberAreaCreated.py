@@ -19,6 +19,9 @@ portal_membership = getToolByName(context,'portal_membership')
 member = portal_membership.getAuthenticatedMember()
 id = member.getUserName()
 name = member.getProperty("fullname")
+if name == '':
+  name = 'Unknown Name'
+
 email = member.getProperty("email")
 
 firstName = ''
