@@ -1,0 +1,12 @@
+<metal:main_macro define-macro="main">
+  <div tal:replace="structure provider:plone.abovecontenttitle" />
+  <h1>
+    <a tal:content="context/title"  
+       tal:define="context_state nocall:context/@@plone_context_state;"
+       tal:attributes="href context_state/view_url" />
+  </h1>
+  <div tal:replace="structure provider:plone.belowcontenttitle" />
+  <div tal:replace="structure provider:plone.abovecontentbody" />
+  <div tal:content="structure context/text/output" />
+  <div tal:replace="structure provider:plone.belowcontentbody" />
+</metal:main_macro>

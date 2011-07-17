@@ -19,3 +19,9 @@ class IRant(form.Schema):
             title=_(u"Text"),
             )
     
+class blog_item_view(grok.View):
+    grok.context(IRant)
+    grok.require('zope2.View')
+
+
+

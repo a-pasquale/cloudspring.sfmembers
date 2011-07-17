@@ -67,5 +67,4 @@
     <adapter factory=".extender.BlogExtender" />
 
     <cmf:registerDirectory name="skin_custom_templates" directory="skins" recursive="True"/>
-
 </configure>
