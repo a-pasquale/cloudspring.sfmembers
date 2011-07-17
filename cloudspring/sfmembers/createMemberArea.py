@@ -107,11 +107,15 @@ def findOrCreateProfileById(context, name, id):
         blog_title = "%s's blog" % name
         dir.invokeFactory(id="blog-collection", type_name="Topic", title=blog_title)
     blog_collection = getattr(blog_folder, "blog-collection")
-    theCriteria = blog_collection.addCriterion('path','ATRelativePathCriterion')
-    theCriteria.setRelativePath("../blog")
     # Most recent content is on top.
-    sort_criteria = blog_collection.addCriterion('modified','ATSortCriterion')
-    sort_criteria.setReversed(True)
+    try:
+      theCriteria = blog_collection.addCriterion('path','ATRelativePathCriterion')
+      theCriteria.setRelativePath("../blog")
+      sort_criteria = blog_collection.addCriterion('modified','ATSortCriterion')
+      sort_criteria.setReversed(True)
+    except:
+      # criteria already set.
+      pass
 
     blog_collection.setLayout('blog_view')
     blog_collection.changeOwnership(user)
@@ -130,15 +134,19 @@ def findOrCreateProfileById(context, name, id):
     except:
         dir.invokeFactory(id="drafts", type_name="Topic", title="Drafts")
     drafts_collection = getattr(blog_folder, "drafts")
-    # Set path to the blog directory
-    theCriteria = drafts_collection.addCriterion('path','ATRelativePathCriterion')
-    theCriteria.setRelativePath("../blog")
-    # Only show drafts 
-    theCriteria = drafts_collection.addCriterion('review_state','ATSimpleStringCriterion')
-    theCriteria.setValue('private')
-    # Sort the drafts so the most recent are first.
-    sort_criteria = drafts_collection.addCriterion('modified','ATSortCriterion')
-    sort_criteria.setReversed(True)
+    try: 
+      # Set path to the blog directory
+      theCriteria = drafts_collection.addCriterion('path','ATRelativePathCriterion')
+      theCriteria.setRelativePath("../blog")
+      # Only show drafts 
+      theCriteria = drafts_collection.addCriterion('review_state','ATSimpleStringCriterion')
+      theCriteria.setValue('private')
+      # Sort the drafts so the most recent are first.
+      sort_criteria = drafts_collection.addCriterion('modified','ATSortCriterion')
+      sort_criteria.setReversed(True)
+    except:
+      # criteria already set.
+      pass
 
     drafts_collection.setLayout('blog_view')
     drafts_collection.changeOwnership(user)
@@ -171,7 +179,7 @@ def findOrCreateProfileById(context, name, id):
     return profile
 
 def updateProfile(context, profile, name, firstName, lastName, id, email, role):
-    logger.info("Updating " + name)
+    logger.info("Updating %s" % name)
     profile.sf_id = id
     profile.name = name
     profile.firstName = firstName
