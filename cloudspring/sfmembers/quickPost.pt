@@ -21,8 +21,12 @@
       </ul>
     </div>
     <div class="post-type-form rant">
-      <form name="quick-post" id="quick-post" method="post" action="http://64.18.217.181:8094/Plone/++add++rant" enctype="multipart/form-data">
-        Title:<input id="form-widgets-IDublinCore-title" name="form.widgets.IDublinCore.title" class="text-widget required textline-field" value="" title="testing"/>
+        <form name="quick-post-rant" id="quick-post-rant" method="post" enctype="multipart/form-data"
+          tal:define="root context/plone_portal_state/navigation_root_url;
+                      member here/portal_membership/getAuthenticatedMember;
+                      username python:member.getUserName();"
+                      tal:attributes="action string:${root}/community/members/${username}/blog/++add++cloudspring.sfmembers.rant" >
+        Title:<input id="form-widgets-title" name="form.widgets.title" class="text-widget required textline-field" value="" title="testing"/>
         <textarea id="form.widgets.text" name="form.widgets.text" class="textarea-widget text-field"></textarea>
         <input id="form-buttons-save" name="form.buttons.save" class="submit-widget button-field context" value="Rant" type="submit" />
       </form>
@@ -53,11 +57,11 @@
         extraSpace : 28,
         limit: 150
       });
-      $('#quick-post').ajaxForm(function() { 
+      $('#quick-post-rant').ajaxForm(function() { 
         $('#message').html("Post submitted.")
         .hide()
         .fadeIn(1500);
-        $('#quick-post').resetForm();
+        $('#quick-post-rant').resetForm();
       });
     </script>
   </dd>
