@@ -1,7 +1,7 @@
 from plone.app.portlets.portlets import base
 from zope.interface import implements
 from Products.CMFCore.utils import getToolByName
-from cloudspring.sfmembers.interfaces import IProfilePortlet
+from cloudspring.sfmembers.interfaces import IMyProfilePortlet
 
 from zope.formlib import form
 
@@ -12,16 +12,16 @@ from Products.CMFPlone import PloneMessageFactory as _
 
 
 class Assignment(base.Assignment):
-    implements(IProfilePortlet)
+    implements(IMyProfilePortlet)
 
     @property
     def title(self):
-        return _(u"Profile Portlet")
+        return _(u"My Profile Portlet")
 
 
 class AddForm(base.AddForm):
-    form_fields = form.Fields(IProfilePortlet)
-    label = _(u"Add Profile Portlet")
+    form_fields = form.Fields(IMyProfilePortlet)
+    label = _(u"Add My Profile Portlet")
     description = _(u"This portlet displays a members profile.")
 
     def create(self, data):
@@ -29,34 +29,24 @@ class AddForm(base.AddForm):
 
 
 class Renderer(base.Renderer):
-    _template = ViewPageTemplateFile('profile.pt')
-
+    _template = ViewPageTemplateFile('my_profile.pt')
+    
     def __init__(self, *args):
         base.Renderer.__init__(self, *args)
-
-    def getUID(self):
-        import re
-        pattern = 'community/members/(\w*)'
-        match = re.search(pattern, self.context.absolute_url())
-        uid = match.group(1)
-        return uid
+        portal_state = getMultiAdapter((self.context, self.request), name=u'plone_portal_state')
+        self.anonymous = portal_state.anonymous()
 
     @memoize
     def _member(self):
-        portal = getToolByName(self.context, 'portal_url').getPortalObject()
-        uid = self.getUID()
-        profile = portal.community.members[uid].profile
-        return profile
-
-    def isHomeFolder(self):
-        mt = getToolByName(self.context, 'portal_membership')
-        member = mt.getAuthenticatedMember()
-        username = member.getUserName()
-        uid = self.getUID()
-        if uid == username:
-            return True
-        else:
-            return False
+       if self.anonymous: # the user has not logged in
+           return None
+       else:
+           mt = getToolByName(self.context, 'portal_membership')
+           member = mt.getAuthenticatedMember()
+           username = member.getUserName()
+           portal = getToolByName(self.context, 'portal_url').getPortalObject()
+           profile = portal.community.members[username].profile
+           return profile
 
     def getUrl(self):
         member = self._member()
@@ -119,6 +109,6 @@ class Renderer(base.Renderer):
 
     @property
     def available(self):
-        return True
+        return not self.anonymous
 
 

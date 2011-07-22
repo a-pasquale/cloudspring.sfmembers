@@ -1,18 +1,20 @@
-<dl class="portlet portletProfilePortlet"
+<dl class="portlet portletMyProfilePortlet"
     i18n:domain="cloudspring.sfmembers"
-    id="portlet-profile">
+    id="portlet-my-profile">
 
 <metal:block use-macro="here/global_defines/macros/defines" />
-<div tal:condition="python: not context.id == 'members-collection'"> 
-    <div tal:condition="view/isHomeFolder" id="my-home-folder" /> 
-    <link rel="stylesheet" type="text/css" tal:attributes="href string:++resource++cloudspring.sfmembers/member.css" />
+<div> 
+    <script type="text/javascript" src="++resource++cloudspring.sfmembers/jquery.editinplace.js"></script> 
+    <link rel="stylesheet" type="text/css" 
+            tal:attributes="href string:++resource++cloudspring.sfmembers/member.css"
+            />
 
     <dt class="portletHeader">
         <span class="portletTopLeft"></span>
         <div>
-          <a tal:attributes="href view/getUrl">
-            <h2 tal:content="view/getName" />
-          </a>
+            <div>
+          <h2 id="name" tal:content="view/getName" />
+          </div>
         </div>
         <span class="portletTopRight"></span>
     </dt>
@@ -28,7 +30,7 @@
           </a>
         </div>
 
-        <div id="accordion">
+        <div id="my_accordion">
 
           <h3 class="current">Academic Info</h3>
           <div class="pane" style="display:block">
@@ -51,11 +53,8 @@
 
           <h3>Contact</h3>
           <div class="pane">
-            <div id="profile-email">
-              <a tal:attributes="href string: mailto:${view/getPublicEmail}">
-                <span tal:replace="view/getPublicEmail">email</span>
-              </a>
-            </div>
+            <div>
+                <div id="email" tal:content="view/getPublicEmail">email</div>
             <div>
               <span tal:replace="view/getWorkPhone">phone</span>
             </div>

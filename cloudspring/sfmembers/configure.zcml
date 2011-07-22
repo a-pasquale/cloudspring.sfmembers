@@ -48,6 +48,14 @@
     <include package="plone.app.portlets"/>
 
      <plone:portlet
+         name="cloudspring.sfmembers.MyProfilePortlet"
+         interface=".my_profile.IMyProfilePortlet"
+         assignment=".my_profile.Assignment"
+         renderer=".my_profile.Renderer"
+         addview=".my_profile.AddForm"
+         />
+
+     <plone:portlet
          name="cloudspring.sfmembers.ProfilePortlet"
          interface=".profile.IProfilePortlet"
          assignment=".profile.Assignment"

@@ -86,7 +86,7 @@ ul.tabs a.xl.current { background-position: 0 -62px; }
         border-top:0;
 }
 /* root element for accordion. decorated with rounded borders and gradient background image */
-#accordion {
+#accordion, #my_accordion {
 	background:#fff url(/Plone/++resource++cloudspring.sfmembers/h300.png) 0 0;
 	width: 200px;
   margin-top:20px;
@@ -95,7 +95,7 @@ ul.tabs a.xl.current { background-position: 0 -62px; }
 }
 
 /* accordion header */
-#accordion h3 {
+#accordion h3, #my_accordion h3 {
 	background:#ccc url(/Plone/++resource++cloudspring.sfmembers/h30.png);
 	margin:0;
 	padding:0px 5px; 
@@ -106,13 +106,13 @@ ul.tabs a.xl.current { background-position: 0 -62px; }
 }
 
 /* currently active header */
-#accordion h3.current {
+#accordion h3.current, #my_accordion h3.current {
 	cursor:default;
 	background-color:#fff;
 }
 
 /* accordion pane */
-#accordion .pane {
+#accordion .pane, #my_accordion .pane {
 	display:none;
 	padding:5px 15px 5px 15px;
 	color:#fff;
@@ -121,7 +121,7 @@ ul.tabs a.xl.current { background-position: 0 -62px; }
 }
 
 /* a title inside pane */
-#accordion .pane {
+#accordion .pane, #my_accordion .pane {
 	font-weight:normal;
 	margin:0 0 -5px 0;
 	font-size:12px;

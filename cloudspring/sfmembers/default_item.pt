@@ -13,6 +13,12 @@
   
   <tal:plone4 tal:condition="python:body_macro is None">
     <div tal:replace="structure provider:plone.abovecontenttitle" />
+         <img src="" tal:define="icon python:here.getIcon(1)"
+         tal:attributes="src string:/${icon}" alt="" /> 
+        <img tal:define="plone_view context/@@plone;
+                         getIcon nocall:plone_view/getIcon;
+                         item_icon python:getIcon(context);"
+                         tal:replace="structure item_icon/html_tag" />
     <h1>
       <a tal:content="context/title"  
          tal:define="context_state nocall:context/@@plone_context_state;"
