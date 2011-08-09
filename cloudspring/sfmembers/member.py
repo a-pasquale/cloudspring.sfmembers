@@ -11,6 +11,8 @@ from rwproperty import getproperty, setproperty
 from plone.app.textfield import RichText
 from plone.namedfile.field import NamedImage
 
+from OFS.Image import Image
+
 from zope.interface import Interface
 from zope.interface import implements
 from zope.component import adapts
@@ -150,6 +152,12 @@ class IMember(form.Schema):
             required=False,
         )
 
+
+    role = schema.Choice(
+            title=_(u"Role"),
+            values=[_(u"Students"), _(u"Faculty"), _(u"Staff"), _(u"Collaborators"), _(u"Teaching Fellows"), _(u"Center Fellows"), _(u"Research Fellows"), _(u"Teaching Assistants"),],
+            required=False,
+        )
 
 class Member(Item):
     implements(IMember)

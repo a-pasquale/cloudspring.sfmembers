@@ -15,6 +15,8 @@
                 Title or id
         </h1>
 
+        <div tal:replace="structure provider:plone.belowcontenttitle" />
+
           <p metal:use-macro="here/kss_generic_macros/macros/generic_description_view">
               Description
           </p>
@@ -26,7 +28,7 @@
 
               <tal:block tal:repeat="item batch">
                 <div class="tileItem visualIEFloatFix vevent"
-                     tal:define="item_url item/getURL|item/absolute_url;
+                     tal:define="item_url python: item.absolute_url;
                                  item_title_or_id item/pretty_title_or_id;
                                  member python: item.profile;
                                  "
@@ -44,12 +46,19 @@
                              tal:condition="nocall:member/picture"
                              tal:attributes="src string:${item_url}/profile/@@images/picture/tile;
 " />
+                        <img class="picture" src="++resource++cloudspring.sfmembers/default_profile.jpg" alt=""
+                             tal:condition="python: not member.picture" width="64"/>
+
                       </a>
                       <div class="tooltip">
                         <h4><span tal:replace="member/name">name</span></h4>
                         <div class="tile">
                           <a tal:attributes="href string:${item_url}">
-                            <img tal:attributes="src string:${item_url}/profile/@@images/picture/thumb;"/>
+                            <img tal:attributes="src string:${item_url}/profile/@@images/picture/thumb;" 
+                                 tal:condition="nocall:member/picture" />
+
+                            <img class="picture" src="++resource++cloudspring.sfmembers/default_profile.jpg" alt=""
+                                 tal:condition="python: not member.picture" width="128"/>
                           </a>
                         </div>
                         <div class="tile">
@@ -83,8 +92,8 @@
                       <a href="#"
                          class="summary url"
                          tal:attributes="href item_url;
-                                         title string:Read ${member/firstName}&#146s blog"
-                         tal:content="item_title_or_id">
+                                         title string:Read ${member/firstName}'s blog"
+                         tal:content="member/name">
                             Item Title
                       </a>
 

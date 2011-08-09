@@ -2,14 +2,22 @@
     xmlns="http://namespaces.zope.org/zope"
     xmlns:browser="http://namespaces.zope.org/browser">
 
-    <!-- Override the blogview template from collective.blogging -->
     <browser:page
-        name="blog-view"
-        for="collective.blogging.interfaces.IBlogMarker"
-        class=".browser.blogview.BlogView"
-        permission="zope2.View"
-        template="browser/blogview.pt"
-        layer="collective.blogging.interfaces.IBloggingSpecific"
-        />
+      for="*"
+      name="blog_item_view"
+      class=".default_item.DefaultItemView"
+      permission="zope2.View"
+      template="rant_templates/blog_item_view.pt"
+    />
+
+  <browser:page
+    for="*"
+    name="blog_view"
+    class="collective.blog.view.blog.BlogView"
+    template="blog.pt"
+    permission="zope2.View"
+    />
+
+
 
 </configure>

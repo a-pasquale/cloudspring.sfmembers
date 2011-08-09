@@ -12,7 +12,7 @@
 
    <browser:page
       name="member_summary_view"
-      for="Products.ATContentTypes.interface.folder.IATFolder"
+      for="Products.ATContentTypes.interface.topic.IATTopic"
       class=".views.MemberSummaryView"
       template="member_summary_view.pt"
       allowed_interface=".interfaces.IMemberSummaryView"
@@ -20,19 +20,19 @@
       />
 
     <browser:menuItem
-        for="Products.ATContentTypes.interface.folder.IATFolder"
+        for="Products.ATContentTypes.interface.topic.IATTopic"
         menu="plone_displayviews"
         title="Member view"
         action="member_summary_view"
         description="Member view"
     />
 
-    <class class="Products.ATContentTypes.interface.folder.IATFolder">
+    <class class="Products.ATContentTypes.interface.topic.IATTopic">
         <allow interface=".interfaces.IMemberSummaryView" />
     </class>
 
     <five:implements
-        class="Products.ATContentTypes.interface.folder.IATFolder"
+        class="Products.ATContentTypes.interface.topic.IATTopic"
         interface=".interfaces.IMemberSummaryView"
     />
 

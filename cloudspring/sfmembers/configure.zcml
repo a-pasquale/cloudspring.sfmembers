@@ -1,5 +1,6 @@
 <configure
     xmlns="http://namespaces.zope.org/zope"
+    xmlns:cmf="http://namespaces.zope.org/cmf"
     xmlns:grok="http://namespaces.zope.org/grok"
     xmlns:plone="http://namespaces.plone.org/plone"
     xmlns:five="http://namespaces.zope.org/five"
@@ -16,30 +17,43 @@
 
   <genericsetup:registerProfile
       name="default"
-      title="Salesforce Integration"
+      title="Cloudspring Membership"
       directory="profiles/default"
       description="Installs the cloudspring.sfmembers package"
       provides="Products.GenericSetup.interfaces.EXTENSION"
       />
-  <!-- -*- extra stuff goes here -*- -->
-  
-  <browser:page
-      for="*"
-      name="sfsync"
-      class=".sfsync.UpdateMemberProfilesFromSalesforce"
-      permission="zope2.View"
+
+  <!-- The name of the uninstall profile must be alphabetically after the install profile --> 
+  <genericsetup:registerProfile 
+      name="uninstall" 
+      title="Uninstall Cloudspring Membership" 
+      directory="profiles/uninstall" 
+      description="Remove support for the Cloudspring membership product." 
+      provides="Products.GenericSetup.interfaces.EXTENSION" 
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot" 
       />
-  <include package="plone.app.z3cform" />
-    <!-- Register the editProfile form -->
-    <browser:page
-        for="Products.CMFPlone.interfaces.IPloneSiteRoot"
-        name="editProfile_form"
-        class=".editProfile.EditProfileView"
-        permission="zope2.View"
+
+
+    <!-- Register the import step -->
+    <genericsetup:importStep
+        name="cloudspring.sfmembers"
+        title="cloudspring.sfmembers special import handlers"
+        description=""
+        handler="cloudspring.sfmembers.setuphandlers.setupVarious" />
         />
+
+  <include package="plone.app.z3cform" />
 
     <include package=".browser" />
     <include package="plone.app.portlets"/>
+
+     <plone:portlet
+         name="cloudspring.sfmembers.MyProfilePortlet"
+         interface=".my_profile.IMyProfilePortlet"
+         assignment=".my_profile.Assignment"
+         renderer=".my_profile.Renderer"
+         addview=".my_profile.AddForm"
+         />
 
      <plone:portlet
          name="cloudspring.sfmembers.ProfilePortlet"
@@ -48,9 +62,6 @@
          renderer=".profile.Renderer"
          addview=".profile.AddForm"
          />
-
-    <include package="archetypes.schemaextender" />
-    <adapter factory=".extender.BlogExtender" />
 
     <!-- Configure content rules for different project types -->
 
@@ -84,4 +95,16 @@
         editview="edit"
         />
 
+    <plone:portlet
+         name="cloudspring.sfmembers.quickPostPortlet"
+         interface=".quickPost.IQuickPostPortlet"
+         assignment=".quickPost.Assignment"
+         renderer=".quickPost.Renderer"
+         addview=".quickPost.AddForm"
+         />
+
+    <include package="archetypes.schemaextender" />
+    <adapter factory=".extender.BlogExtender" />
+
+    <cmf:registerDirectory name="skin_custom_templates" directory="skins" recursive="True"/>
 </configure>

@@ -1,0 +1,75 @@
+<dl class="portlet portletQuickPostPortlet"
+    i18n:domain="cloudspring.sfmembers"
+    id="portlet-quickPost">
+
+<metal:block use-macro="here/global_defines/macros/defines" />
+<div class="inner"> 
+  <link rel="stylesheet" type="text/css" 
+    tal:attributes="href string:++resource++cloudspring.sfmembers/quickPost.css" />
+  <script type="text/javascript" src="++resource++cloudspring.sfmembers/autoresize.jquery.min.js"></script>
+  <dt class="portletHeader">
+    <span class="portletTopLeft"></span>
+    <div><h2>Quick Post</h2></div>
+    <span class="portletTopRight"></span>
+  </dt>
+
+  <dd class="portletItem">
+    <div>
+      <ul id="post-types">
+        <li><a href="#">Rant</a></li>
+        <li><a href="#">Blog</a></li>
+      </ul>
+    </div>
+    <div class="post-type-form rant">
+        <form name="quick-post-rant" id="quick-post-rant" method="post" enctype="multipart/form-data"
+          tal:define="root context/plone_portal_state/navigation_root_url;
+                      member here/portal_membership/getAuthenticatedMember;
+                      username python:member.getUserName();"
+                      tal:attributes="action string:${root}/community/members/${username}/blog/++add++cloudspring.sfmembers.rant" >
+        Title:<input id="form-widgets-title" name="form.widgets.title" class="text-widget required textline-field" value="" title="testing"/>
+        <textarea id="form.widgets.text" name="form.widgets.text" class="textarea-widget text-field"></textarea>
+        <input id="form-buttons-save" name="form.buttons.save" class="submit-widget button-field context" value="Rant" type="submit" />
+      </form>
+    </div>
+    
+    <div class="post-type-form blog">
+      <form name="quick-post" id="quick-post" method="post" action="http://64.18.217.181:8094/Plone/++add++rant" enctype="multipart/form-data">
+        Title:<input id="form-widgets-IDublinCore-title" name="form.widgets.IDublinCore.title" class="text-widget required textline-field" value="" title="testing"/>
+        <textarea id="form.widgets.text" name="form.widgets.text" class="textarea-widget text-field"></textarea>
+        <input id="form-buttons-save" name="form.buttons.save" class="submit-widget button-field context" value="Post" type="submit" />
+      </form>
+    </div>
+
+    <div id="result"><div id="message"></div></div>
+    <script>
+      $('textarea').autoResize({
+        // On resize:
+        onResize : function() {
+          $(this).css({opacity:0.8});
+        },
+        // After resize:
+        animateCallback : function() {
+          $(this).css({opacity:1});
+        },
+        // Quite slow animation:
+        animateDuration             : 300,
+        // More extra space:
+        extraSpace : 28,
+        limit: 150
+      });
+      $('#quick-post-rant').ajaxForm(function() { 
+        $('#message').html("Post submitted.")
+        .hide()
+        .fadeIn(1500);
+        $('#quick-post-rant').resetForm();
+      });
+    </script>
+  </dd>
+
+  <dd class="portletFooter">
+    <span class="portletBottomLeft"></span>
+    <a class="overlayLink" href="/" >Home</a>
+    <span class="portletBottomRight"></span>
+  </dd>
+</div>
+</dl>

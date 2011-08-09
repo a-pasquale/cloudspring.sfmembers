@@ -1,0 +1,90 @@
+<dl class="portlet portletMyProfilePortlet"
+    i18n:domain="cloudspring.sfmembers"
+    id="portlet-my-profile">
+
+<metal:block use-macro="here/global_defines/macros/defines" />
+<div> 
+    <script type="text/javascript" src="++resource++cloudspring.sfmembers/jquery.editinplace.js"></script> 
+    <link rel="stylesheet" type="text/css" 
+            tal:attributes="href string:++resource++cloudspring.sfmembers/member.css"
+            />
+
+    <dt class="portletHeader">
+        <span class="portletTopLeft"></span>
+        <div>
+            <div>
+          <h2 id="name" tal:content="view/getName" />
+          </div>
+        </div>
+        <span class="portletTopRight"></span>
+    </dt>
+
+    <dd class="portletItem">
+      <div>
+        <div class="_overlay">
+          <a tal:attributes="href string:${view/getUrl}/profile" title="View Profile">
+            <img tal:define="member view/_member; scale member/@@images"
+                 tal:replace="structure python: scale.scale('picture', width=200, height=200).tag()" 
+                 tal:condition="python: view.getPicture()">
+            <img tal:attributes="src string: ++resource++cloudspring.sfmembers/default_profile.jpg" alt="" tal:condition="python: not view.getPicture()" width="200"/>
+          </a>
+        </div>
+
+        <div id="my_accordion">
+
+          <h3 class="current">Academic Info</h3>
+          <div class="pane" style="display:block">
+            <ul>
+              <li tal:condition="view/getDiscipline" tal:content="view/getDiscipline"/>
+              <li>
+                Interested in
+                <span tal:repeat="interest view/getAcademicInterests">
+                  <span tal:condition="python: repeat['interest'].end and not repeat['interest'].start">and</span>
+                  <span tal:content="interest"/><span tal:condition="python: repeat['interest'].index &lt; repeat['interest'].end and not repeat['interest'].start">,</span>
+                </span>
+              </li>
+              <li>
+                <div class="_overlay">
+                  <a tal:attributes="href string:${view/getUrl}/profile" title="Curriculum Vitae">Curriculum Vitae</a>
+                </div>
+              </li>
+            </ul>
+          </div>
+
+          <h3>Contact</h3>
+          <div class="pane">
+            <div>
+                <div id="email" tal:content="view/getPublicEmail">email</div>
+            <div>
+              <span tal:replace="view/getWorkPhone">phone</span>
+            </div>
+            <div>
+              <span tal:replace="view/getAddress">address</span><br />
+              <span tal:replace="view/getCity">city</span>, 
+              <span tal:replace="view/getState">state</span>
+              <span tal:replace="view/getZipcode">zip</span>
+            </div>
+            <div>
+              <a tal:condition="view/getFacebook" 
+                 tal:attributes="href view/getFacebook">
+                 Visit me on Facebook</a>
+            </div>
+            <div>
+              <a tal:condition="view/getTwitter" 
+                 tal:attributes="href string: http://twitter.com/${view/getTwitter}">
+                 Follow me on Twitter</a>
+            </div>
+          </div>
+
+        </div> <!-- end accordion -->
+
+        <br clear="both" />
+      </div>
+    </dd>
+
+    <dd class="portletFooter">
+        <span class="portletBottomLeft"></span>
+        <span class="portletBottomRight"></span>
+    </dd>
+</div>
+</dl>

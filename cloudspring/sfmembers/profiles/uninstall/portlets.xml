@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<portlets>
+
+ <!-- Portlet type registrations -->
+
+  <assignment
+    remove="True"
+    name="Profile Portlet"
+    type="cloudspring.sfmembers.ProfilePortlet"
+    manager="plone.leftcolumn"
+    category="context"
+    key="/community/members">
+  </assignment>
+
+</portlets>
+

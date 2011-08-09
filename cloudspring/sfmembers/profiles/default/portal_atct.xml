@@ -8,7 +8,8 @@
     friendlyName="Blog type">
    <criteria>ATSelectionCriterion</criteria>
    <criteria>ATSimpleStringCriterion</criteria>
-  </index>
+   <criteria>ATListCriterion</criteria>
+ </index>
   <index
     name="AssignmentNumberField"
     description="A field that contains the assignment number."
@@ -25,7 +26,15 @@
    <criteria>ATSelectionCriterion</criteria>
    <criteria>ATSimpleStringCriterion</criteria>
    </index>
-</topic_indexes>
+ </topic_indexes>
+ <topic_metadata>
+  <metadata
+    name="role"
+        description="A field that describes the member's role."
+        enabled="True"
+        friendlyName="Member role"/>
+ </topic_metadata>
+
  <topic_metadata>
   <metadata
     name="BlogTypeField"
@@ -43,5 +52,25 @@
         enabled="True"
         friendlyName="Project"/>
  </topic_metadata>
+
+  <topic_indexes>
+  <index
+    name="lastName"
+    description="Last Name"
+    enabled="True"
+    friendlyName="Last Name">
+   <criteria>ATSelectionCriterion</criteria>
+   <criteria>ATSimpleStringCriterion</criteria>
+  </index>
+
+ </topic_indexes>
+ <topic_metadata>
+  <metadata
+    name="lastName"
+        description="Last Name"
+        enabled="True"
+        friendlyName="Last Name"/>
+ </topic_metadata>
+
 </atcttool>
 

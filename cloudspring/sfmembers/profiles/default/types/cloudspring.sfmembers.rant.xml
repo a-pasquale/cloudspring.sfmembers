@@ -1,24 +1,24 @@
 <?xml version="1.0"?>
-<object name="cloudspring.sfmembers.organization" meta_type="Dexterity FTI"
+<object name="cloudspring.sfmembers.rant" meta_type="Dexterity FTI"
    i18n:domain="cloudspring.sfmembers" xmlns:i18n="http://xml.zope.org/namespaces/i18n">
  
  <!-- Basic metadata -->
- <property name="title" i18n:translate="">Organization</property>
- <property name="description" i18n:translate="">A SalesForce account representing a plone organization.</property>
- <property name="content_icon">group.gif</property>
+ <property name="title" i18n:translate="">Rant</property>
+ <property name="description" i18n:translate="">A rant.</property>
+ <property name="content_icon">user.gif</property>
  <property name="allow_discussion">True</property>
  <property name="global_allow">True</property>
  <property name="filter_content_types">True</property>
  <property name="allowed_content_types" />
  
  <!-- schema interface -->
- <property name="schema">cloudspring.sfmembers.organization.IOrganization</property> 
+ <property name="schema">cloudspring.sfmembers.rant.IRant</property> 
  
  <!-- class used for content items -->
  <property name="klass">plone.dexterity.content.Item</property>
  
  <!-- add permission -->
- <property name="add_permission">cmf.AddPortalMember</property>
+ <property name="add_permission">cmf.AddPortalContent</property>
  
  <!-- enabled behaviors -->
  <property name="behaviors">

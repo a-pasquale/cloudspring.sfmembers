@@ -86,32 +86,33 @@ ul.tabs a.xl.current { background-position: 0 -62px; }
         border-top:0;
 }
 /* root element for accordion. decorated with rounded borders and gradient background image */
-#accordion {
+#accordion, #my_accordion {
 	background:#fff url(/Plone/++resource++cloudspring.sfmembers/h300.png) 0 0;
-	width: 250px;
-        margin-top:20px;
-	-background:#666;
+	width: 200px;
+  margin-top:20px;
+  box-shadow: 2px 2px 2px #999;
+  border-radius: 4px;
 }
 
 /* accordion header */
-#accordion h3 {
+#accordion h3, #my_accordion h3 {
 	background:#ccc url(/Plone/++resource++cloudspring.sfmembers/h30.png);
 	margin:0;
 	padding:0px 5px; 
 	font-weight:normal;
-        font: bold 1.8em "museo-slab-1","museo-slab-2";
-        color: #797979;
+  font: bold 1.8em "museo-slab-1","museo-slab-2";
+  color: #797979;
 	cursor:pointer;		
 }
 
 /* currently active header */
-#accordion h3.current {
+#accordion h3.current, #my_accordion h3.current {
 	cursor:default;
 	background-color:#fff;
 }
 
 /* accordion pane */
-#accordion .pane {
+#accordion .pane, #my_accordion .pane {
 	display:none;
 	padding:5px 15px 5px 15px;
 	color:#fff;
@@ -120,7 +121,7 @@ ul.tabs a.xl.current { background-position: 0 -62px; }
 }
 
 /* a title inside pane */
-#accordion .pane {
+#accordion .pane, #my_accordion .pane {
 	font-weight:normal;
 	margin:0 0 -5px 0;
 	font-size:12px;

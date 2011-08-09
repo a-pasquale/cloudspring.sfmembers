@@ -1,0 +1,34 @@
+<metal:block use-macro="here/global_defines/macros/defines" />
+<metal:main_macro define-macro="main"
+  tal:define="portal_type python:here.getPortalTypeName().lower().replace(' ', '');
+              base_macros here/base/macros;
+              view_template python:'%s_view' % portal_type;
+              view_macros python:path('here/%s/macros|nothing' % view_template);
+              body_macro view_macros/main | base_macros/main | nothing;
+              content_macro view_macros/content-core | base_macros/content-core | nothing;">
+
+  <tal:plone3 tal:condition="python:body_macro is not None">
+    <metal:use_body use-macro="body_macro" />
+  </tal:plone3>
+  
+  <tal:plone4 tal:condition="python:body_macro is None">
+    <div tal:replace="structure provider:plone.abovecontenttitle" />
+         <img src="" tal:define="icon python:here.getIcon(1)"
+         tal:attributes="src string:/${icon}" alt="" /> 
+        <img tal:define="plone_view context/@@plone;
+                         getIcon nocall:plone_view/getIcon;
+                         item_icon python:getIcon(context);"
+                         tal:replace="structure item_icon/html_tag" />
+    <h1>
+      <a tal:content="context/title"  
+         tal:define="context_state nocall:context/@@plone_context_state;"
+         tal:attributes="href context_state/view_url" />
+    </h1>
+    <div tal:replace="structure provider:plone.belowcontenttitle" />
+    <div class="documentDescription" tal:content="context/Description" />
+    <div tal:replace="structure provider:plone.abovecontentbody" />
+    <metal:use_body use-macro="content_macro" />
+    <div tal:replace="structure provider:plone.belowcontentbody" />
+  </tal:plone4>
+
+</metal:main_macro>

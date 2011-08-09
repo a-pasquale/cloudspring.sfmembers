@@ -24,7 +24,7 @@ class MemberSummaryView(BrowserView):
         start = self.request.get("b_start", 0)
 
         contentFilter = {}
-        contentFilter['portal_type'] = 'Folder'
+        #contentFilter['portal_type'] = 'Folder'
         contentFilter['sort_on'] = 'getObjPositionInParent'
         contentFilter['sort_order'] = 'ascending'
         
@@ -33,9 +33,9 @@ class MemberSummaryView(BrowserView):
 
         path['query'] = cur_path
         path['depth'] = 1
-        contentFilter['path'] = path
+        #contentFilter['path'] = path
 
-        self.contents = self.context.portal_catalog.queryCatalog(contentFilter, show_all=1, show_inactive=False)
+        self.contents = self.context.queryCatalog(contentFilter, show_all=1, show_inactive=False)
 
         self.contents = [b.getObject() for b in self.contents]
 

@@ -1,4 +1,5 @@
 <object name="portal_types">
  <object name="cloudspring.sfmembers.member" meta_type="Dexterity FTI" />
  <object name="cloudspring.sfmembers.organization" meta_type="Dexterity FTI" />
+ <object name="cloudspring.sfmembers.rant" meta_type="Dexterity FTI" />
 </object>

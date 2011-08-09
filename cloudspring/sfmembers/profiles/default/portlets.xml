@@ -3,7 +3,21 @@
 
  <!-- Portlet type registrations -->
 
- <portlet
+  <portlet
+   name="cloudspring.sfmembers.MyProfilePortlet"
+   addview="cloudspring.sfmembers.MyProfilePortlet"
+   title="My Profile Portlet"
+   description="A portlet that displays member profiles"
+   />
+
+  <assignment
+    name="My Profile Portlet"
+    type="cloudspring.sfmembers.MyProfilePortlet"
+     manager="ContentWellPortlets.FooterPortletManager6"
+    category="context">
+  </assignment>
+
+<portlet
    name="cloudspring.sfmembers.ProfilePortlet"
    addview="cloudspring.sfmembers.ProfilePortlet"
    title="Profile Portlet"
@@ -12,11 +26,25 @@
 
 <!--  Add the portlet to the members folder by hand, instead.
   <assignment
+    name="Profile Portlet"
     type="cloudspring.sfmembers.ProfilePortlet"
-    manager="plone.leftcolumn"
+    manager="plone.rightcolumn"
     category="context"
-    key="/community">
+    key="/community/members">
   </assignment>
 -->
 
+ <portlet
+   name="cloudspring.sfmembers.quickPostPortlet"
+   addview="cloudspring.sfmembers.quickPostPortlet"
+   title="Quick-Post Portlet"
+   description="A portlet that allows members to make quick posts."
+   />
+
+  <assignment
+    name="QuickPostPortlet"
+    type="cloudspring.sfmembers.quickPostPortlet"
+    manager="ContentWellPortlets.FooterPortletManager6"
+    category="context"
+  />
 </portlets>
