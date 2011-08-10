@@ -1,7 +1,7 @@
 <configure
     xmlns="http://namespaces.zope.org/zope"
     xmlns:browser="http://namespaces.zope.org/browser">
-
+<!--
     <browser:page
       for="*"
       name="blog_item_view"
@@ -17,7 +17,7 @@
     template="blog.pt"
     permission="zope2.View"
     />
-
+-->
 
 
 </configure>

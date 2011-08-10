@@ -21,7 +21,7 @@ from AccessControl import allow_module
 allow_module('cloudspring.sfmembers.createMemberArea')
 
 MEMBER_SOBJECT_TYPE = 'Contact'
-MEMBER_DIRECTORY = 'community/members'
+MEMBER_DIRECTORY = 'members'
 MEMBER_DIRECTORY_ID = 'members'
 MEMBER_PORTAL_TYPE = 'cloudspring.sfmembers.Member'
 PUBLISH_ACTION = 'publish'
@@ -202,5 +202,5 @@ def createMemberArea(context, name, firstName, lastName, id, email, role):
         logger.info("profile.Title: " + profile.title)
         updateProfile(context, profile, name, firstName, lastName, id, email, role)
         portal = getToolByName(context, 'portal_url').getPortalObject()
-        portal.community.setLayout("member_summary_view")
+        portal.members.setLayout("member_summary_view")
  

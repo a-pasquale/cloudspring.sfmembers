@@ -45,7 +45,7 @@ class Renderer(base.Renderer):
            member = mt.getAuthenticatedMember()
            username = member.getUserName()
            portal = getToolByName(self.context, 'portal_url').getPortalObject()
-           profile = portal.community.members[username].profile
+           profile = portal.members[username].profile
            return profile
 
     def getUrl(self):

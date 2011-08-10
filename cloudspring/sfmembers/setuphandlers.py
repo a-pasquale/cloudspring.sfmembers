@@ -1,6 +1,8 @@
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.utils import _createObjectByType
 
+PUBLISH_ACTION = "publish-internally"
+
 def deletePloneFolders(p):
     """Delete the standard Plone stuff that we don't need
     """
@@ -54,7 +56,7 @@ def createFolderStructure(portal):
             'children': community_children,
             },
         ]
-    createObjects(portal, parent=portal, children=top_folders)
+    createObjects(portal, parent=portal, children=community_children)
 
 def createObjects(portal, parent, children):
     """This will create new objects, or modify existing ones if id's and type
@@ -98,9 +100,10 @@ def createObjects(portal, parent, children):
                         parent.setDefaultPage(new_object['id'])
                     # Publish it
                     wftool = getToolByName(portal, 'portal_workflow')
-                    wfstatus = wftool.getStatusOf('simple_publication_workflow', obj)
-                    if wfstatus['review_state'] != 'published':
-                        wftool.doActionFor(obj,'publish')
+                    try:
+                        wftool.doActionFor(obj, PUBLISH_ACTION)
+                    except WorkflowException:
+                        pass
 
                     if new_object['excludeFromNav']:
                         obj.setExcludeFromNav(True)
@@ -114,9 +117,10 @@ def createObjects(portal, parent, children):
 
                 # Publish it
                 wftool = getToolByName(portal, 'portal_workflow')
-                wfstatus = wftool.getStatusOf('simple_publication_workflow', obj)
-                if wfstatus['review_state'] != 'published':
-                    wftool.doActionFor(obj,'publish')
+                try:
+                    wftool.doActionFor(obj, PUBLISH_ACTION)
+                except WorkflowException:
+                    pass
 
                 if new_object['excludeFromNav']:
                     obj.setExcludeFromNav(True)

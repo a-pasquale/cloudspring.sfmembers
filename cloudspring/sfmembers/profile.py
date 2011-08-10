@@ -74,27 +74,7 @@ class Renderer(base.Renderer):
         member = self._member()
         return member.cell_phone
 
-    def getAcademicInterests(self):
-        member = self._member()
-        return member.academic_interests
-
-    def getAddress(self):
-        member = self._member()
-        return member.address
-
-    def getCity(self):
-        member = self._member()
-        return member.city
-
-    def getState(self):
-        member = self._member()
-        return member.state
-
-    def getZipcode(self):
-        member = self._member()
-        return member.zipcode
-
-    def getPublicEmail(self):
+    def getEmail(self):
         member = self._member()
         return member.email
 
