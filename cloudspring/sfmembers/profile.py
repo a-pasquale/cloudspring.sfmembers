@@ -45,7 +45,7 @@ class Renderer(base.Renderer):
     def _member(self):
         portal = getToolByName(self.context, 'portal_url').getPortalObject()
         uid = self.getUID()
-        profile = portal.community.members[uid].profile
+        profile = portal.members[uid].profile
         return profile
 
     def isHomeFolder(self):

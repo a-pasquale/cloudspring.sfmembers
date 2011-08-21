@@ -30,54 +30,6 @@
           </a>
         </div>
 
-        <div id="my_accordion">
-
-          <h3 class="current">Academic Info</h3>
-          <div class="pane" style="display:block">
-            <ul>
-              <li tal:condition="view/getDiscipline" tal:content="view/getDiscipline"/>
-              <li>
-                Interested in
-                <span tal:repeat="interest view/getAcademicInterests">
-                  <span tal:condition="python: repeat['interest'].end and not repeat['interest'].start">and</span>
-                  <span tal:content="interest"/><span tal:condition="python: repeat['interest'].index &lt; repeat['interest'].end and not repeat['interest'].start">,</span>
-                </span>
-              </li>
-              <li>
-                <div class="_overlay">
-                  <a tal:attributes="href string:${view/getUrl}/profile" title="Curriculum Vitae">Curriculum Vitae</a>
-                </div>
-              </li>
-            </ul>
-          </div>
-
-          <h3>Contact</h3>
-          <div class="pane">
-            <div>
-                <div id="email" tal:content="view/getPublicEmail">email</div>
-            <div>
-              <span tal:replace="view/getWorkPhone">phone</span>
-            </div>
-            <div>
-              <span tal:replace="view/getAddress">address</span><br />
-              <span tal:replace="view/getCity">city</span>, 
-              <span tal:replace="view/getState">state</span>
-              <span tal:replace="view/getZipcode">zip</span>
-            </div>
-            <div>
-              <a tal:condition="view/getFacebook" 
-                 tal:attributes="href view/getFacebook">
-                 Visit me on Facebook</a>
-            </div>
-            <div>
-              <a tal:condition="view/getTwitter" 
-                 tal:attributes="href string: http://twitter.com/${view/getTwitter}">
-                 Follow me on Twitter</a>
-            </div>
-          </div>
-
-        </div> <!-- end accordion -->
-
         <br clear="both" />
       </div>
     </dd>

@@ -24,7 +24,7 @@ MEMBER_SOBJECT_TYPE = 'Contact'
 MEMBER_DIRECTORY = 'members'
 MEMBER_DIRECTORY_ID = 'members'
 MEMBER_PORTAL_TYPE = 'cloudspring.sfmembers.Member'
-PUBLISH_ACTION = 'publish'
+PUBLISH_ACTION = 'publish-internally'
 logger = logging.getLogger('Create Member Area')
 
 
@@ -82,9 +82,6 @@ def findOrCreateProfileById(context, name, id):
     blog_folder = getattr(dir, 'blog')
 
     # Change ownership and give local roles to member folder
-    acl_users = getToolByName(context, "acl_users")
-    user = acl_users.getUserById('khomstead')
-    blog_folder.changeOwnership(user)
     blog_folder.__ac_local_roles__ = None
     blog_folder.manage_setLocalRoles(id, ['Editor'])
 
@@ -118,7 +115,6 @@ def findOrCreateProfileById(context, name, id):
       pass
 
     blog_collection.setLayout('blog_view')
-    blog_collection.changeOwnership(user)
 
     # Hide the collection from navigation.
     blog_collection.setExcludeFromNav(True)
@@ -149,7 +145,6 @@ def findOrCreateProfileById(context, name, id):
       pass
 
     drafts_collection.setLayout('blog_view')
-    drafts_collection.changeOwnership(user)
     drafts_collection.__ac_local_roles__ = None
     drafts_collection.manage_setLocalRoles(id, ['member'])
 
@@ -169,8 +164,6 @@ def findOrCreateProfileById(context, name, id):
     # Hide the profile from navigation.
     profile.setExcludeFromNav(True)
     # Change ownership and give local roles to member profile
-    profile.changeOwnership(user)
-    logger.info("Changing profile ownership to %s " % user.id)
     profile.__ac_local_roles__ = None
     profile.manage_setLocalRoles(id, ['Editor'])
 
