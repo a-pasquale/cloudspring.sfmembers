@@ -195,5 +195,27 @@ def createMemberArea(context, name, firstName, lastName, id, email, role):
         logger.info("profile.Title: " + profile.title)
         updateProfile(context, profile, name, firstName, lastName, id, email, role)
         portal = getToolByName(context, 'portal_url').getPortalObject()
-        portal.members.setLayout("member_summary_view")
- 
+        dir = portal.members
+        # get the members collection
+        try:
+            members_collection = dir.unrestrictedTraverse('members-collection')
+        except:
+            dir.invokeFactory(id="members-collection", type_name="Topic")
+        members_collection = getattr(dir, "members-collection")
+        try:
+            theCriteria = members_collection.addCriterion('path','ATRelativePathCriterion')
+            theCriteria.setRelativePath("..")
+            theCriteria = members_collection.addCriterion('Type','ATPortalTypeCriterion')
+            theCriteria.setValue("Folder")
+        except:
+            # criteria already set.
+            pass
+
+        members_collection.setLayout('member_summary_view')
+        dir.setDefaultPage("members-collection")
+
+        # Hide the collection from navigation.
+        members_collection.setExcludeFromNav(True)
+        # publish and reindex
+        publish(context, members_collection)
+
