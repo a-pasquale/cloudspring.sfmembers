@@ -12,8 +12,8 @@
     <dt class="portletHeader">
         <span class="portletTopLeft"></span>
         <div>
-            <div>
-          <h2 id="name" tal:content="view/getName" />
+          <div>
+            <h2 id="name" tal:content="view/getName" />
           </div>
         </div>
         <span class="portletTopRight"></span>
@@ -21,16 +21,22 @@
 
     <dd class="portletItem">
       <div>
-        <div class="_overlay">
-          <a tal:attributes="href string:${view/getUrl}/profile" title="View Profile">
+        <form name="update-profile-picture" id="update-profile-picture" method="post" action="./inline_edit_view">
+
+          <span class="named-image-widget namedimage-field" id="my_form-widgets-picture"> 
+            <input type="file" id="my_form-widgets-picture-input" name="form.widgets.picture" />
+          </span>
+        </form>
+          <a tal:attributes="href string:${view/getUrl}/profile" title="view/getName">
             <img tal:define="member view/_member; scale member/@@images"
                  tal:replace="structure python: scale.scale('picture', width=200, height=200).tag()" 
                  tal:condition="python: view.getPicture()">
             <img tal:attributes="src string: ++resource++cloudspring.sfmembers/default_profile.jpg" alt="" tal:condition="python: not view.getPicture()" width="200"/>
           </a>
-        </div>
 
         <br clear="both" />
+        <div id="my_email" tal:content="view/getEmail" tal:omit-tag="not:exists:view/getEmail"/>
+        <div id="my_website" tal:content="view/getWebsite" tal:omit-tag="not:exists:view/getWebsite"/>
       </div>
     </dd>
 

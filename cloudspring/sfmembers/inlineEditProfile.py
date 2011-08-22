@@ -27,7 +27,7 @@ class inline_edit_view(grok.View):
 
         context = aq_inner(self.context)
         portal = getToolByName(context, 'portal_url').getPortalObject()
-        member_folder = portal.community.members[username]
+        member_folder = portal.members[username]
  
         # A dictionary of items submitted in a POST request
         form = self.request.form
@@ -41,3 +41,7 @@ class inline_edit_view(grok.View):
 
         if "email" in form:
             member_folder.profile.email = self.update_value
+
+        if "website" in form:
+            member_folder.profile.website = self.update_value
+

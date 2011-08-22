@@ -60,45 +60,19 @@ class Renderer(base.Renderer):
         member = self._member()
         return member.name
 
-    def getDiscipline(self):
+    def getEmail(self):
         member = self._member()
-        return member.discipline
+        if member.email:
+            return member.email
+        else:
+            return 'Click to enter your email address.'
 
-    def getAcademicInterests(self):
+    def getWebsite(self):
         member = self._member()
-        return member.academic_interests
-
-    def getAddress(self):
-        member = self._member()
-        return member.address
-
-    def getCity(self):
-        member = self._member()
-        return member.city
-
-    def getState(self):
-        member = self._member()
-        return member.state
-
-    def getZipcode(self):
-        member = self._member()
-        return member.zipcode
-
-    def getPublicEmail(self):
-        member = self._member()
-        return member.email
-
-    def getFacebook(self):
-        member = self._member()
-        return member.facebook
-
-    def getWorkPhone(self):
-        member = self._member()
-        return member.work_phone
-
-    def getTwitter(self):
-        member = self._member()
-        return member.twitter
+        if member.website:
+            return member.website
+        else:
+            return 'Click to enter your website if you have one.'
 
     def getPicture(self):
         member = self._member()
