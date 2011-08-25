@@ -21,7 +21,7 @@ from AccessControl import allow_module
 allow_module('cloudspring.sfmembers.createMemberArea')
 
 MEMBER_SOBJECT_TYPE = 'Contact'
-MEMBER_DIRECTORY = 'members'
+MEMBER_DIRECTORY = 'members/2011-2012'
 MEMBER_DIRECTORY_ID = 'members'
 MEMBER_PORTAL_TYPE = 'cloudspring.sfmembers.Member'
 PUBLISH_ACTION = 'publish-internally'
@@ -195,7 +195,12 @@ def createMemberArea(context, name, firstName, lastName, id, email, role):
         logger.info("profile.Title: " + profile.title)
         updateProfile(context, profile, name, firstName, lastName, id, email, role)
         portal = getToolByName(context, 'portal_url').getPortalObject()
-        dir = portal.members
+
+        # Create a collection to display a member directory.
+        # Use the custom view for the collection,
+        # and set it as the default page for the member folder.
+        member_dir_path = MEMBER_DIRECTORY.split("/")
+        dir = getDirectoryFolder(context, member_dir_path)
         # get the members collection
         try:
             members_collection = dir.unrestrictedTraverse('members-collection')
@@ -218,4 +223,5 @@ def createMemberArea(context, name, firstName, lastName, id, email, role):
         members_collection.setExcludeFromNav(True)
         # publish and reindex
         publish(context, members_collection)
-
+ 
+        
