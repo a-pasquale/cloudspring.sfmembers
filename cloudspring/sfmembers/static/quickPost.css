@@ -1,23 +1,7 @@
-#drawer #portlet-quickPost {
-  background: #000 url('++resource++cloudspring.sfmembers/post-it-note.png') left top no-repeat;
-  height: 375px;
-}
+/* @override 
+	http://localhost:8080/Plone/++resource++cloudspring.sfmembers/quickPost.css */
 
-#drawer #portlet-quickPost .inner {
-  width: 300px;
-  margin: 0 auto;
-  padding-top: 40px;
-}
 
-#drawer .portletHeader {
-  border: 0;
-  background: transparent;
-}
-
-#drawer .portletHeader h2 {
-  text-align: right;
-  padding: 0;
-}
 
 #quick-post textarea {
   width: 100%;
