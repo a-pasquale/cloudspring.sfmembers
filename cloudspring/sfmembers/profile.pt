@@ -30,11 +30,11 @@
 
         <ul>
           <li tal:condition="view/getCellPhone" tal:content="view/getCellPhone"/>
-          <li tal:condition="view/getEmail">
+          <li id="profile-email" tal:condition="view/getEmail">
             <a tal:attributes="href string:mailto:${view/getEmail}" 
                tal:content="view/getEmail" />
           </li>
-          <li tal:condition="view/getWebsite">
+          <li id="profile-website" tal:condition="view/getWebsite">
             <a tal:attributes="href view/getWebsite" 
                tal:content="view/getWebsite" />
           </li>

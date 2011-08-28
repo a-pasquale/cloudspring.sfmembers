@@ -26,18 +26,27 @@
           $('#name').html(update_value);
           if (document.getElementById("my-home-folder") != null) {
               $('#portlet-profile .portletHeader div a h2').html(update_value);
-              $('#page-title a').html(update_value + "'s Blog");
+              $('#page-title').html(update_value + "'s Blog");
           }
       }
     });
-     $('#email').editInPlace({
+    $('#my_email').editInPlace({
       url: './@@inline_edit_view',
       params: "email",
-      value_required: 'true',
       success: function(update_value){
-          $('#email').html(update_value);
+          $('#my_email').html(update_value);
           if (document.getElementById("my-home-folder") != null) {
               $('#portlet-profile #profile-email a').html(update_value);
+          }
+      }
+    });
+    $('#my_website').editInPlace({
+      url: './@@inline_edit_view',
+      params: "website",
+      success: function(update_value){
+          $('#my_website').html(update_value);
+          if (document.getElementById("my-home-folder") != null) {
+              $('#portlet-profile #profile-website a').html(update_value);
           }
       }
     });
