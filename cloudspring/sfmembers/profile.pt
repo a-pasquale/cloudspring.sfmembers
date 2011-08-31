@@ -3,7 +3,8 @@
     id="portlet-profile">
 
 <metal:block use-macro="here/global_defines/macros/defines" />
-<div tal:condition="python: not context.id == 'members-collection'"> 
+<div tal:condition="python: not context.id == 'members-collection' and not
+    context.id == 'members'"> 
     <div tal:condition="view/isHomeFolder" id="my-home-folder" /> 
     <link rel="stylesheet" type="text/css" tal:attributes="href string:++resource++cloudspring.sfmembers/member.css" />
 
