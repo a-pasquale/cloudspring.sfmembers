@@ -44,7 +44,7 @@ def createFolderStructure(portal):
             'type': 'Folder',
             'excludeFromNav': False,
             'criteria': [],
-            'children': members_children,
+            #'children': members_children,
             },
         ]
     top_folders = [
