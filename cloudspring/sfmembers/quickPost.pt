@@ -16,28 +16,32 @@
   <dd class="portletItem">
     <div>
       <ul id="post-types">
-        <li><a href="#">Rant</a></li>
+        <li><a href="#">Reflection</a></li>
         <li><a href="#">Blog</a></li>
       </ul>
     </div>
-    <div class="post-type-form rant">
-        <form name="quick-post-rant" id="quick-post-rant" method="post" enctype="multipart/form-data"
-          tal:define="root context/plone_portal_state/navigation_root_url;
-                      member here/portal_membership/getAuthenticatedMember;
-                      username python:member.getUserName();"
-                      tal:attributes="action string:${root}/community/members/${username}/blog/++add++cloudspring.sfmembers.rant" >
-        Title:<input id="form-widgets-title" name="form.widgets.title" class="text-widget required textline-field" value="" title="testing"/>
-        <textarea id="form.widgets.text" name="form.widgets.text" class="textarea-widget text-field"></textarea>
-        <input id="form-buttons-save" name="form.buttons.save" class="submit-widget button-field context" value="Rant" type="submit" />
-      </form>
-    </div>
-    
-    <div class="post-type-form blog">
-      <form name="quick-post" id="quick-post" method="post" action="http://64.18.217.181:8094/Plone/++add++rant" enctype="multipart/form-data">
-        Title:<input id="form-widgets-IDublinCore-title" name="form.widgets.IDublinCore.title" class="text-widget required textline-field" value="" title="testing"/>
-        <textarea id="form.widgets.text" name="form.widgets.text" class="textarea-widget text-field"></textarea>
-        <input id="form-buttons-save" name="form.buttons.save" class="submit-widget button-field context" value="Post" type="submit" />
-      </form>
+    <div tal:define="root context/plone_portal_state/navigation_root_url;
+                    member here/portal_membership/getAuthenticatedMember;
+                    username python:member.getUserName();">
+
+      <div class="post-type-form reflection">
+        <form name="quick-post-reflection" id="quick-post-reflection" method="post" enctype="multipart/form-data"
+              tal:attributes="action string:${view/getUrl}/blog/++add++cloudspring.sfmembers.reflection" >
+          Title:<input id="form-widgets-title" name="form.widgets.title" class="text-widget required textline-field" value="" title="testing"/>
+          <textarea id="form.widgets.text" name="form.widgets.text" class="textarea-widget text-field" 
+            title='{"valid_elements": {"code": ["class", "dir", "id", "style", "title"], "kbd": ["class", "dir", "id", "style", "title"], "aside": ["class", "dir", "id", "style", "title"], "img": ["align", "alt", "class", "dir", "height", "hspace", "id", "ismap<ismap", "longdesc", "name", "src", "style", "title", "usemap", "vspace", "width"], "title": ["dir", "id"], "tt": ["class", "dir", "id", "style", "title"], "tr": ["align", "char", "charoff", "class", "dir", "id", "style", "title"], "li": ["class", "dir", "id", "style"...tent-tab", "Pane Break|hr|pane-break", "prettyPhoto Link|a|prettyPhoto", "prettyPhoto Iframe Link|a|prettyPhotoIframe"], "navigation_root_url": "http://64.18.217.181:8902/Plone", "editor_height": 400, "toolbar_location": "top", "autoresize": false, "atd_rpc_url": "Plone/@@", "valid_inline_styles": ["text-align", "list-style-type", "float", "padding-left"], "resizing": true, "atd_rpc_id": "Products.TinyMCE-apasquale", "language": "en", "contextmenu": true, "entity_encoding": "raw", "directionality": "ltr"}'></textarea>
+          <input id="form-buttons-save" name="form.buttons.save" class="submit-widget button-field context" value="Submit" type="submit" />
+        </form>
+      </div>
+      <div class="post-type-form blogpost">
+        <form name="quick-post-blogpost" id="quick-post-blogpost" method="post" enctype="multipart/form-data"
+              tal:attributes="action string:${view/getUrl}/blog/createObject?type_name=Blog+Entry" >
+           Title:<input id="form-widgets-title" name="form.widgets.title" class="text-widget required textline-field" value="" title="testing"/>
+           <textarea id="form.widgets.text" name="form.widgets.text" class="textarea-widget text-field"
+             title='{"valid_elements": {"code": ["class", "dir", "id", "style", "title"], "kbd": ["class", "dir", "id", "style", "title"], "aside": ["class", "dir", "id", "style", "title"], "img": ["align", "alt", "class", "dir", "height", "hspace", "id", "ismap<ismap", "longdesc", "name", "src", "style", "title", "usemap", "vspace", "width"], "title": ["dir", "id"], "tt": ["class", "dir", "id", "style", "title"], "tr": ["align", "char", "charoff", "class", "dir", "id", "style", "title"], "li": ["class", "dir", "id", "style"...tent-tab", "Pane Break|hr|pane-break", "prettyPhoto Link|a|prettyPhoto", "prettyPhoto Iframe Link|a|prettyPhotoIframe"], "navigation_root_url": "http://64.18.217.181:8902/Plone", "editor_height": 400, "toolbar_location": "top", "autoresize": false, "atd_rpc_url": "Plone/@@", "valid_inline_styles": ["text-align", "list-style-type", "float", "padding-left"], "resizing": true, "atd_rpc_id": "Products.TinyMCE-apasquale", "language": "en", "contextmenu": true, "entity_encoding": "raw", "directionality": "ltr"}'></textarea>
+           <input id="form-buttons-save" name="form.buttons.save" class="submit-widget button-field context" value="Post" type="submit" />
+        </form>
+     </div>
     </div>
 
     <div id="result"><div id="message"></div></div>
@@ -55,7 +59,7 @@
         animateDuration             : 300,
         // More extra space:
         extraSpace : 28,
-        limit: 150
+        limit: 150,
       });
       $('#quick-post-rant').ajaxForm(function() { 
         $('#message').html("Post submitted.")
@@ -68,7 +72,6 @@
 
   <dd class="portletFooter">
     <span class="portletBottomLeft"></span>
-    <a class="overlayLink" href="/" >Home</a>
     <span class="portletBottomRight"></span>
   </dd>
 </div>
