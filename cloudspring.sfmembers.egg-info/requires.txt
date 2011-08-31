@@ -3,3 +3,4 @@ Plone
 plone.app.dexterity
 collective.autopermission
 plone.app.z3cform
+archetypes.schemaextender
