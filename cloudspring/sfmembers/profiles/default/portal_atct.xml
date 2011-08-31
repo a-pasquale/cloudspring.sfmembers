@@ -1,41 +1,55 @@
 <?xml version="1.0"?>
 <atcttool>
  <topic_indexes>
-  <index
-    name="BlogTypeField"
-    description="A field that describes the type of blog entry."
-    enabled="True"
-    friendlyName="Blog type">
-   <criteria>ATSelectionCriterion</criteria>
-   <criteria>ATSimpleStringCriterion</criteria>
-   <criteria>ATListCriterion</criteria>
- </index>
-  <index
-    name="AssignmentNumberField"
-    description="A field that contains the assignment number."
-    enabled="True"
-    friendlyName="Assignment number">
-   <criteria>ATSelectionCriterion</criteria>
-   <criteria>ATSimpleStringCriterion</criteria>
-  </index> 
-  <index
-    name="ProjectField"
-    description="A field that contains the project name."
-    enabled="True"
-    friendlyName="Project">
-   <criteria>ATSelectionCriterion</criteria>
-   <criteria>ATSimpleStringCriterion</criteria>
-   </index>
- </topic_indexes>
- <topic_metadata>
+    <index
+        name="BlogTypeField"
+        description="A field that describes the type of blog entry."
+        enabled="True"
+        friendlyName="Blog type">
+        <criteria>ATSelectionCriterion</criteria>
+        <criteria>ATSimpleStringCriterion</criteria>
+        <criteria>ATListCriterion</criteria>
+    </index>
+    <index
+        name="AssignmentNumberField"
+        description="A field that contains the assignment number."
+        enabled="True"
+        friendlyName="Assignment number">
+        <criteria>ATSelectionCriterion</criteria>
+        <criteria>ATSimpleStringCriterion</criteria>
+    </index> 
+    <index
+        name="ProjectField"
+        description="A field that contains the project name."
+        enabled="True"
+        friendlyName="Project">
+        <criteria>ATSelectionCriterion</criteria>
+        <criteria>ATSimpleStringCriterion</criteria>
+    </index>
+    <index
+        name="assignment"
+        description="A field that contains the assignment name."
+        enabled="True"
+        friendlyName="Assignment">
+        <criteria>ATSelectionCriterion</criteria>
+        <criteria>ATSimpleStringCriterion</criteria>
+    </index>
+    <index
+        name="lastName"
+        description="Last Name"
+        enabled="True"
+        friendlyName="Last Name">
+        <criteria>ATSelectionCriterion</criteria>
+        <criteria>ATSimpleStringCriterion</criteria>
+    </index>
+  </topic_indexes>
+
+  <topic_metadata>
   <metadata
     name="role"
         description="A field that describes the member's role."
         enabled="True"
         friendlyName="Member role"/>
- </topic_metadata>
-
- <topic_metadata>
   <metadata
     name="BlogTypeField"
         description="A field that describes the type of blog entry."
@@ -51,20 +65,11 @@
         description="A field that contains the project name."
         enabled="True"
         friendlyName="Project"/>
- </topic_metadata>
-
-  <topic_indexes>
-  <index
-    name="lastName"
-    description="Last Name"
-    enabled="True"
-    friendlyName="Last Name">
-   <criteria>ATSelectionCriterion</criteria>
-   <criteria>ATSimpleStringCriterion</criteria>
-  </index>
-
- </topic_indexes>
- <topic_metadata>
+  <metadata
+    name="assignment"
+        description="A field that contains the assignment name."
+        enabled="True"
+        friendlyName="Assignment"/>
   <metadata
     name="lastName"
         description="Last Name"
