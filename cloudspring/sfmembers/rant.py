@@ -4,7 +4,6 @@ from zope import schema
 from plone.directives import form, dexterity
 
 from plone.app.textfield import RichText
-
 from cloudspring.sfmembers import _
 
 class IRant(form.Schema):
@@ -19,6 +18,12 @@ class IRant(form.Schema):
             title=_(u"Text"),
             )
     
+    assignment = schema.Choice(
+            title=_(u"Assignment"),
+            vocabulary=u"cloudspring.sfmembers.possibleAssignments",
+            required=False,
+        )
+
 class blog_item_view(grok.View):
     grok.context(IRant)
     grok.require('zope2.View')
