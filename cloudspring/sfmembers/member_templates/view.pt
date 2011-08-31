@@ -17,13 +17,12 @@
 
         <div tal:replace="structure provider:plone.abovecontenttitle" />
 
-        <h1 class="documentFirstHeading" tal:content="context/name" />
         <h1 class="name" style="margin-bottom:20px;" tal:content="context/name" />
        
         <div tal:define="picture nocall:context/picture"
              tal:condition="nocall:picture"
              class="picture">
-          <img tal:replace="structure context/@@images/picture/mini" />
+             <img tal:replace="structure context/@@images/picture/thumb" />
         </div>
 
         <div style="float:left">
