@@ -10,7 +10,7 @@ from zope.component import getMultiAdapter
 from Acquisition import aq_inner
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from Products.CMFPlone import PloneMessageFactory as _
-
+import membership
 
 class Assignment(base.Assignment):
     implements(IQuickPostPortlet)
@@ -39,20 +39,10 @@ class Renderer(base.Renderer):
         #whether or not the current user is Anonymous
         self.anonymous = portal_state.anonymous()  
 
-    @memoize
-    def _member(self):
-        import re
-        pattern = 'community/members/(\w*)'
-        match = re.search(pattern, self.context.absolute_url())
-        uid = match.group(1)
-
-        portal = getToolByName(self.context, 'portal_url').getPortalObject()
-        profile = portal.community.members[uid].profile
-        return profile
-
+    @memoize 
     def getUrl(self):
-        member = self._member()
-        return member.aq_inner.aq_parent.absolute_url_path()
+        url = membership.getHomeUrl(self.context)
+        return url
 
     def render(self):
         return self._template()
