@@ -7,6 +7,7 @@
     xmlns:i18n="http://namespaces.zope.org/i18n"
     xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
     xmlns:browser="http://namespaces.zope.org/browser"
+    xmlns:monkey="http://namespaces.plone.org/monkey"
     i18n_domain="cloudspring.sfmembers">
 
   <!-- Include configuration for dependencies listed in setup.py -->
@@ -47,7 +48,7 @@
     <include package=".browser" />
     <include package="plone.app.portlets"/>
 
-     <plone:portlet
+    <plone:portlet
          name="cloudspring.sfmembers.MyProfilePortlet"
          interface=".my_profile.IMyProfilePortlet"
          assignment=".my_profile.Assignment"
@@ -55,7 +56,15 @@
          addview=".my_profile.AddForm"
          />
 
-     <plone:portlet
+    <plone:portlet
+         name="cloudspring.sfmembers.MyContentPortlet"
+         interface=".myContent.IMyContentPortlet"
+         assignment=".myContent.Assignment"
+         renderer=".myContent.Renderer"
+         addview=".myContent.AddForm"
+         />
+
+    <plone:portlet
          name="cloudspring.sfmembers.ProfilePortlet"
          interface=".profile.IProfilePortlet"
          assignment=".profile.Assignment"
@@ -107,4 +116,13 @@
     <adapter factory=".extender.BlogExtender" />
 
     <cmf:registerDirectory name="skin_custom_templates" directory="skins" recursive="True"/>
+    <include package="collective.monkeypatcher" />
+    <monkey:patch
+        description="Use our member folders instead of the default home folders"
+        class="Products.PlonePAS.MembershipTool"
+        original="getHomeUrl"
+        replacement=".membership.getHomeUrl"
+        />
+    <include package="collective.gtags" file="configure.zcml" />
+    <include package="collective.gtags" file="behaviors.zcml" />
 </configure>
