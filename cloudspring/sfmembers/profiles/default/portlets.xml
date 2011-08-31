@@ -13,11 +13,25 @@
   <assignment
     name="My Profile Portlet"
     type="cloudspring.sfmembers.MyProfilePortlet"
-     manager="ContentWellPortlets.FooterPortletManager6"
+     manager="ContentWellPortlets.FooterPortletManager4"
     category="context">
   </assignment>
 
-<portlet
+  <portlet
+   name="cloudspring.sfmembers.MyContentPortlet"
+   addview="cloudspring.sfmembers.MyContentPortlet"
+   title="My Profile Portlet"
+   description="A portlet that displays member profiles"
+   />
+
+  <assignment
+    name="My Profile Portlet"
+    type="cloudspring.sfmembers.MyContentPortlet"
+     manager="ContentWellPortlets.FooterPortletManager3"
+    category="context">
+  </assignment>
+
+  <portlet
    name="cloudspring.sfmembers.ProfilePortlet"
    addview="cloudspring.sfmembers.ProfilePortlet"
    title="Profile Portlet"
@@ -44,7 +58,7 @@
   <assignment
     name="QuickPostPortlet"
     type="cloudspring.sfmembers.quickPostPortlet"
-    manager="ContentWellPortlets.FooterPortletManager6"
+    manager="ContentWellPortlets.FooterPortletManager3"
     category="context"
   />
 </portlets>

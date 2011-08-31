@@ -12,3 +12,7 @@ class IProfilePortlet(IPortletDataProvider):
 class IQuickPostPortlet(IPortletDataProvider):
     """Portlet to allow members to make quick posts.
     """
+
+class IMyContentPortlet(IPortletDataProvider):
+    """Portlet to allow members to view their posts and change workflow state.
+    """

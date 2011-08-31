@@ -1,0 +1,36 @@
+<dl class="portlet portletQuickPostPortlet"
+    i18n:domain="cloudspring.sfmembers"
+    id="portlet-quickPost">
+
+<metal:block use-macro="here/global_defines/macros/defines" />
+<div class="inner"> 
+  <link rel="stylesheet" type="text/css" 
+    tal:attributes="href string:++resource++cloudspring.sfmembers/myContent.css" />
+  <dt class="portletHeader">
+    <span class="portletTopLeft"></span>
+    <div><h2>My Content</h2></div>
+    <span class="portletTopRight"></span>
+  </dt>
+
+  <dd class="portletItem">
+    <div tal:define="root context/plone_portal_state/navigation_root_url;
+                    member here/portal_membership/getAuthenticatedMember;
+                    username python:member.getUserName();
+                    batch here/getContent">
+        <tal:block tal:repeat="item batch">
+        <div class="tileItem">
+            <a tal:attributes="href item/getURL|item/absolute_url"
+               tal:content="item/Title"/>
+        </div>
+        <div class="tileItem">
+        </div>
+        </tal:block>
+    </div>
+  </dd>
+
+  <dd class="portletFooter">
+    <span class="portletBottomLeft"></span>
+    <span class="portletBottomRight"></span>
+  </dd>
+</div>
+</dl>
