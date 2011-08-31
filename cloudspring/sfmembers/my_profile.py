@@ -41,12 +41,9 @@ class Renderer(base.Renderer):
        if self.anonymous: # the user has not logged in
            return None
        else:
-           mt = getToolByName(self.context, 'portal_membership')
-           member = mt.getAuthenticatedMember()
-           username = member.getUserName()
-           portal = getToolByName(self.context, 'portal_url').getPortalObject()
-           profile = portal.members[username].profile
-           return profile
+           import membership
+           blog = membership.getBlog(self.context)
+           return blog.profile
 
     def getUrl(self):
         member = self._member()

@@ -2,14 +2,13 @@ from plone.app.portlets.portlets import base
 from zope.interface import implements
 from Products.CMFCore.utils import getToolByName
 from cloudspring.sfmembers.interfaces import IProfilePortlet
-
 from zope.formlib import form
-
+import re
 from plone.memoize.instance import memoize
 from zope.component import getMultiAdapter
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from Products.CMFPlone import PloneMessageFactory as _
-
+import membership
 
 class Assignment(base.Assignment):
     implements(IProfilePortlet)
@@ -34,26 +33,32 @@ class Renderer(base.Renderer):
     def __init__(self, *args):
         base.Renderer.__init__(self, *args)
 
+    @memoize
     def getUID(self):
-        import re
-        pattern = 'members/(\w*)'
+        pattern = 'members/[\w-]*/(\w*)/?.*'
         match = re.search(pattern, self.context.absolute_url())
         uid = match.group(1)
         return uid
 
     @memoize
+    def getMemberDir(self):
+        pattern = 'members/([\w-]*)/.*'
+        match = re.search(pattern, self.context.absolute_url())
+        path = match.group(1)
+        return path
+
+    @memoize
     def _member(self):
         portal = getToolByName(self.context, 'portal_url').getPortalObject()
         uid = self.getUID()
-        profile = portal.members[uid].profile
+        path = self.getMemberDir()
+        profile = portal.members[path][uid].profile
         return profile
 
     def isHomeFolder(self):
-        mt = getToolByName(self.context, 'portal_membership')
-        member = mt.getAuthenticatedMember()
-        username = member.getUserName()
-        uid = self.getUID()
-        if uid == username:
+        home = membership.getHomeUrl(self.context)
+        match = re.search(home, self.context.absolute_url())
+        if match:
             return True
         else:
             return False
