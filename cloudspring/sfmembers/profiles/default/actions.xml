@@ -6,7 +6,7 @@
     <object name="mystuff" meta_type="CMF Action" i18n:domain="plone">
       <property name="title" i18n:translate="">My Folder</property>
       <property name="description" i18n:translate=""></property>
-      <property name="url_expr">string:${portal/portal_url}/members/${portal/portal_membership/getAuthenticatedMember}</property>
+      <property name="url_expr">string:${portal/getHomeFolderUrl}</property>
       <property name="icon_expr"></property>
       <property name="available_expr">python:(member is not None) and (portal.portal_membership.getHomeFolder() is not None)</property>
       <property name="permissions">
