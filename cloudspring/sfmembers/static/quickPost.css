@@ -19,11 +19,14 @@
   padding: 0;
 }
 
-#quick-post textarea {
+#portlet-quickPost textarea {
   width: 100%;
 }
+#portlet-quickPost #form-widgets-title {
+  width: 220px;
+}
 
-.tooltip {
+.portlet .tooltip {
     background-color:#000;
     border:1px solid #fff;
     padding:10px 15px;
