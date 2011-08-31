@@ -2,7 +2,11 @@
     xmlns="http://namespaces.zope.org/zope"
     xmlns:browser="http://namespaces.zope.org/browser">
 <!--
+<<<<<<< HEAD
     <browser:page
+=======
+<browser:page
+>>>>>>> Edited cloudspring/sfmembers/overrides.zcml via GitHub
       for="*"
       name="blog_item_view"
       class=".default_item.DefaultItemView"
