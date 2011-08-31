@@ -25,6 +25,7 @@ MEMBER_DIRECTORY = 'members/2011-2012'
 MEMBER_DIRECTORY_ID = 'members'
 MEMBER_PORTAL_TYPE = 'cloudspring.sfmembers.Member'
 PUBLISH_ACTION = 'publish-internally'
+PUBLISHED_STATE = 'internally_published'
 logger = logging.getLogger('Create Member Area')
 
 
@@ -83,7 +84,7 @@ def findOrCreateProfileById(context, name, id):
 
     # Change ownership and give local roles to member folder
     blog_folder.__ac_local_roles__ = None
-    blog_folder.manage_setLocalRoles(id, ['Editor'])
+    blog_folder.manage_setLocalRoles(id, ['Manager'])
 
     # This enables collective.blogging (I think).
     # Probably not necessary anymore?
@@ -108,13 +109,16 @@ def findOrCreateProfileById(context, name, id):
     try:
       theCriteria = blog_collection.addCriterion('path','ATRelativePathCriterion')
       theCriteria.setRelativePath("../blog")
+      # Only show published content
+      theCriteria = blog_collection.addCriterion('review_state','ATSimpleStringCriterion')
+      theCriteria.setValue(PUBLISHED_STATE)
       sort_criteria = blog_collection.addCriterion('modified','ATSortCriterion')
       sort_criteria.setReversed(True)
     except:
       # criteria already set.
       pass
 
-    blog_collection.setLayout('blog_view')
+    blog_collection.setLayout('folder_summary_view')
 
     # Hide the collection from navigation.
     blog_collection.setExcludeFromNav(True)
@@ -144,9 +148,9 @@ def findOrCreateProfileById(context, name, id):
       # criteria already set.
       pass
 
-    drafts_collection.setLayout('blog_view')
+    drafts_collection.setLayout('folder_summary_view')
     drafts_collection.__ac_local_roles__ = None
-    drafts_collection.manage_setLocalRoles(id, ['member'])
+    drafts_collection.manage_setLocalRoles(id, ['Manager'])
 
     # get the member profile object, if it exists.
     try:
