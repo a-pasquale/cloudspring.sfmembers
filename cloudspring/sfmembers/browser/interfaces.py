@@ -7,6 +7,10 @@ class IThemeSpecific(IDefaultPloneLayer):
        Selection in portal_skins.
     """
 
+class IHomeFolderUrlView(Interface):
+    """ Return the members home folder url
+    """
+
 class IMemberSummaryView(Interface):
     """ Allowed template variables exposed from the view.
     """

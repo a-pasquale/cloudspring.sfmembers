@@ -3,6 +3,27 @@ from zope.interface import implements, Interface
 
 from Products.CMFCore.utils import getToolByName
 from cloudspring.sfmembers.browser.interfaces import IMemberSummaryView
+from cloudspring.sfmembers.browser.interfaces import IHomeFolderUrlView
+
+class HomeFolderUrlView(BrowserView):
+    """
+    Return the members home folder url
+    """
+
+    implements(IHomeFolderUrlView)
+
+    def __call__(self):
+        username = self.request.get('username', None)
+        if username is None:
+            mt = getToolByName(self.context, 'portal_membership')
+            member = mt.getAuthenticatedMember()
+        username = member.getUserName()
+        catalog = getToolByName(self.context, 'portal_catalog')
+        results = catalog.searchResults(
+                        {'portal_type': 'Folder', 
+                        'id': username})
+        for brain in results:
+            return brain.getURL()
 
 
 class MemberSummaryView(BrowserView):
