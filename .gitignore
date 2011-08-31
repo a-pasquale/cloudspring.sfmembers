@@ -1,0 +1,8 @@
+*.pyc
+.DS_Store?
+*.esproj
+*.expressostorage
+*.scssc
+compass_app_log.txt
+.sass_cache
+.DS_Store
