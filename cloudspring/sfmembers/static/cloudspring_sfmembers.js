@@ -77,8 +77,9 @@
 
     $(".member .picture").tooltip({effect:'fade'});
 
-    $('ul.tabs').tabs('> div');
     $("#my_accordion").tabs("#my_accordion div.pane", {tabs: 'h3', effect: 'slide', event: 'mouseover', initialIndex: null});
+    $('ul.tabs').tabs('> div');
+    $('#my-content-tabs').tabs('> div');
     $("#accordion").tabs("#accordion div.pane", {tabs: 'h3', effect: 'slide', event: 'mouseover', initialIndex: null});
 
     $('#name').editInPlace({
