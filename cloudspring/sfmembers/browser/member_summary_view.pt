@@ -40,16 +40,18 @@
 
                   <tal:block tal:define="global role member/role"/>
                     <div style="float:left">
+                      <div class="picture">
                       <a href="#"
                          tal:attributes="href item_url">
-                        <img class="picture" src="" alt="" 
+                        <img src="" alt="" 
                              tal:condition="nocall:member/picture"
                              tal:attributes="src string:${item_url}/profile/@@images/picture/tile;
 " />
                         <img class="picture" src="++resource++cloudspring.sfmembers/default_profile.jpg" alt=""
                              tal:condition="python: not member.picture" width="64"/>
 
-                      </a>
+                           </a>
+                      </div>
                       <div class="tooltip">
                         <h4><span tal:replace="member/name">name</span></h4>
                         <div class="tile">
