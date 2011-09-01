@@ -1,6 +1,6 @@
-<dl class="portlet portletQuickPostPortlet"
+<dl class="portlet portletMyContentPortlet"
     i18n:domain="cloudspring.sfmembers"
-    id="portlet-quickPost">
+    id="portlet-MyContent">
 
 <metal:block use-macro="here/global_defines/macros/defines" />
 <div class="inner"> 
@@ -13,19 +13,92 @@
   </dt>
 
   <dd class="portletItem">
-    <div tal:define="root context/plone_portal_state/navigation_root_url;
-                    member here/portal_membership/getAuthenticatedMember;
-                    username python:member.getUserName();
-                    batch here/getContent">
-        <tal:block tal:repeat="item batch">
-        <div class="tileItem">
-            <a tal:attributes="href item/getURL|item/absolute_url"
-               tal:content="item/Title"/>
+    <ul id="my-content-tabs">
+      <li><a href="#">Recent Content</a></li>
+      <li><a href="#">Drafts</a></li>
+    </ul>
+
+    <div tal:define="wf_tool here/portal_workflow;
+                     batch here/getContent"
+         class="contents-block">
+      <tal:block tal:repeat="item batch">
+        <div class="tileItem"
+             tal:define="item_url item/getURL|item/absolute_url;
+                         item_edit_url string:${item_url}/edit;
+                         review_state python:wf_tool.getInfoFor(item, 'review_state', '')">
+          <div class="MyContent_title">
+            <a tal:attributes="href item_url"
+               tal:content="item/Title"
+               title="Read"/>
+          </div>
+          <div class="MyContent_edit">
+            <a tal:attributes="href item_edit_url">
+              <img src="/++resource++cloudspring.sfmembers/pencil-icon.png"
+                   title="Edit" alt="Edit"/>
+            </a>
+          </div>
+          <form name="review_state_form" class="review-state-form" 
+                tal:attributes="action string:${item_url}/content_status_modify" method="get">
+            <select name="workflow_action" onchange="this.form.submit();" 
+                    tal:condition="python:review_state == 'internally_published'">
+              <option value="hide">Private</option>
+              <option value="" SELECTED>Class</option>
+              <option value="submit">Community</option>
+            </select>
+            <select name="workflow_action" onchange="this.form.submit();" 
+                    tal:condition="python:review_state == 'pending' or review_state == 'published'">
+              <option value="retract">Private</option>
+              <option value="submit" SELECTED="SELECTED">Community</option>
+            </select>
+          </form>
         </div>
-        <div class="tileItem">
-        </div>
-        </tal:block>
+        <br clear="both"/>
+      </tal:block>
     </div>
+    <div tal:define="wf_tool here/portal_workflow;
+                     batch here/getDrafts"
+        class="contents-block">
+      <tal:block tal:repeat="item batch">
+        <div class="tileItem"
+             tal:define="item_url item/getURL|item/absolute_url;
+                         item_edit_url string:${item_url}/edit;
+                         review_state python:wf_tool.getInfoFor(item, 'review_state', '')">
+          <div class="MyContent_title">
+            <a tal:attributes="href item_url"
+               tal:content="item/Title"
+               title="Read"/>
+          </div>
+          <div class="MyContent_edit">
+            <a tal:attributes="href item_edit_url">
+              <img src="/++resource++cloudspring.sfmembers/pencil-icon.png"
+                   title="Edit" alt="Edit"/>
+            </a>
+          </div>
+          <form name="review_state_form" class="review-state-form"
+                tal:attributes="action string:${item_url}/content_status_modify" method="get">
+            <select name="workflow_action" onchange="this.form.submit();" 
+                    tal:condition="python:review_state == 'private'">
+              <option value="hide" SELECTED>Draft</option>
+              <option value="publish-internally">Class</option>
+            </select>
+          </form>
+        </div>
+        <br clear="both"/>
+      </tal:block>
+      </div>
+      <ul>
+        <li>
+          <a tal:attributes="href string:${view/getUrl}">
+              Go to my blog
+          </a>
+        </li>
+        <li>
+          <a tal:attributes="href string:${view/getUrl}/drafts">
+              Go to my drafts 
+          </a>
+        </li>
+
+
   </dd>
 
   <dd class="portletFooter">

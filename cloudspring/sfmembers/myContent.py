@@ -37,7 +37,12 @@ class Renderer(base.Renderer):
         context = aq_inner(self.context)
         portal_state = getMultiAdapter((context, self.request), name=u'plone_portal_state')
         #whether or not the current user is Anonymous
-        self.anonymous = portal_state.anonymous()  
+        self.anonymous = portal_state.anonymous()
+        if self.anonymous:
+            return
+        self.catalog = getToolByName(context, 'portal_catalog')
+        self.home = membership.getHomePath(context)
+        self.limit = 5
 
     @memoize 
     def getUrl(self):
@@ -45,23 +50,29 @@ class Renderer(base.Renderer):
         return url
 
     def getContent(self):
-        if self.anonymous:
-            return
- 
         context = aq_inner(self.context)
-        home = membership.getHomePath(context)
-        catalog = getToolByName(context, 'portal_catalog')
-        results = catalog.searchResults(
+        limit = self.limit
+        contents = self.catalog.searchResults(
                     portal_type=('cloudspring.sfmembers.reflection', 'Blog Entry'), 
-                    path={'query': home, 
-                          'depth': 2}
-        )
-       
-        contents = []
-        for brain in results:
-            contents.append(brain.getObject())
+                    path={'query': self.home, 'depth': 2},
+                    review_state=('internally_published', 'published'),
+                    sort_limit=limit
+        )[:limit]
+        contents = [b.getObject() for b in contents]
         return contents
 
+    def getDrafts(self):
+        context = aq_inner(self.context)
+        limit = self.limit
+        contents = self.catalog.searchResults(
+                    portal_type=('cloudspring.sfmembers.reflection', 'Blog Entry'), 
+                    path={'query': self.home, 'depth': 2},
+                    review_state='private',
+                    sort_limit=limit
+        )[:limit]
+        contents = [b.getObject() for b in contents]
+        return contents
+ 
 
     def render(self):
         return self._template()
