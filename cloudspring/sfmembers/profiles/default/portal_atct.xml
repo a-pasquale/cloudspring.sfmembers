@@ -35,6 +35,14 @@
         <criteria>ATSimpleStringCriterion</criteria>
     </index>
     <index
+        name="projects"
+        description="A field that contains the projects name."
+        enabled="True"
+        friendlyName="Projects">
+        <criteria>ATSelectionCriterion</criteria>
+        <criteria>ATSimpleStringCriterion</criteria>
+    </index>
+    <index
         name="lastName"
         description="Last Name"
         enabled="True"
@@ -70,6 +78,11 @@
         description="A field that contains the assignment name."
         enabled="True"
         friendlyName="Assignment"/>
+  <metadata
+    name="projects"
+        description="A field that contains the projects name."
+        enabled="True"
+        friendlyName="Projects"/>
   <metadata
     name="lastName"
         description="Last Name"

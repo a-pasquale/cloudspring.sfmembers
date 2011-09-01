@@ -27,4 +27,8 @@
         <indexed_attr value="assignment"/>
     </index>
     <column value="assignment"/>
+    <index name="projects" meta_type="FieldIndex">
+        <indexed_attr value="projects"/>
+    </index>
+    <column value="projects"/>
 </object>
