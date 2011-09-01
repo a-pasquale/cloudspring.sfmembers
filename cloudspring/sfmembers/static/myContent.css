@@ -1,0 +1,19 @@
+#portlet-MyContent div.tileItem div {
+    float: left;
+}
+
+#portlet-MyContent form {
+    float: left;
+}
+
+.MyContent_title {
+    width: 150px;
+}
+
+.MyContent_edit {
+    width: 24px;
+}
+
+#portlet-MyContent select {
+    width: 90px;
+}
