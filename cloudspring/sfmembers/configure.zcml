@@ -123,6 +123,4 @@
         original="getHomeUrl"
         replacement=".membership.getHomeUrl"
         />
-    <include package="collective.gtags" file="configure.zcml" />
-    <include package="collective.gtags" file="behaviors.zcml" />
 </configure>
