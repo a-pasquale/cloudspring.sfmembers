@@ -29,7 +29,7 @@
               tal:attributes="action string:${view/getUrl}/blog/++add++cloudspring.sfmembers.reflection" >
           Title:<input id="form-widgets-title" name="form.widgets.title" class="text-widget required textline-field" value="" title="testing"/>
           <textarea id="form.widgets.text" name="form.widgets.text" class="textarea-widget text-field" 
-            title='{"valid_elements": {"code": ["class", "dir", "id", "style", "title"], "kbd": ["class", "dir", "id", "style", "title"], "aside": ["class", "dir", "id", "style", "title"], "img": ["align", "alt", "class", "dir", "height", "hspace", "id", "ismap<ismap", "longdesc", "name", "src", "style", "title", "usemap", "vspace", "width"], "title": ["dir", "id"], "tt": ["class", "dir", "id", "style", "title"], "tr": ["align", "char", "charoff", "class", "dir", "id", "style", "title"], "li": ["class", "dir", "id", "style"...tent-tab", "Pane Break|hr|pane-break", "prettyPhoto Link|a|prettyPhoto", "prettyPhoto Iframe Link|a|prettyPhotoIframe"], "navigation_root_url": "http://64.18.217.181:8902/Plone", "editor_height": 400, "toolbar_location": "top", "autoresize": false, "atd_rpc_url": "Plone/@@", "valid_inline_styles": ["text-align", "list-style-type", "float", "padding-left"], "resizing": true, "atd_rpc_id": "Products.TinyMCE-apasquale", "language": "en", "contextmenu": true, "entity_encoding": "raw", "directionality": "ltr"}'></textarea>
+            title=''></textarea>
           <input id="form-buttons-save" name="form.buttons.save" class="submit-widget button-field context" value="Submit" type="submit" />
         </form>
       </div>
@@ -38,13 +38,27 @@
               tal:attributes="action string:${view/getUrl}/blog/createObject?type_name=Blog+Entry" >
            Title:<input id="form-widgets-title" name="form.widgets.title" class="text-widget required textline-field" value="" title="testing"/>
            <textarea id="form.widgets.text" name="form.widgets.text" class="textarea-widget text-field"
-             title='{"valid_elements": {"code": ["class", "dir", "id", "style", "title"], "kbd": ["class", "dir", "id", "style", "title"], "aside": ["class", "dir", "id", "style", "title"], "img": ["align", "alt", "class", "dir", "height", "hspace", "id", "ismap<ismap", "longdesc", "name", "src", "style", "title", "usemap", "vspace", "width"], "title": ["dir", "id"], "tt": ["class", "dir", "id", "style", "title"], "tr": ["align", "char", "charoff", "class", "dir", "id", "style", "title"], "li": ["class", "dir", "id", "style"...tent-tab", "Pane Break|hr|pane-break", "prettyPhoto Link|a|prettyPhoto", "prettyPhoto Iframe Link|a|prettyPhotoIframe"], "navigation_root_url": "http://64.18.217.181:8902/Plone", "editor_height": 400, "toolbar_location": "top", "autoresize": false, "atd_rpc_url": "Plone/@@", "valid_inline_styles": ["text-align", "list-style-type", "float", "padding-left"], "resizing": true, "atd_rpc_id": "Products.TinyMCE-apasquale", "language": "en", "contextmenu": true, "entity_encoding": "raw", "directionality": "ltr"}'></textarea>
+             title=''></textarea>
            <input id="form-buttons-save" name="form.buttons.save" class="submit-widget button-field context" value="Post" type="submit" />
         </form>
      </div>
     </div>
 
     <div id="result"><div id="message"></div></div>
+
+    <div>
+        <a tal:attributes="href
+            string:${view/getUrl}/blog/createObject?type_name=Blog+Entry">
+            Post to your blog
+        </a>
+    </div>
+    <div>
+        <a tal:attributes="href
+            string:${view/getUrl}/blog/++add++cloudspring.sfmembers.reflection">
+            Write a reflection
+        </a>
+    </div>
+
     <script>
       $('textarea').autoResize({
         // On resize:
