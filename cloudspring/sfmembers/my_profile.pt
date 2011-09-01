@@ -21,9 +21,10 @@
 
     <dd class="portletItem">
       <div>
-<!--
+        <!--
         <form name="update-profile-picture" id="update-profile-picture" method="post" 
               action="./@@inline_edit_view?picture=1" enctype="multipart/form-data"> 
+
           <span class="named-image-widget namedimage-field" id="my_form-widgets-picture"> 
             <input type="file" id="update_value" name="update_value" />
           </span>
@@ -32,10 +33,9 @@
           </div>
         </form>
         -->
-        <a tal:attributes="href string:${view/getUrl}/profile; title string:${view/getName}">
-            <img tal:define="member view/_member; scales member/@@images"
-                 tal:replace="structure python: scales.scale('picture',
-                 width=200, height=200).tag()" 
+          <a tal:attributes="href string:${view/getUrl}/profile; title view/getName">
+            <img tal:define="member view/_member; scale member/@@images"
+                 tal:replace="structure python: scale.scale('picture', width=250, height=250).tag()" 
                  tal:condition="python: view.getPicture()">
             <img tal:attributes="src string: ++resource++cloudspring.sfmembers/default_profile.jpg" alt="" tal:condition="python: not view.getPicture()" width="200"/>
           </a>
@@ -43,16 +43,21 @@
         <br clear="both" />
         <div id="my_email" tal:content="view/getEmail" tal:omit-tag="not:exists:view/getEmail"/>
         <div id="my_website" tal:content="view/getWebsite" tal:omit-tag="not:exists:view/getWebsite"/>
-        <div>
-          <ul id="profile_links">
-            <li><a tal:attributes="href string:${view/getUrl}" title="My blog">Go to my blog</a></li>
-            <li><a tal:attributes="href string:${view/getUrl}/drafts" title="My drafts">Go to my drafts</a></li>
-            <li><a tal:attributes="href string:${view/getUrl}/profile" 
-                   class="overlayLink" title="My profile">View my profile</a></li>
-            <li><a tal:attributes="href string:${view/getUrl}/profile/edit" title="Edit my profile">Edit my profile</a></li>
-          </ul>
-        </div>
       </div>
+      <ul>
+          <li><a class="overlayLink" tal:attributes="href
+              string:${view/getUrl}/profile">
+              View your profile</a>
+          </li>
+          <li><a tal:attributes="href
+              string:${view/getUrl}/profile/edit">
+              Edit your profile</a>
+          </li>
+          <li>
+              <a class="overlayLink"
+                 href="/Plone/@@change-password">Change your password</a>
+          </li>
+      </ul>
     </dd>
 
     <dd class="portletFooter">
