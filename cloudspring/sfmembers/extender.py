@@ -3,15 +3,12 @@ from zope.component import adapts
 from zope.interface import implements
 from zope import schema
 from archetypes.schemaextender.interfaces import ISchemaExtender
-from Products.Archetypes.atapi import StringField, SelectionWidget, StringWidget
+from Products.Archetypes.atapi import StringField, SelectionWidget, MultiSelectionWidget, StringWidget
 from Products.ATContentTypes.content.newsitem import ATNewsItem
+from Products.Archetypes.public import DisplayList
 from cloudspring.sfmembers import _
 
-
-class BlogTypeField(ExtensionField, StringField):
-    pass
-
-class AssignmentNumberField(ExtensionField, StringField):
+class assignment(ExtensionField, StringField):
     pass
 
 class ProjectField(ExtensionField, StringField):
@@ -23,27 +20,23 @@ class BlogExtender(object):
 
 
     fields = [ 
-        BlogTypeField(name='BlogTypeField',
-                  vocabulary=[_(u'Assignment'),_(u'Pre-class reflection'), _(u'Post-class reflection'), _(u'Project'), _(u'Seminar feed'), _(u'Personal blog')],
-                  widget=SelectionWidget(
-                      label=_(u'Blog type:'),
-                      format='radio'
-                  ),
-        ),
-        AssignmentNumberField(
-            name=_(u"AssignmentNumberField"),
-            widget=StringWidget(
-                label=_(u"Assignment number:"),            
-                description=_(u"Enter the relevant class number."),
-            ),
+
+        assignment(name=_(u"Assignment"),
+                   title=_(u"Assignment"),
+                   vocabulary=[_(u'Assignment 1'), _(u'Assignment 2'),
+                       _(u'Assignment 3'), _(u'Assignment 4')],
+                   required=False,
+                   widget=SelectionWidget(
+                       format='radio'
+                   ),
         ),
 
         ProjectField(
             name=_(u"ProjectField"),
             vocabulary=[_(u'Syracuse'), _(u'Rutgers Future Scholars'), _(u'Innovative Lawyering'), _(u'Higher Education and Immigration'), _(u'College Initiative')],
-            widget=SelectionWidget(
+            widget=MultiSelectionWidget(
                 label=_(u"Select a project:"),            
-                format='radio',
+                format='checkbox',
             ),
         ),
     ]
