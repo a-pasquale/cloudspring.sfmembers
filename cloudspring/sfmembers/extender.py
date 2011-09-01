@@ -27,7 +27,7 @@ class BlogExtender(object):
                        _(u'Assignment 3'), _(u'Assignment 4')],
                    required=False,
                    widget=SelectionWidget(
-                       format='radio'
+                       format='select'
                    ),
         ),
 
@@ -36,7 +36,7 @@ class BlogExtender(object):
             vocabulary=[_(u'Syracuse'), _(u'Rutgers Future Scholars'), _(u'Innovative Lawyering'), _(u'Higher Education and Immigration'), _(u'College Initiative')],
             widget=MultiSelectionWidget(
                 label=_(u"Select a project:"),            
-                format='checkbox',
+                format='select',
             ),
         ),
     ]
