@@ -21,7 +21,7 @@ div.tooltip {
 }
 
 /* root element for tabs  */
-#post-types {  
+#post-types, #my-content-tabs {  
   margin:0 !important; 
   padding:0;
   height:30px;
@@ -29,7 +29,7 @@ div.tooltip {
 }
 
 /* solidingle tab */
-#post-types li {  
+#post-types li, #my-content-tabs li {  
   float:left; 
   padding:0; 
   margin:0;          
@@ -37,7 +37,7 @@ div.tooltip {
 }
 
 /* link inside the tab. uses a background     image */
-#post-types a { 
+#post-types a, #my-content-tabs a { 
   float:left;
   font-size:13px;
   display:block;
@@ -56,13 +56,13 @@ div.tooltip {
   border-radius:8px 8px 0 0;
 }
 
-#post-types a:hover {
+#post-types a:hover, #my-content-tabs a:hover {
   background-color:#F7F7F7;
   color:#333;
 }
 
 /* selected tab */
-#post-types a.current {
+#post-types a.current, #my-content-tabs a.current {
   background-color:#ddd;
   border-bottom:1px solid #ddd;
   color:#000;
@@ -71,7 +71,7 @@ div.tooltip {
 
 
 /* tab pane */
-.post-type-form {
+.post-type-form, .portletMyContentPortlet .contents-block {
   display:none;
   border:1px solid #666;
   border-width:0 1px 1px 1px;
