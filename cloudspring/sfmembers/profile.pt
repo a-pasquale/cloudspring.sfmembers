@@ -6,7 +6,7 @@
 <div tal:condition="python: not context.id == 'members-collection' and not
     context.id == 'members'"> 
     <div tal:condition="view/isHomeFolder" id="my-home-folder" /> 
-    <link rel="stylesheet" type="text/css" tal:attributes="href string:++resource++cloudspring.sfmembers/member.css" />
+    <link rel="stylesheet" type="text/css" tal:attributes="href string:/++resource++cloudspring.sfmembers/member.css" />
 
     <dt class="portletHeader">
         <span class="portletTopLeft"></span>
@@ -25,7 +25,7 @@
              <img tal:define="member view/_member; scale member/@@images"
                  tal:replace="structure python: scale.scale('picture', width=200, height=200).tag()" 
                  tal:condition="python: view.getPicture()">
-            <img tal:attributes="src string: ++resource++cloudspring.sfmembers/default_profile.jpg" alt="" tal:condition="python: not view.getPicture()" width="200"/>
+            <img tal:attributes="src string:/++resource++cloudspring.sfmembers/default_profile.jpg" alt="" tal:condition="python: not view.getPicture()" width="200"/>
           </a>
         </div>
 

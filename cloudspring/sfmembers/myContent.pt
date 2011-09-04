@@ -5,7 +5,7 @@
 <metal:block use-macro="here/global_defines/macros/defines" />
 <div class="inner"> 
   <link rel="stylesheet" type="text/css" 
-    tal:attributes="href string:++resource++cloudspring.sfmembers/myContent.css" />
+    tal:attributes="href string:/++resource++cloudspring.sfmembers/myContent.css" />
   <dt class="portletHeader">
     <span class="portletTopLeft"></span>
     <div><h2>My Content</h2></div>
