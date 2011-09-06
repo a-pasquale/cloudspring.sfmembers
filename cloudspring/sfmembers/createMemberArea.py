@@ -16,6 +16,7 @@ from Products.CMFPlone.utils import safe_unicode
 from Products.CMFPlone.utils import _createObjectByType
 from zope.app.component.hooks import getSite
 from cloudspring.sfmembers.member import IMember
+import membership
 
 from AccessControl import allow_module
 allow_module('cloudspring.sfmembers.createMemberArea')
@@ -62,10 +63,13 @@ def getDirectoryFolder(context, dir):
 
 def findOrCreateProfileById(context, name, id):
 
-    member_dir_path = MEMBER_DIRECTORY.split("/")
-    member_dir_path.append(id)
- 
-    directory = getDirectoryFolder(context, member_dir_path)
+    #member_dir_path = MEMBER_DIRECTORY.split("/")
+    #member_dir_path.append(id)
+    #directory = getDirectoryFolder(context, member_dir_path)
+
+    # Get the members home folder.
+    directory = membership.getBlog(context, id)
+    # Then get their profile:
     dir = getattr(directory, id)
 
     # Change the title to the members fullname.
