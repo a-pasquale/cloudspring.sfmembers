@@ -14,7 +14,7 @@
         <indexed_attr value="AssignmentNumberField" />
     </index>
     <column value="AssignmentNumberField" />
-    <index name="ProjectField" meta_type="FieldIndex">
+    <index name="ProjectField" meta_type="KeywordIndex">
         <indexed_attr value="ProjectField" />
     </index>
     <column value="ProjectField" />
@@ -27,8 +27,10 @@
         <indexed_attr value="assignment"/>
     </index>
     <column value="assignment"/>
+    <!--
     <index name="projects" meta_type="FieldIndex">
         <indexed_attr value="projects"/>
     </index>
     <column value="projects"/>
+    -->
 </object>

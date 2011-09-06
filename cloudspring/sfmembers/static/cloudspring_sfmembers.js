@@ -2,7 +2,7 @@
   var $;
   $ = jQuery;
   $(function() {
-    $('#drawer_tab').show();
+   $('#drawer_tab').show();
 
     $('#drawer_tab').click(function() {
       var drawerWidth;
@@ -47,9 +47,7 @@
       effect: "fade",
       opacity: 0.7
     });
-    $('#post-types').tabs('div.post-type-form', {
-      event: 'mouseover'
-    });
+    $('#post-types').tabs('div.post-type-form');
     $('#drawer_nav ul').tabs("#panes > div");
     $('a.overlayLink').prepOverlay({
       subtype: 'ajax',
@@ -62,6 +60,23 @@
         }
       }
     });
+
+    // This is for the MyContent portlet
+    $(".sliding_div").hide();
+    $('div.show_hide').toggle(
+        function() {
+          $(this).children('img').attr("src", "/++resource++cloudspring.sfmembers/orange-arrow-open.png");
+          $(this).parent().addClass("expanded");
+          $(this).parent().children('div.sliding_div').slideDown();
+        },
+        function () {
+          $(this).children('img').attr("src", "/++resource++cloudspring.sfmembers/orange-arrow-closed.png");
+          $(this).parent().removeClass("expanded");
+          $(this).parent().children('div.sliding_div').slideUp();
+        }
+    );
+    $('#review_state_form').buttonset();
+
     // This snippet actives the overlay for the member profile·
     $('._overlay a').prepOverlay({
       subtype :  'ajax',
@@ -81,7 +96,7 @@
     $('ul.tabs').tabs('> div');
     $('#my-content-tabs').tabs('> div');
     $("#accordion").tabs("#accordion div.pane", {tabs: 'h3', effect: 'slide', event: 'mouseover', initialIndex: null});
-
+    try {
     $('#name').editInPlace({
       url: './@@inline_edit_view',
       params: "name",
@@ -113,6 +128,7 @@
               $('#portlet-profile #profile-website a').html(update_value);
           }
       }
-    });
+    });}
+    catch(err){}
   });
 }).call(this);

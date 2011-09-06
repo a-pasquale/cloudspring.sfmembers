@@ -26,79 +26,137 @@
              tal:define="item_url item/getURL|item/absolute_url;
                          item_edit_url string:${item_url}/edit;
                          review_state python:wf_tool.getInfoFor(item, 'review_state', '')">
+          <div class="show_hide">
+            <img
+                 src="/++resource++cloudspring.sfmembers/orange-arrow-closed.png" title="Click for publishing options." alt=""/>
+          </div>
           <div class="MyContent_title">
-            <a tal:attributes="href item_url"
+                        <a tal:attributes="href item_url"
                tal:content="item/Title"
                title="Read"/>
-          </div>
-          <div class="MyContent_edit">
-            <a tal:attributes="href item_edit_url">
-              <img src="/++resource++cloudspring.sfmembers/pencil-icon.png"
-                   title="Edit" alt="Edit"/>
-            </a>
-          </div>
-          <form name="review_state_form" class="review-state-form" 
-                tal:attributes="action string:${item_url}/content_status_modify" method="get">
-            <select name="workflow_action" onchange="this.form.submit();" 
-                    tal:condition="python:review_state == 'internally_published'">
-              <option value="hide">Private</option>
-              <option value="" SELECTED>Class</option>
-              <option value="submit">Community</option>
-            </select>
-            <select name="workflow_action" onchange="this.form.submit();" 
-                    tal:condition="python:review_state == 'pending' or review_state == 'published'">
-              <option value="retract">Private</option>
-              <option value="submit" SELECTED="SELECTED">Community</option>
-            </select>
-          </form>
+           </div>
+           <div class="sliding_div">
+             <div class="MyContent_edit">
+               <a tal:attributes="href item_edit_url">
+                 <img src="/++resource++cloudspring.sfmembers/notepad_16x16-32.png"
+                     title="Edit" alt="Edit"/>
+               </a>
+             </div>
+             <div class="MyContent_delete">
+               <a tal:attributes="href string:${item_url}/delete_confirmation">
+                 <img src="/++resource++cloudspring.sfmembers/recycle_bin_empty_16x16-32.png"
+                     title= "Delete" alt="Delete" />
+                </a>
+             </div>
+                      
+             <form id="review_state_form" name="review_state_form" 
+                   class="review-state-form" 
+                   tal:attributes="action string:${item_url}/content_status_modify" method="get">
+                <div class="my_content_radio">
+                  <label for="radio_draft">Draft</label>
+                  <input type="radio" id="radio_draft" 
+                         name="workflow_action" value="hide" 
+                         tal:attributes="checked python:
+                         review_state=='private'"
+                         onClick="this.form.submit()"/>
+                  <label for="radio_myblog">My Blog</label>
+                  <input type="radio" id="radio_myblog"
+                         name="workflow_action" value="publish-internally" 
+                         tal:attributes="checked python:
+                         review_state=='internally_published'"
+                         onClick="this.form.submit()"/>
+                  <label for="radio_seminar">Seminar Blog</label>
+                  <input type="radio" name="workflow_action"
+                         id="radio_seminar" value="seminar" 
+                         tal:attributes="checked python:
+                         review_state=='seminar'"
+                         onClick="this.form.submit()"/>
+                </div>
+             </form>
+           </div>
         </div>
         <br clear="both"/>
       </tal:block>
     </div>
     <div tal:define="wf_tool here/portal_workflow;
                      batch here/getDrafts"
-        class="contents-block">
+         class="contents-block">
       <tal:block tal:repeat="item batch">
         <div class="tileItem"
              tal:define="item_url item/getURL|item/absolute_url;
                          item_edit_url string:${item_url}/edit;
                          review_state python:wf_tool.getInfoFor(item, 'review_state', '')">
+          <div class="show_hide">
+            <img
+                 src="/++resource++cloudspring.sfmembers/orange-arrow-closed.png" title="Click for publishing options." alt=""/>
+          </div>
           <div class="MyContent_title">
-            <a tal:attributes="href item_url"
+                        <a tal:attributes="href item_url"
                tal:content="item/Title"
                title="Read"/>
-          </div>
-          <div class="MyContent_edit">
-            <a tal:attributes="href item_edit_url">
-              <img src="/++resource++cloudspring.sfmembers/pencil-icon.png"
-                   title="Edit" alt="Edit"/>
-            </a>
-          </div>
-          <form name="review_state_form" class="review-state-form"
-                tal:attributes="action string:${item_url}/content_status_modify" method="get">
-            <select name="workflow_action" onchange="this.form.submit();" 
-                    tal:condition="python:review_state == 'private'">
-              <option value="hide" SELECTED>Draft</option>
-              <option value="publish-internally">Class</option>
-            </select>
-          </form>
+           </div>
+           <div class="sliding_div">
+             <div class="MyContent_edit">
+               <a tal:attributes="href item_edit_url">
+                 <img src="/++resource++cloudspring.sfmembers/notepad_16x16-32.png"
+                     title="Edit" alt="Edit"/>
+               </a>
+             </div>
+             <div class="MyContent_delete">
+               <a tal:attributes="href string:${item_url}/delete_confirmation">
+                 <img src="/++resource++cloudspring.sfmembers/recycle_bin_empty_16x16-32.png"
+                     title= "Delete" alt="Delete" />
+                </a>
+             </div>
+                      
+             <form id="review_state_form" name="review_state_form" 
+                   class="review-state-form" 
+                  tal:attributes="action string:${item_url}/content_status_modify" method="get">
+                <div class="my_content_radio">
+                  <input type="radio" id="radio_draft" 
+                         name="workflow_action" value="hide" 
+                         tal:attributes="checked python:
+                         review_state=='private'"
+                         onClick="this.form.submit()" />
+                  <label for="radio_draft">Draft</label>
+                  <input type="radio" id="radio_myblog"
+                         name="workflow_action" value="publish-internally" 
+                         tal:attributes="checked python:
+                         review_state=='internally_published'"
+                         onClick="this.form.submit()" />
+                  <label for="radio_myblog">My Blog</label>
+                  <input type="radio" name="workflow_action"
+                         id="radio_seminar" value="seminar" 
+                         tal:attributes="checked python:
+                         review_state=='seminar'" 
+                         onClick="this.form.submit()" />
+                  <label for="radio_seminar">Seminar Blog</label>
+                </div>
+             </form>
+           </div>
         </div>
         <br clear="both"/>
       </tal:block>
-      </div>
-      <ul>
-        <li>
-          <a tal:attributes="href string:${view/getUrl}">
+    </div>
+    <ul>
+      <li>
+        <a tal:attributes="href
+            string:${view/getUrl}/blog/createObject?type_name=Blog+Entry">
+            Create new content 
+        </a>
+      </li>
+      <li>
+        <a tal:attributes="href string:${view/getUrl}">
               Go to my blog
-          </a>
-        </li>
-        <li>
-          <a tal:attributes="href string:${view/getUrl}/drafts">
+        </a>
+      </li>
+      <li>
+        <a tal:attributes="href string:${view/getUrl}/drafts">
               Go to my drafts 
-          </a>
-        </li>
-
-
+        </a>
+      </li>
+    </ul>
+ 
   </dd>
 
   <dd class="portletFooter">

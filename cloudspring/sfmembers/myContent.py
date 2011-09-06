@@ -55,7 +55,7 @@ class Renderer(base.Renderer):
         contents = self.catalog.searchResults(
                     portal_type=('cloudspring.sfmembers.reflection', 'Blog Entry'), 
                     path={'query': self.home, 'depth': 2},
-                    review_state=('internally_published', 'published'),
+                    review_state=('internally_published', 'seminar'),
                     sort_limit=limit
         )[:limit]
         contents = [b.getObject() for b in contents]
