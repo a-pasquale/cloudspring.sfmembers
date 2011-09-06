@@ -153,12 +153,6 @@ class IMember(form.Schema):
         )
 
 
-    role = schema.Choice(
-            title=_(u"Role"),
-            values=[_(u"Students"), _(u"Faculty"), _(u"Staff"), _(u"Collaborators"), _(u"Teaching Fellows"), _(u"Center Fellows"), _(u"Research Fellows"), _(u"Teaching Assistants"),],
-            required=False,
-        )
-
 class Member(Item):
     implements(IMember)
 
@@ -172,6 +166,10 @@ class Member(Item):
     @setproperty
     def name(self, value):
         self.context.name = value
+
+    @getproperty
+    def absolute_url(self):
+        return self.absolute_url()
 
 class View(grok.View):
     grok.context(IMember)
