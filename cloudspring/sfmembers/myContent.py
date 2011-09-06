@@ -42,7 +42,7 @@ class Renderer(base.Renderer):
             return
         self.catalog = getToolByName(context, 'portal_catalog')
         self.home = membership.getHomePath(context)
-        self.limit = 5
+        self.limit = 10
 
     @memoize 
     def getUrl(self):
@@ -56,6 +56,8 @@ class Renderer(base.Renderer):
                     portal_type=('cloudspring.sfmembers.reflection', 'Blog Entry'), 
                     path={'query': self.home, 'depth': 2},
                     review_state=('internally_published', 'seminar'),
+                    sort_on='modified',
+                    sort_order='descending',
                     sort_limit=limit
         )[:limit]
         contents = [b.getObject() for b in contents]
@@ -68,6 +70,8 @@ class Renderer(base.Renderer):
                     portal_type=('cloudspring.sfmembers.reflection', 'Blog Entry'), 
                     path={'query': self.home, 'depth': 2},
                     review_state='private',
+                    sort_on='modified',
+                    sort_order='descending',
                     sort_limit=limit
         )[:limit]
         contents = [b.getObject() for b in contents]
