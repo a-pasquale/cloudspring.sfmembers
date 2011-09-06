@@ -57,7 +57,9 @@ class Renderer(base.Renderer):
 
     def isHomeFolder(self):
         home = membership.getHomeUrl(self.context)
-        match = re.search(home, self.context.absolute_url())
+        match = ''
+        if home is not None:
+            match = re.search(home, self.context.absolute_url())
         if match:
             return True
         else:
