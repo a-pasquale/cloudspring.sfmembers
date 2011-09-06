@@ -23,7 +23,9 @@ def getBlog(context, id=None):
     return blog
 
 def getHomeUrl(self, id=None, verifyPermission=0):
-    return getHome(self.context, id).getURL()
+    home = getHome(self.context, id)
+    if home is not None:
+        return home.getURL()
 
 def getHomePath(context, id=None):
     return getHome(context, id).getPath()
