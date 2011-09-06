@@ -21,7 +21,7 @@ class BlogExtender(object):
 
     fields = [ 
 
-        assignment(name=_(u"Assignment"),
+        assignment(name=_(u"assignment"),
                    title=_(u"Assignment"),
                    vocabulary=[_(u'Select an assignment'),
                                _(u'Reflection'),
