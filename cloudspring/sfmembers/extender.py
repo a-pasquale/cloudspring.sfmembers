@@ -23,7 +23,10 @@ class BlogExtender(object):
 
         assignment(name=_(u"Assignment"),
                    title=_(u"Assignment"),
-                   vocabulary=[_(u'Select an assignment'),_(u'Public Narrative'), _(u'Political Autobiography'),],
+                   vocabulary=[_(u'Select an assignment'),
+                               _(u'Reflection'),
+                               _(u'Public Narrative'), 
+                               _(u'Political Autobiography'),],
                    required=False,
                    widget=SelectionWidget(
                        format='select'
@@ -32,7 +35,11 @@ class BlogExtender(object):
 
         ProjectField(
             name=_(u"ProjectField"),
-            vocabulary=[_(u'Syracuse'), _(u'Rutgers Future Scholars'), _(u'Innovative Lawyering'), _(u'Higher Education and Immigration'), _(u'College Initiative')],
+            vocabulary=[_(u'Syracuse'), 
+                        _(u'Rutgers Future Scholars'), 
+                        _(u'Innovative Lawyering'), 
+                        _(u'Higher Education and Immigration'), 
+                        _(u'College Initiative')],
             widget=MultiSelectionWidget(
                 label=_(u"Select a project:"),
                 format='select',
