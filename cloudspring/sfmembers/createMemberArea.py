@@ -41,34 +41,29 @@ def publish(context, item):
         pass
     item.reindexObject(idxs=['Title'])
 
-def getDirectoryFolder(context, dir):
-    portal = getToolByName(context, 'portal_url').getPortalObject()
-    cur_dir = portal.unrestrictedTraverse('')
-    for d in dir:
-        logger.info("d %s " % d)
-        logger.info("curdir: %s" % cur_dir ) 
-        try:
-            cur_dir = cur_dir.unrestrictedTraverse(d)
-        except (AttributeError, KeyError):
-            logger.info("cur_dir: %s" % cur_dir)
-            logger.info("Folder %s doesn't exist yet, so create it." % d)
-            cur_dir.invokeFactory("Folder", d)
-            logger.info("InvokeFactory %s " % d)
-            cur_dir = getattr(cur_dir, d)
-            cur_dir.setTitle(cur_dir.id.title())
-            cur_dir.reindexObject(idxs=['Title'])
-            publish(context, cur_dir)
+def getDirectoryFolder(context, id):
+    try:
+        # Get the members home folder.
+        member_folder = membership.getBlog(context, id)
+    except (AttributeError, KeyError):
+        # Folder doesn't exist yet, so create it.
+        logger.info("Folder doesn't exist yet, so create it.")
+        portal = getToolByName(context, 'portal_url').getPortalObject()
+        member_dir_path = MEMBER_DIRECTORY.split("/")
+        members_dir = portal.unrestrictedTraverse(member_dir_path)
+        members_dir.invokeFactory("Folder", id)
+        logger.info("InvokeFactory %s " % id)
+        member_folder = getattr(members_dir, id)
+        member_folder.setTitle(member_folder.id.title())
+        member_folder.reindexObject(idxs=['Title'])
+        publish(context, member_folder)
 
-    return cur_dir
+    return member_folder
 
 def findOrCreateProfileById(context, name, id):
+    # Get the members folder
+    directory = getDirectoryFolder(context, id)
 
-    #member_dir_path = MEMBER_DIRECTORY.split("/")
-    #member_dir_path.append(id)
-    #directory = getDirectoryFolder(context, member_dir_path)
-
-    # Get the members home folder.
-    directory = membership.getBlog(context, id)
     # Then get their profile:
     dir = getattr(directory, id)
 
@@ -207,8 +202,7 @@ def createMemberArea(context, name, firstName, lastName, id, email, role):
         # Create a collection to display a member directory.
         # Use the custom view for the collection,
         # and set it as the default page for the member folder.
-        member_dir_path = MEMBER_DIRECTORY.split("/")
-        dir = getDirectoryFolder(context, member_dir_path)
+        dir = membership.getBlog(context, id)
         # get the members collection
         try:
             members_collection = dir.unrestrictedTraverse('members-collection')
