@@ -30,12 +30,12 @@ PUBLISHED_STATE = 'internally_published'
 logger = logging.getLogger('Create Member Area')
 
 
-def publish(context, item):
+def publish(context, item, state=PUBLISH_ACTION):
     wftool = getToolByName(context, 'portal_workflow')
     # publish and reindex
     try:
         logger.info("Publishing %s... " % item.Title)
-        wftool.doActionFor(item, PUBLISH_ACTION)
+        wftool.doActionFor(item, state)
     except:
         logger.info("Failed to publish %s" % item.Title)
         pass
@@ -62,24 +62,24 @@ def getDirectoryFolder(context, id):
 
 def findOrCreateProfileById(context, name, id):
     # Get the members folder
-    directory = getDirectoryFolder(context, id)
+    dir = getDirectoryFolder(context, id)
 
-    # Then get their profile:
-    dir = getattr(directory, id)
+    #dir = getattr(directory, id)
 
     # Change the title to the members fullname.
-    home_dir = getattr(dir, id)
-    home_dir.setTitle(name)
+    dir.setTitle(name)
 
     # publish and reindex
-    publish(context, home_dir)
+    publish(context, dir)
 
     # look for the member's blog folder
     try:
-        blog_folder = dir.unrestrictedTraverse('blog')
+        logger.info("Trying to get the blog folder.")
+        blog_folder = dir['blog']
     except:
+        logger.info("The blog folder doesn't exist.  Create it.")
         dir.invokeFactory("Folder", 'blog')
-    blog_folder = getattr(dir, 'blog')
+    blog_folder = dir['blog']
 
     # Change ownership and give local roles to member folder
     blog_folder.__ac_local_roles__ = None
@@ -99,11 +99,11 @@ def findOrCreateProfileById(context, name, id):
 
     # get the blog collection
     try:
-       blog_collection = dir.unrestrictedTraverse('blog-collection')
+       blog_collection = dir['blog-collection']
     except:
         blog_title = "%s's blog" % name
         dir.invokeFactory(id="blog-collection", type_name="Topic", title=blog_title)
-    blog_collection = getattr(blog_folder, "blog-collection")
+    blog_collection = dir['blog-collection']
     # Most recent content is on top.
     try:
       theCriteria = blog_collection.addCriterion('path','ATRelativePathCriterion')
@@ -129,10 +129,10 @@ def findOrCreateProfileById(context, name, id):
 
     # get the draft collection
     try:
-       draft_collection = dir.unrestrictedTraverse('drafts')
+       draft_collection = dir['drafts']
     except:
         dir.invokeFactory(id="drafts", type_name="Topic", title="Drafts")
-    drafts_collection = getattr(blog_folder, "drafts")
+    drafts_collection = dir['drafts']
     try: 
       # Set path to the blog directory
       theCriteria = drafts_collection.addCriterion('path','ATRelativePathCriterion')
@@ -154,12 +154,12 @@ def findOrCreateProfileById(context, name, id):
     # get the member profile object, if it exists.
     try:
         logger.info("Looking for the member profile...")
-        profile = getattr(dir, "profile")
+        profile = dir['profile']
     except:
         logger.info("The profile doesn't exist, so create it.")
         profile_id = dir.invokeFactory("cloudspring.sfmembers.member", "profile")
         logger.info("Profile created.")
-        profile = getattr(dir, profile_id)
+        profile = dir['profile']
 
     profile_title = "%s's profile" % name
     profile.setTitle(profile_title)
@@ -203,12 +203,13 @@ def createMemberArea(context, name, firstName, lastName, id, email, role):
         # Use the custom view for the collection,
         # and set it as the default page for the member folder.
         dir = membership.getBlog(context, id)
+        parent = dir.aq_inner.aq_parent
         # get the members collection
         try:
-            members_collection = dir.unrestrictedTraverse('members-collection')
+            members_collection = parent['members-collection']
         except:
-            dir.invokeFactory(id="members-collection", type_name="Topic")
-        members_collection = getattr(dir, "members-collection")
+            parent.invokeFactory(id="members-collection", type_name="Topic")
+        members_collection = parent['members-collection']
         try:
             theCriteria = members_collection.addCriterion('path','ATRelativePathCriterion')
             theCriteria.setRelativePath("..")
@@ -219,7 +220,7 @@ def createMemberArea(context, name, firstName, lastName, id, email, role):
             pass
 
         members_collection.setLayout('member_summary_view')
-        dir.setDefaultPage("members-collection")
+        parent.setDefaultPage("members-collection")
 
         # Hide the collection from navigation.
         members_collection.setExcludeFromNav(True)
