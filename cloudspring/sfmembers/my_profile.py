@@ -2,9 +2,8 @@ from plone.app.portlets.portlets import base
 from zope.interface import implements
 from Products.CMFCore.utils import getToolByName
 from cloudspring.sfmembers.interfaces import IMyProfilePortlet
-
 from zope.formlib import form
-
+import membership
 from plone.memoize.instance import memoize
 from zope.component import getMultiAdapter
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
@@ -38,12 +37,9 @@ class Renderer(base.Renderer):
 
     @memoize
     def _member(self):
-       if self.anonymous: # the user has not logged in
-           return None
-       else:
-           import membership
-           blog = membership.getBlog(self.context)
-           return blog.profile
+        blog = membership.getBlog(self.context)
+        profile = blog.profile
+        return profile
 
     def getUrl(self):
         member = self._member()
@@ -80,6 +76,14 @@ class Renderer(base.Renderer):
 
     @property
     def available(self):
-        return not self.anonymous
-
+        # Test to see if the member profile has been
+        # created.  Hide the portlet if not.
+        try:
+            name = self._member().name
+        except:
+            return False
+        
+        if self.anonymous:
+            return False
+        return True
 

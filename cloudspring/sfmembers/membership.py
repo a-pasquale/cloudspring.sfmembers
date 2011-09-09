@@ -28,6 +28,8 @@ def getHomeUrl(self, id=None, verifyPermission=0):
         return home.getURL()
 
 def getHomePath(context, id=None):
-    return getHome(context, id).getPath()
+    home = getHome(context, id)
+    if home:
+        return home.getPath()
 
 

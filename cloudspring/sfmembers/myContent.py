@@ -40,8 +40,8 @@ class Renderer(base.Renderer):
         self.anonymous = portal_state.anonymous()
         if self.anonymous:
             return
-        self.catalog = getToolByName(context, 'portal_catalog')
         self.home = membership.getHomePath(context)
+        self.catalog = getToolByName(context, 'portal_catalog')
         self.limit = 10
 
     @memoize 
@@ -83,6 +83,6 @@ class Renderer(base.Renderer):
 
     @property
     def available(self):
-        return not self.anonymous
+        return not self.anonymous and self.home
 
 
