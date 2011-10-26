@@ -90,7 +90,7 @@
       }
     });
 
-    $(".member .picture").tooltip({effect:'fade'});
+    $(".member").tooltip({tipClass: 'member_tooltip', effect:'fade'});
 
     $("#my_accordion").tabs("#my_accordion div.pane", {tabs: 'h3', effect: 'slide', event: 'mouseover', initialIndex: null});
     $('ul.tabs').tabs('> div');
