@@ -38,13 +38,13 @@
            <div class="sliding_div">
              <div class="MyContent_edit">
                <a tal:attributes="href item_edit_url">
-                 <img src="/++resource++cloudspring.sfmembers/notepad_16x16-32.png"
+                 <img src="/++resource++cloudspring.sfmembers/notepad_white_16x16-32.png"
                      title="Edit" alt="Edit"/>
                </a>
              </div>
              <div class="MyContent_delete">
                <a tal:attributes="href string:${item_url}/delete_confirmation">
-                 <img src="/++resource++cloudspring.sfmembers/recycle_bin_empty_16x16-32.png"
+                 <img src="/++resource++cloudspring.sfmembers/recycle_bin_empty_white_16x16-32.png"
                      title= "Delete" alt="Delete" />
                 </a>
              </div>
@@ -98,13 +98,13 @@
            <div class="sliding_div">
              <div class="MyContent_edit">
                <a tal:attributes="href item_edit_url">
-                 <img src="/++resource++cloudspring.sfmembers/notepad_16x16-32.png"
+                 <img src="/++resource++cloudspring.sfmembers/notepad_white_16x16-32.png"
                      title="Edit" alt="Edit"/>
                </a>
              </div>
              <div class="MyContent_delete">
                <a tal:attributes="href string:${item_url}/delete_confirmation">
-                 <img src="/++resource++cloudspring.sfmembers/recycle_bin_empty_16x16-32.png"
+                 <img src="/++resource++cloudspring.sfmembers/recycle_bin_empty_white_16x16-32.png"
                      title= "Delete" alt="Delete" />
                 </a>
              </div>
