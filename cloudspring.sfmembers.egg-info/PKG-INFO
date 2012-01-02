@@ -1,0 +1,23 @@
+Metadata-Version: 1.0
+Name: cloudspring.sfmembers
+Version: 1.0
+Summary: A project to synchronize SalesForce accounts and contacts with Plone.
+Home-page: https://cloudspring.svn.beanstalkapp.com/cloudspring_sfmembers/
+Author: Andrew Pasquale
+Author-email: andrew@elytra.net
+License: GPL
+Description: Introduction
+        ============
+        
+        This is an add-on product for Plone 4.1 that provides a membership interface for social networking.
+        Changelog
+        =========
+        
+        1.0dev (unreleased)
+        -------------------
+        
+        - Initial release
+        
+Platform: UNKNOWN
+Classifier: Framework :: Plone
+Classifier: Programming Language :: Python
