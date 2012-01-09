@@ -22,8 +22,8 @@ def getBlog(context, id=None):
     blog = portal_url.unrestrictedTraverse(getHome(context, id).getPath())
     return blog
 
-def getHomeUrl(self, id=None, verifyPermission=0):
-    home = getHome(self.context, id)
+def getHomeUrl(context, id=None, verifyPermission=0):
+    home = getHome(context, id)
     if home is not None:
         return home.getURL()
 
