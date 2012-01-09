@@ -22,7 +22,7 @@ from AccessControl import allow_module
 allow_module('cloudspring.sfmembers.createMemberArea')
 
 MEMBER_SOBJECT_TYPE = 'Contact'
-MEMBER_DIRECTORY = 'members/2011-2012'
+MEMBER_DIRECTORY = 'members'
 MEMBER_DIRECTORY_ID = 'members'
 MEMBER_PORTAL_TYPE = 'cloudspring.sfmembers.Member'
 PUBLISH_ACTION = 'publish-internally'
