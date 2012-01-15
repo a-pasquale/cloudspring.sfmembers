@@ -21,10 +21,12 @@ cloudspring/sfmembers/inlineEditProfile.py
 cloudspring/sfmembers/interfaces.py
 cloudspring/sfmembers/member.py
 cloudspring/sfmembers/membership.py
+cloudspring/sfmembers/myContent.py
 cloudspring/sfmembers/my_profile.py
 cloudspring/sfmembers/organization.py
 cloudspring/sfmembers/profile.py
 cloudspring/sfmembers/project.py
+cloudspring/sfmembers/projects.py
 cloudspring/sfmembers/quickPost.py
 cloudspring/sfmembers/rant.py
 cloudspring/sfmembers/reflection.py

@@ -6,3 +6,11 @@
 compass_app_log.txt
 .sass_cache
 .DS_Store
+
+cloudspring.sfmembers.egg-info/SOURCES.txt
+
+cloudspring.sfmembers.egg-info/SOURCES.txt
+
+cloudspring/sfmembers/browser/interfaces.pyc
+
+cloudspring/sfmembers/browser/views.pyc
