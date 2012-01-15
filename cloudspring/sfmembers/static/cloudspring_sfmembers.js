@@ -8,7 +8,7 @@
       var drawerWidth;
       drawerWidth = $("#drawer").outerWidth();
       if (parseInt($('#drawer').css('left')) === 0) {
-        $('#page').animate({
+        $('#page-wrapper').animate({
           left: 0
         });
         $('#light').animate({
@@ -17,14 +17,11 @@
         $('#drawer_tab').animate({
           left: 0
         });
-        $('#drawer').animate({
+        return $('#drawer').animate({
           left: -drawerWidth
         });
-        return $('#foot-base').animate({
-          left: 0
-        });
       } else {
-        $('#page').animate({
+        $('#page-wrapper').animate({
           left: drawerWidth
         });
         $('#light').animate({
@@ -33,11 +30,8 @@
         $('#drawer_tab').animate({
           left: drawerWidth
         });
-        $('#drawer').animate({
+        return $('#drawer').animate({
           left: 0
-        });
-        return $('#foot-base').animate({
-          left: drawerWidth
         });
       }
     });
@@ -96,6 +90,62 @@
     $('ul.tabs').tabs('> div');
     $('#my-content-tabs').tabs('> div');
     $("#accordion").tabs("#accordion div.pane", {tabs: 'h3', effect: 'slide', event: 'mouseover', initialIndex: null});
+
+
+    // Load the site stream into the drawer
+    $('#pane3').load('/@@pubsub-feed?node=people');
+
+    $('#create-blog-post a').prepOverlay({
+          subtype: 'ajax',
+          filter: '#blog-overlay',
+          config  :  {
+              onLoad: function() {
+                  $.noConflict();
+                  var wizard = $(".pb-ajax #wizard")
+                  // enable tabs that are contained within the wizard
+                  $(wizard).tabs("div.panes > div.pane", function(event, index) {
+                      /* now we are initializeside the onBeforeClick event */
+                      // ensure that the "terms" checkbox    is checked.
+                  });
+                  // get handle to the tabs API
+                  var api = $(wizard).data("tabs");
+   
+                  // "next tab" button
+                  $("button.next", wizard).click(function() {
+                      api.next();
+                  });
+    
+                  // "previous tab" button
+                  $("button.prev", wizard).click(function() {
+                      api.prev();
+                  });
+                  $(document).ready(function() {
+                      $("input#title").clone().prependTo("div#wizard-title");
+                      $("div.ArchetypesKeywordWidget").prependTo("div#wizard-tags");
+                      var widgets = jQuery('.ArchetypesKeywordWidget');
+                      if(!widgets.length){
+                        return;
+                      }
+                      
+                      widgets.eeatags();
+                  });
+                  /*
+                  tinyMCE.init({
+                            // General options
+                            theme : "advanced",
+                            mode : "textareas",
+                  });
+                  var initfunc = kukit && kukit.actionsGlobalRegistry.get("init-tinymce");
+ 
+                  if (initfunc && $('#form\\.text .mce_editable')) {
+                            initfunc({node:{id:'form.text'}});
+                  }
+                  */
+
+              }
+          }
+    });
+
     try {
     $('#name').editInPlace({
       url: './@@inline_edit_view',
@@ -119,7 +169,7 @@
           }
       }
     });
-    return $('#my_website').editInPlace({
+    $('#my_website').editInPlace({
       url: './@@inline_edit_view',
       params: "website",
       success: function(update_value){
@@ -130,5 +180,6 @@
       }
     });}
     catch(err){}
+
   });
 }).call(this);
