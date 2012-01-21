@@ -98,9 +98,13 @@
     $('#create-blog-post a').prepOverlay({
           subtype: 'ajax',
           filter: '#blog-overlay',
+          closeselector: '#overlay-cancel',
           config  :  {
+              closeOnClick: false,
               onLoad: function() {
                   $.noConflict();
+                  $('.pb-ajax #blog-overlay').show();
+                  $('.pb-ajax #blog_entry-base-edit').hide();
                   var wizard = $(".pb-ajax #wizard")
                   // enable tabs that are contained within the wizard
                   $(wizard).tabs("div.panes > div.pane", function(event, index) {
@@ -119,29 +123,43 @@
                   $("button.prev", wizard).click(function() {
                       api.prev();
                   });
+                  $(".pb-ajax input#overlay_save").click(function() {
+                    // Copy the title
+                    var title = $(".pb-ajax #wizard-input-title").val();
+                    $("#archetypes-fieldname-title #title").val(title);
+                    // Copy the content
+                    var content = tinyMCE.get("mce_2").getContent();
+                    $("textarea#text").val(content);
+                    
+                    // Move the keyword tags back
+                    $(".pb-ajax textarea#subject_keywords").appendTo("#fieldset-categorization");
+                    
+                    // Move the post type back
+                    $(".pb-ajax select#assignment").appendTo("#archetypes-fieldname-assignment");
+
+                    // Submit the form
+                    var form = $("#blog_entry-base-edit");
+                    $.post(form.attr('action'), form.serialize());
+                  });
+                  
                   $(document).ready(function() {
-                      $("input#title").clone().prependTo("div#wizard-title");
+                      // Move the select box for post type
+                      $("select#assignment").appendTo("label#wizard-content-type");
+                      // Move the keywords textarea
                       $("div.ArchetypesKeywordWidget").prependTo("div#wizard-tags");
+                      // Initialize the eea.tags widget.
                       var widgets = jQuery('.ArchetypesKeywordWidget');
-                      if(!widgets.length){
-                        return;
-                      }
-                      
+                      if(!widgets.length){ return; }
                       widgets.eeatags();
                   });
-                  /*
                   tinyMCE.init({
                             // General options
                             theme : "advanced",
                             mode : "textareas",
+                            theme_advanced_toolbar_location : "top",
+                            content_css : "/Plone/portal_skins/tinymce/themes/advanced/skins/plone/content.css",
+                            editor_css : "/Plone/portal_skins/tinymce/themes/advanced/skins/plone/ui.css",
                   });
-                  var initfunc = kukit && kukit.actionsGlobalRegistry.get("init-tinymce");
- 
-                  if (initfunc && $('#form\\.text .mce_editable')) {
-                            initfunc({node:{id:'form.text'}});
-                  }
-                  */
-
               }
           }
     });
