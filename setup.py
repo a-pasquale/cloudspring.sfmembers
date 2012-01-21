@@ -25,7 +25,7 @@ setup(name='cloudspring.sfmembers',
       zip_safe=False,
       install_requires=[
           'setuptools',
-          'Plone',
+          'Products.CMFPlone',
           'plone.app.dexterity',
           'collective.autopermission',
           'plone.app.z3cform',

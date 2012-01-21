@@ -39,10 +39,9 @@
         <allow interface=".interfaces.IMemberSummaryView" />
     </class>
 
-    <five:implements
-        class="Products.ATContentTypes.interface.topic.IATTopic"
-        interface=".interfaces.IMemberSummaryView"
-    />
+    <class class="Products.ATContentTypes.interface.topic.IATTopic">
+        <implements interface=".interfaces.IMemberSummaryView" />
+    </class>
 
 <!-- Hide the viewlet for now.  Using the portlet instead.
     <browser:viewlet
