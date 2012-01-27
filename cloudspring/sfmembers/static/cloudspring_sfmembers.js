@@ -2,39 +2,32 @@
   var $;
   $ = jQuery;
   $(function() {
-   $('#drawer_tab').show();
-
+    // Animate the drawer when the drawer tab is clicked.
+    $('#drawer_tab').show();
     $('#drawer_tab').click(function() {
       var drawerWidth;
       drawerWidth = $("#drawer").outerWidth();
       if (parseInt($('#drawer').css('left')) === 0) {
-        $('#page-wrapper').animate({
+        $('#page-wrapper, #light, #drawer_tab').animate({
           left: 0
         });
-        $('#light').animate({
-          left: 0
-        });
-        $('#drawer_tab').animate({
-          left: 0
-        });
-        return $('#drawer').animate({
+        $('#drawer').animate({
           left: -drawerWidth
         });
       } else {
-        $('#page-wrapper').animate({
+        $('#page-wrapper, #light, #drawer_tab').animate({
           left: drawerWidth
         });
-        $('#light').animate({
-          left: drawerWidth / 2
-        });
-        $('#drawer_tab').animate({
-          left: drawerWidth
-        });
-        return $('#drawer').animate({
+        $('#drawer').animate({
           left: 0
         });
       }
     });
+    // Setup tabs for the drawer navigation.
+    $('#drawer_nav ul').tabs("#panes > div");
+
+    /*  don't think this is used currently.
+    */
     $('#quick-post input').tooltip({
       position: "center right",
       offset: [-2, 20],
@@ -42,7 +35,6 @@
       opacity: 0.7
     });
     $('#post-types').tabs('div.post-type-form');
-    $('#drawer_nav ul').tabs("#panes > div");
     $('a.overlayLink').prepOverlay({
       subtype: 'ajax',
       filter: common_content_filter,
@@ -54,6 +46,7 @@
         }
       }
     });
+
 
     // This is for the MyContent portlet
     $(".sliding_div").hide();
@@ -95,7 +88,7 @@
     // Load the site stream into the drawer
     $('#pane3').load('/@@pubsub-feed?node=people');
 
-    $('#create-blog-post a').prepOverlay({
+    $('.create-blog-post a').prepOverlay({
           subtype: 'ajax',
           filter: '#blog-overlay',
           closeselector: '#overlay-cancel',
@@ -139,7 +132,22 @@
 
                     // Submit the form
                     var form = $("#blog_entry-base-edit");
-                    $.post(form.attr('action'), form.serialize());
+                    /*
+                    $.get('/Plone/getHomeFolderUrl', function(data) {
+                      var blog_entry_id = form.attr('action').split('/').slice(-2,-1);
+                      var url = data + "/blog/portal_factory/Blog%20Entry/" + blog_entry_id + "/atct_edit";
+                      $.post(url, form.serialize());
+                    });
+                    */
+                    $.post(form.attr('action'), form.serialize(), function(data) {
+                        $.gritter.add({
+                          title: '<h2>Woohoo!</h2>',
+                          text: 'You wrote something cool.',
+                        });
+                        $(".overlay").fadeOut('slow');
+                        $("#exposeMask").fadeOut('slow');
+                          
+                    });
                   });
                   
                   $(document).ready(function() {

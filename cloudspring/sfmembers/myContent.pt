@@ -139,9 +139,9 @@
       </tal:block>
     </div>
     <ul>
-      <li>
-        <a tal:attributes="href
-            string:${view/getUrl}/blog/createObject?type_name=Blog+Entry">
+      <li class="create-blog-post">
+        <a tal:attributes="class string:link-overlay;
+                           href string:${view/getUrl}/blog/createObject?type_name=Blog+Entry">
             Create new content 
         </a>
       </li>
