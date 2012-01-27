@@ -4,6 +4,8 @@ from zope.interface import implements, Interface
 from Products.CMFCore.utils import getToolByName
 from cloudspring.sfmembers.browser.interfaces import IMemberSummaryView
 from cloudspring.sfmembers.browser.interfaces import IHomeFolderUrlView
+from cloudspring.sfmembers.settings import MEMBER_DIR_PATH
+
 
 class HomeFolderUrlView(BrowserView):
     """
@@ -21,7 +23,10 @@ class HomeFolderUrlView(BrowserView):
         catalog = getToolByName(self.context, 'portal_catalog')
         results = catalog.searchResults(
                         {'portal_type': 'Folder', 
-                        'id': username})
+                        'id': username,
+                        'path': {'query': '/Plone%s' % MEMBER_DIR_PATH, 
+                                 'depth': 1},
+                        })
         for brain in results:
             return brain.getURL()
 

@@ -17,12 +17,12 @@ from Products.CMFPlone.utils import _createObjectByType
 from zope.app.component.hooks import getSite
 from cloudspring.sfmembers.member import IMember
 import membership
+from settings import MEMBER_DIR_PATH
 
 from AccessControl import allow_module
 allow_module('cloudspring.sfmembers.createMemberArea')
 
 MEMBER_SOBJECT_TYPE = 'Contact'
-MEMBER_DIRECTORY = 'members'
 MEMBER_DIRECTORY_ID = 'members'
 MEMBER_PORTAL_TYPE = 'cloudspring.sfmembers.Member'
 PUBLISH_ACTION = 'publish-internally'
@@ -42,21 +42,49 @@ def publish(context, item, state=PUBLISH_ACTION):
     item.reindexObject(idxs=['Title'])
 
 def getDirectoryFolder(context, id):
-    try:
-        # Get the members home folder.
-        member_folder = membership.getBlog(context, id)
-    except (AttributeError, KeyError):
+    # Get the member's home folder.
+    member_folder = membership.getBlog(context, id)
+    if member_folder is None:
         # Folder doesn't exist yet, so create it.
         logger.info("Folder doesn't exist yet, so create it.")
-        portal = getToolByName(context, 'portal_url').getPortalObject()
-        member_dir_path = MEMBER_DIRECTORY.split("/")
-        members_dir = portal.unrestrictedTraverse(member_dir_path)
+        d = getToolByName(context, 'portal_url').getPortalObject()
+        member_dir_path = MEMBER_DIR_PATH.split("/")
+        for dir in member_dir_path:
+            d = d.unrestrictedTraverse(dir)
+        members_dir = d
         members_dir.invokeFactory("Folder", id)
         logger.info("InvokeFactory %s " % id)
         member_folder = getattr(members_dir, id)
         member_folder.setTitle(member_folder.id.title())
         member_folder.reindexObject(idxs=['Title'])
         publish(context, member_folder)
+
+        # Create a collection to display a member directory.
+        # Use the custom view for the collection,
+        # and set it as the default page for the member folder.
+        
+        # get the members collection
+        try:
+            members_collection = members_dir['members-collection']
+        except:
+            members_dir.invokeFactory(id="members-collection", type_name="Topic")
+        members_collection = members_dir['members-collection']
+        try:
+            theCriteria = members_collection.addCriterion('path','ATRelativePathCriterion')
+            theCriteria.setRelativePath("..")
+            theCriteria = members_collection.addCriterion('Type','ATPortalTypeCriterion')
+            theCriteria.setValue("Folder")
+        except:
+            # criteria already set.
+            pass
+
+        members_collection.setLayout('member_summary_view')
+        members_dir.setDefaultPage("members-collection")
+
+        # Hide the collection from navigation.
+        members_collection.setExcludeFromNav(True)
+        # publish and reindex
+        publish(context, members_collection)
 
     return member_folder
 
@@ -197,34 +225,3 @@ def createMemberArea(context, name, firstName, lastName, id, email, role):
         profile = findOrCreateProfileById(context, name, id)
         logger.info("profile.Title: " + profile.title)
         updateProfile(context, profile, name, firstName, lastName, id, email, role)
-        portal = getToolByName(context, 'portal_url').getPortalObject()
-
-        # Create a collection to display a member directory.
-        # Use the custom view for the collection,
-        # and set it as the default page for the member folder.
-        dir = membership.getBlog(context, id)
-        parent = dir.aq_inner.aq_parent
-        # get the members collection
-        try:
-            members_collection = parent['members-collection']
-        except:
-            parent.invokeFactory(id="members-collection", type_name="Topic")
-        members_collection = parent['members-collection']
-        try:
-            theCriteria = members_collection.addCriterion('path','ATRelativePathCriterion')
-            theCriteria.setRelativePath("..")
-            theCriteria = members_collection.addCriterion('Type','ATPortalTypeCriterion')
-            theCriteria.setValue("Folder")
-        except:
-            # criteria already set.
-            pass
-
-        members_collection.setLayout('member_summary_view')
-        parent.setDefaultPage("members-collection")
-
-        # Hide the collection from navigation.
-        members_collection.setExcludeFromNav(True)
-        # publish and reindex
-        publish(context, members_collection)
- 
-        

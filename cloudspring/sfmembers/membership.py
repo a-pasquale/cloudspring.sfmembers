@@ -1,4 +1,5 @@
 from Products.CMFCore.utils import getToolByName
+from settings import MEMBER_DIR_PATH
 
 def getHome(context, id=None):
     if id is None:
@@ -11,7 +12,7 @@ def getHome(context, id=None):
     catalog = getToolByName(context, 'portal_catalog')
     results = catalog.searchResults(
                     {'portal_type': 'Folder', 
-                     'path': {'query': '/Plone/members', 
+                     'path': {'query': "Plone%s" % MEMBER_DIR_PATH, 
                               'depth': 2},
                      'id': id})
     for brain in results:
@@ -19,8 +20,9 @@ def getHome(context, id=None):
 
 def getBlog(context, id=None):
     portal_url = getToolByName(context, "portal_url")
-    blog = portal_url.unrestrictedTraverse(getHome(context, id).getPath())
-    return blog
+    home = getHome(context, id)
+    if home:
+       return portal_url.unrestrictedTraverse(home).getPath()
 
 def getHomeUrl(context, id=None, verifyPermission=0):
     home = getHome(context, id)
