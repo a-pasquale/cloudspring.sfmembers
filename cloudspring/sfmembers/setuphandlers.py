@@ -2,7 +2,7 @@ from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.utils import _createObjectByType
 from Products.CMFCore.WorkflowCore import WorkflowException
 
-PUBLISH_ACTION = "publish-internally"
+PUBLISH_ACTION = "publish"
 
 def deletePloneFolders(p):
     """Delete the standard Plone stuff that we don't need
@@ -57,7 +57,7 @@ def createFolderStructure(portal):
             'children': community_children,
             },
         ]
-    createObjects(portal, parent=portal, children=community_children)
+    createObjects(portal, parent=portal, children=top_folders)
 
 def createObjects(portal, parent, children):
     """This will create new objects, or modify existing ones if id's and type
