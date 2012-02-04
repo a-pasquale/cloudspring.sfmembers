@@ -19,10 +19,13 @@ def getHome(context, id=None):
         return brain
 
 def getBlog(context, id=None):
-    portal_url = getToolByName(context, "portal_url")
-    home = getHome(context, id)
+    d = getToolByName(context, "portal_url")
+    home = getHome(context, id).getPath()
     if home:
-       return portal_url.unrestrictedTraverse(home).getPath()
+        member_dir_path = MEMBER_DIR_PATH.split("/")
+        for dir in member_dir_path:
+            d = d.unrestrictedTraverse(dir)
+        return d.unrestrictedTraverse(home)
 
 def getHomeUrl(context, id=None, verifyPermission=0):
     home = getHome(context, id)
