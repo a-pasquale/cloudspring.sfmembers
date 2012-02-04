@@ -42,8 +42,7 @@
               <span tal:content="context/website"/>
             </a>
           </div>
-          <div tal:omit-tag=""
-               tal:condition="context/food_preferences/output">
+          <div tal:condition="exists:context/food_preferences/output">
             <h4>Food preferences and allergies:</h4>
             <span tal:content="structure context/food_preferences/output"/>
           </div>
@@ -56,33 +55,31 @@
         </ul>
 
         <div class="pane">
-          <div tal:omit-tag=""
-               tal:condition="context/place_of_birth">
+          <div tal:condition="context/place_of_birth">
             <h3>Place of Birth</h3>
             <span tal:content="context/place_of_birth" />
           </div>
-          <div tal:omit-tag=""
-               tal:condition="context/college_major">
+          <div  tal:condition="context/college_major">
             <h3>College Major:</h3>
             <span tal:content="context/college_major" />
           </div>
-          <div tal:condition="context/background/output">
+          <div tal:condition="exists:context/background/output">
             <h3>Pre-law school relevant background: academic, personal or work experiences:</h3>
             <span tal:content="structure context/background/output" />
           </div>
-          <div tal:condition="context/work_experiences/output">
+          <div tal:condition="exists:context/work_experiences/output">
             <h3>Work experiences in law school:</h3>
             <span tal:content="structure context/work_experiences/output" />
           </div>
-          <div tal:condition="context/writing_projects/output">
+          <div tal:condition="exists:context/writing_projects/output">
             <h3>Writing projects or articles in law school</h3>
             <span tal:content="structure context/writing_projects/output" />
           </div>
-          <div tal:condition="context/interests/output">
+          <div tal:condition="exists:context/interests/output">
             <h3>Interests and aspirations</h3>
             <span tal:content="structure context/interests/output" />
           </div>
-          <div tal:condition="context/leadership/output">
+          <div tal:condition="exists:context/leadership/output">
             <h3>Leadership and/or team experience</h3>
             <span tal:content="structure context/leadership/output" />
           </div>
