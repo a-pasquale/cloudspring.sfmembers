@@ -14,12 +14,22 @@ class assignment(ExtensionField, StringField):
 class ProjectField(ExtensionField, LinesField):
     pass
 
+class postType(ExtensionField, StringField):
+    pass
+
+
 class BlogExtender(object):
     adapts(ATNewsItem)
     implements(ISchemaExtender)
 
 
     fields = [ 
+
+        postType(name=_(u"postType"),
+                 title=_(u"Post Type"),
+                 required=False,
+                 widget=StringWidget(),
+        ),
 
         assignment(name=_(u"assignment"),
                    title=_(u"Assignment"),

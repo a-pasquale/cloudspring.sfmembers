@@ -4,12 +4,6 @@
         <indexed_attr value="sf_id"/>
     </index>
     <column value="sf_id"/>
-
-    <index name="BlogTypeField" meta_type="KeywordIndex">
-        <indexed_attr value="BlogTypeField" />
-    </index>
-    <column value="BlogTypeField" />
-
     <index name="AssignmentNumberField" meta_type="FieldIndex">
         <indexed_attr value="AssignmentNumberField" />
     </index>
@@ -27,6 +21,11 @@
         <indexed_attr value="assignment"/>
     </index>
     <column value="assignment"/>
+    <column value="postType"/>
+    <index name="postType" meta_type="FieldIndex">
+        <indexed_attr value="postType"/>
+    </index>
+    <column value="postType"/>
     <!--
     <index name="projects" meta_type="FieldIndex">
         <indexed_attr value="projects"/>

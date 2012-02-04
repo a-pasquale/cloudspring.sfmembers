@@ -2,10 +2,10 @@
 <atcttool>
  <topic_indexes>
     <index
-        name="BlogTypeField"
+        name="postType"
         description="A field that describes the type of blog entry."
         enabled="True"
-        friendlyName="Blog type">
+        friendlyName="postType">
         <criteria>ATSelectionCriterion</criteria>
         <criteria>ATSimpleStringCriterion</criteria>
         <criteria>ATListCriterion</criteria>
@@ -58,11 +58,6 @@
         description="A field that describes the member's role."
         enabled="True"
         friendlyName="Member role"/>
-  <metadata
-    name="BlogTypeField"
-        description="A field that describes the type of blog entry."
-        enabled="True"
-        friendlyName="Blog type"/>
   <metadata
     name="AssignmentNumberField"
         description="A field that contains the assignment number."
