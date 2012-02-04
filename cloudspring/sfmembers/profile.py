@@ -9,6 +9,7 @@ from zope.component import getMultiAdapter
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from Products.CMFPlone import PloneMessageFactory as _
 import membership
+from cloudspring.sfmembers.settings import MEMBER_DIR_PATH
 
 class Assignment(base.Assignment):
     implements(IProfilePortlet)
@@ -35,25 +36,23 @@ class Renderer(base.Renderer):
 
     @memoize
     def getUID(self):
-        pattern = 'members/[\w-]*/(\w*)/?.*'
+        str_list = [MEMBER_DIR_PATH, '/([\w-]*)/\w*/?.*']
+        pattern = ''.join(str_list)
         match = re.search(pattern, self.context.absolute_url())
         uid = match.group(1)
         return uid
 
     @memoize
     def getMemberDir(self):
-        pattern = 'members/([\w-]*)/.*'
+        pattern = MEMBER_DIR_PATH.join('/([\w-]*)/.*')
         match = re.search(pattern, self.context.absolute_url())
         path = match.group(1)
         return path
 
     @memoize
     def _member(self):
-        portal = getToolByName(self.context, 'portal_url').getPortalObject()
-        uid = self.getUID()
-        path = self.getMemberDir()
-        profile = portal.members[path][uid].profile
-        return profile
+        home = membership.getBlog(self.context, self.getUID())
+        return home.profile
 
     def isHomeFolder(self):
         home = membership.getHomeUrl(self.context)
@@ -67,7 +66,7 @@ class Renderer(base.Renderer):
 
     def getUrl(self):
         member = self._member()
-        return member.aq_inner.aq_parent.absolute_url_path()
+        return member.aq_inner.aq_parent.absolute_url()
 
     def getFirstName(self):
         member = self._member()
