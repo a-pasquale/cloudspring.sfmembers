@@ -33,30 +33,34 @@
           </div>
         </form>
         -->
+        <div class="profile_overlay">
           <a tal:attributes="href string:${view/getUrl}/profile; title view/getName">
             <img tal:define="member view/_member; scale member/@@images"
                  tal:replace="structure python: scale.scale('picture', width=250, height=250).tag()" 
                  tal:condition="python: view.getPicture()">
             <img tal:attributes="src string:/++resource++cloudspring.sfmembers/default_profile.jpg" alt="" tal:condition="python: not view.getPicture()" width="200"/>
           </a>
-
+        </div>
         <br clear="both" />
         <div id="my_email" tal:content="view/getEmail" tal:omit-tag="not:exists:view/getEmail"/>
         <div id="my_website" tal:content="view/getWebsite" tal:omit-tag="not:exists:view/getWebsite"/>
       </div>
       <ul>
-          <li><a class="overlayLink" tal:attributes="href
-              string:${view/getUrl}/profile">
-              View your profile</a>
-          </li>
-          <li><a tal:attributes="href
-              string:${view/getUrl}/profile/edit">
-              Edit your profile</a>
-          </li>
-          <li>
-              <a class="overlayLink"
-                 href="/Plone/@@change-password">Change your password</a>
-          </li>
+        <li class="profile_overlay">
+          <a tal:attributes="href string:${view/getUrl}/profile">
+             View your profile
+          </a>
+        </li>
+        <li>
+          <a tal:attributes="href string:${view/getUrl}/profile/edit">
+            Edit your profile
+          </a>
+        </li>
+        <li>
+          <a class="overlayLink"
+            href="/Plone/@@change-password">Change your password
+          </a>
+        </li>
       </ul>
     </dd>
 
