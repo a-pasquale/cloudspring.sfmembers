@@ -140,19 +140,18 @@
     </div>
     <ul>
       <li class="create-blog-post">
-        <a tal:attributes="class string:link-overlay;
-                           href string:${view/getUrl}/blog/createObject?type_name=Blog+Entry">
-            Create new content 
+        <a tal:attributes="href string:${view/getUrl}/blog/createObject?type_name=Blog+Entry">
+          Create new content 
         </a>
       </li>
       <li>
         <a tal:attributes="href string:${view/getUrl}">
-              Go to my blog
+          Go to my blog
         </a>
       </li>
       <li>
         <a tal:attributes="href string:${view/getUrl}/drafts">
-              Go to my drafts 
+          Go to my drafts 
         </a>
       </li>
     </ul>
