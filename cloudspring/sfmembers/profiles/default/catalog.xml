@@ -8,11 +8,6 @@
         <indexed_attr value="AssignmentNumberField" />
     </index>
     <column value="AssignmentNumberField" />
-    <index name="ProjectField" meta_type="KeywordIndex">
-        <indexed_attr value="ProjectField" />
-    </index>
-    <column value="ProjectField" />
-    
     <index name="lastName" meta_type="FieldIndex">
         <indexed_attr value="lastName"/>
     </index>
@@ -26,10 +21,4 @@
         <indexed_attr value="postType"/>
     </index>
     <column value="postType"/>
-    <!--
-    <index name="projects" meta_type="FieldIndex">
-        <indexed_attr value="projects"/>
-    </index>
-    <column value="projects"/>
-    -->
 </object>

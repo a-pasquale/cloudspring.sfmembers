@@ -146,3 +146,10 @@ def setupVarious(context):
     # Add additional setup code here
     deletePloneFolders(portal)
     createFolderStructure(portal)
+    # These remove any old indices that might be around from 
+    # previous versions of cloudspring.sfmembers
+    smart_folder_tool = getToolByName(context, 'portal_atct')
+    smart_folder_tool.removeIndex("ProjectField")
+    smart_folder_tool.removeMetadata("ProjectField")
+    smart_folder_tool.removeIndex("projects")
+    smart_folder_tool.removeMetadata("projects")

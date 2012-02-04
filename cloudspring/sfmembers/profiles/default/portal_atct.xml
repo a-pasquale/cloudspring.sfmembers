@@ -19,26 +19,10 @@
         <criteria>ATSimpleStringCriterion</criteria>
     </index> 
     <index
-        name="ProjectField"
-        description="A field that contains the project name."
-        enabled="True"
-        friendlyName="Project">
-        <criteria>ATSelectionCriterion</criteria>
-        <criteria>ATSimpleStringCriterion</criteria>
-    </index>
-    <index
         name="assignment"
         description="A field that contains the assignment name."
         enabled="True"
         friendlyName="Assignment">
-        <criteria>ATSelectionCriterion</criteria>
-        <criteria>ATSimpleStringCriterion</criteria>
-    </index>
-    <index
-        name="projects"
-        description="A field that contains the projects name."
-        enabled="True"
-        friendlyName="Projects">
         <criteria>ATSelectionCriterion</criteria>
         <criteria>ATSimpleStringCriterion</criteria>
     </index>
@@ -64,20 +48,10 @@
         enabled="True"
         friendlyName="Assignment number"/>
   <metadata
-    name="ProjectField"
-        description="A field that contains the project name."
-        enabled="True"
-        friendlyName="Project"/>
-  <metadata
     name="assignment"
         description="A field that contains the assignment name."
         enabled="True"
         friendlyName="Assignment"/>
-  <metadata
-    name="projects"
-        description="A field that contains the projects name."
-        enabled="True"
-        friendlyName="Projects"/>
   <metadata
     name="lastName"
         description="Last Name"
