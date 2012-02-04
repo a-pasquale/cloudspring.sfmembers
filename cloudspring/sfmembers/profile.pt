@@ -20,7 +20,7 @@
 
     <dd class="portletItem">
       <div>
-        <div class="_overlay">
+        <div class="profile_overlay">
           <a tal:attributes="href string:${view/getUrl}/profile" title="View Profile">
              <img tal:define="member view/_member; scale member/@@images"
                  tal:replace="structure python: scale.scale('picture', width=200, height=200).tag()" 
@@ -40,7 +40,7 @@
                tal:content="view/getWebsite" />
           </li>
           <li>
-            <div class="_overlay">
+            <div class="profile_overlay">
               <a tal:attributes="href string:${view/getUrl}/profile">
                 <span tal:content="string:${view/getFirstName}'s profile" />
               </a>
