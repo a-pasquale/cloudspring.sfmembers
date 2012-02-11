@@ -97,105 +97,131 @@
           config  :  {
               closeOnClick: false,
               onLoad: function() {
-                  $.noConflict();
+                  var $ = jQuery_1_7_1;
                   $('.pb-ajax #blog-overlay').show();
-                  $('.pb-ajax #blog_entry-base-edit').hide();
-                  var wizard = $(".pb-ajax #wizard")
-                  // enable tabs that are contained within the wizard
-                  $(wizard).tabs("div.panes > div.pane", function(event, index) {
-                    var title = $('.pb-ajax #wizard-input-title'); 
-                    if (index > 0 && title.val() == '') {
-                      /* now we are initializeside the onBeforeClick event */
-                      // ensure that there is a title for the post.
-                      title.parent().addClass("error");
-                      // when false is returned, the user cannot advance to the  next tab
-                      return false;
-                    }
+                  //$('.pb-ajax #blog_entry-base-edit').hide();
+                  var tags = ["\n"];
 
-                    // everything is ok. remove possible red highlight from the terms
-                    title.parent().removeClass("error");
-                  });
-                  // get handle to the tabs API
-                  var api = $(wizard).data("tabs");
-                  // "next tab" button
-                  $("button.next", wizard).click(function() {
-                      api.next();
-                  });
-                  // "previous tab" button
-                  $("button.prev", wizard).click(function() {
-                      api.prev();
-                  });
+                  function validate() {
+                      if ($(".pb-ajax #wizard-input-title").val() == '') {
+                          $(".pb-ajax #wizard-content").collapse("show");
+                          $(".pb-ajax #wizard-content .alert").show();
+                          $(".pb-ajax #wizard-post-type").collapse("hide");
+                          $(".pb-ajax #wizard-tags").collapse("hide");
+                          $(".pb-ajax #wizard-content .alert").show();
+                          $(".pb-ajax #wizard-input-title").focus();
+                          return false;
+                      } 
+                      return true;
+                  }
 
                   function handleContentCreation(state) {
-                    // Copy the title
-                    var title = $(".pb-ajax #wizard-input-title").val();
-                    $("#archetypes-fieldname-title #title").val(title);
-                    // Copy the content
-                    var mce_instance = $('.pb-ajax #wizard-content .ploneSkin textarea').attr('id');
-                    var content = tinyMCE.get(mce_instance).getContent();
-                    $("textarea#text").val(content);
-                    
-                    // Move the keyword tags back
-                    $(".pb-ajax textarea#subject_keywords").appendTo("#fieldset-categorization");
-                    
-                    // Submit the form
-                    var form = $("#blog_entry-base-edit");
-                    $.ajax( {
-                        url: form.attr('action'), 
-                        type: "post",
-                        data: form.serialize(), 
-                        success: function(data) {
-                          $(".overlay").fadeOut('slow');
-                          $("#exposeMask").fadeOut('slow');
-                          $(".overlay-ajax").remove();
-                          tinymce.EditorManager.execCommand('mceRemoveControl',true, mce_instance);
-                          $("#wizard-tags #archetypes-fieldname-subject").remove();
-                        },
-                        complete: function(data, textStatus) {
-                          if (state == "draft") {
-                            // CHANGE ME to private workflow action
-                            var post_url = $("#contentview-view a", data.responseText).attr('href') + '/content_status_modify?workflow_action=publish';
-                            $.ajax( {
-                              url: post_url,
-                              success: function(data) {
-                                $.gritter.add({
-                                  title: 'Saved as a draft',
-                                  text: "Don't forget to finish me later."
+                    if (validate()) {
+                      // Copy the title
+                      var title = $(".pb-ajax #wizard-input-title").val();
+                      $("#archetypes-fieldname-title #title").val(title);
+                      // Copy the content
+                      var mce_instance = $('.pb-ajax #wizard-content .ploneSkin textarea').attr('id');
+                      var content = tinyMCE.get(mce_instance).getContent();
+                      console.log("content: " + content);
+                      $("textarea[name='text']").val(content);
+                      console.log("textarea: " + $("textarea[name='text']").val());
+                      
+                      // Append category tags to the subject_keywords textarea
+                      $(".pb-ajax textarea[name='subject_keywords:lines']").val( $(".pb-ajax textarea[name='subject_keywords:lines']").val() + tags.join("\n") );
+                      // Move the keyword tags back
+                      $(".pb-ajax textarea[name='subject_keywords:lines']").appendTo("#fieldset-categorization");
+                      
+                      // Submit the form
+                      var form = $("#blog_entry-base-edit");
+                      $.ajax( {
+                          url: form.attr('action'), 
+                          type: "post",
+                          data: form.serialize(), 
+                          success: function(data) {
+                            $("#exposeMask").fadeOut('slow');
+                            tinymce.EditorManager.execCommand('mceRemoveControl',true, mce_instance);
+                          },
+                          complete: function(data, textStatus) {
+                            if (state == "draft") {
+                              // CHANGE ME to private workflow action
+                              var draft_url = $("#contentview-view a", data.responseText).attr('href') + '/content_status_modify?workflow_action=publish';
+                              $.ajax( {
+                                url: draft_url,
+                                success: function(data) {
+                                  jQuery.gritter.add({
+                                    title: 'Saved as a draft',
+                                    text: "Don't forget to finish me later."
+                                  });
+                                }
+                              });
+                            } else {
+                              // Default action is to make publicly available.
+                              // Give user a message saying post succeeded.
+                              if (textStatus == "success") {
+                                jQuery.gritter.add({
+                                  title: '<h2>Woohoo!</h2>',
+                                  text: 'You wrote something cool.'
+                                });
+                              } else {
+                                jQuery.gritter.add({
+                                  title: '<h2>Uh oh!</h2>',
+                                  text: 'Something went wrong.  The server responded with ' + textStatus + '.  Please contact the site administrator.'
                                 });
                               }
-                            });
-                          } else {
-                            // Default action is to make publicly available.
-                            // Give user a message saying post succeeded.
-                            if (data.textStatus == "OK") {
-                              $.gritter.add({
-                                title: '<h2>Woohoo!</h2>',
-                                text: 'You wrote something cool.',
-                              });
-                            };
+                            }
+                            $(".overlay-ajax").remove();
                           }
-                        }
-                    });
-
+                      });
+                    }
                   }
 
                   $(".pb-ajax .post-type").click(function() {
-                    // When you click on a post type, store that type
-                    // in the content item and move to the next tab.
-                    $("input#postType").val($(this).data("post-type"));
-                    api.next();
+                      // When you click on a post type, store that type
+                      // in the content item and move to the next tab.
+                      $("input#postType").val($(this).data("post-type"));
+                      $(".pb-ajax #wizard-content").collapse('show');
+                      $(".pb-ajax #wizard-post-type").collapse('hide');
+                      $(".pb-ajax #wizard-input-title").focus();
+                  });
+
+                  $(".pb-ajax #wizard-input-title").blur(function() {
+                      if ($(".pb-ajax #wizard-input-title").val() == '') {
+                          $(".pb-ajax #wizard-content .alert").show();
+                          $(".pb-ajax #wizard-input-title").focus();
+                      } else {
+                          $(".pb-ajax #wizard-content .alert").hide();
+                      }
                   });
                     
-                  $(".pb-ajax input#overlay_save").click(function() {
-                    handleContentCreation();
+                  $(".pb-ajax a#overlay_save").click(function() {
+                      handleContentCreation();
                   });
-                  $(".pb-ajax input#overlay_draft").click(function() {
-                    var data = handleContentCreation("draft");
+                  $(".pb-ajax a#overlay_draft").click(function() {
+                      handleContentCreation("draft");
+                  });
+
+                  // Add tags from the tag cloud to the autocomplete tokeninput field.
+                  $('.pb-ajax .vaporized-tag a').click(function(e) {
+                      e.preventDefault();
+                      var tag = $(this).text();
+                      jQuery(".pb-ajax textarea[name='subject_keywords:lines']").tokenInput("add", {id: tag, name: tag});
+                  });
+
+                  // Add tags from the categories buttons to the autocomplete tokeninput field.
+                  $('.pb-ajax #wizard-tags button').click(function(e) {
+                      var tag = $(this).text();
+                      if ($(this).hasClass("active")) {
+                          var idx = tags.indexOf(tag);
+                          if (idx!=-1) tags.splice(idx, 1);
+                      } else {
+                          tags.push(tag);
+                      }
                   });
                   
                   $(document).ready(function() {
                       // Move the keywords textarea
-                      $("div.ArchetypesKeywordWidget").prependTo("div#wizard-tags");
+                      $("div.ArchetypesKeywordWidget").appendTo(".wizard-tags-left");
                       // Initialize the eea.tags widget.
                       var widgets = jQuery('.ArchetypesKeywordWidget');
                       if(!widgets.length){ return; }
