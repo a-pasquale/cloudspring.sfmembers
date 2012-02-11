@@ -99,7 +99,7 @@
               onLoad: function() {
                   var $ = jQuery_1_7_1;
                   $('.pb-ajax #blog-overlay').show();
-                  //$('.pb-ajax #blog_entry-base-edit').hide();
+                  $('.pb-ajax #blog_entry-base-edit').hide();
                   var tags = ["\n"];
 
                   function validate() {
@@ -123,9 +123,7 @@
                       // Copy the content
                       var mce_instance = $('.pb-ajax #wizard-content .ploneSkin textarea').attr('id');
                       var content = tinyMCE.get(mce_instance).getContent();
-                      console.log("content: " + content);
                       $("textarea[name='text']").val(content);
-                      console.log("textarea: " + $("textarea[name='text']").val());
                       
                       // Append category tags to the subject_keywords textarea
                       $(".pb-ajax textarea[name='subject_keywords:lines']").val( $(".pb-ajax textarea[name='subject_keywords:lines']").val() + tags.join("\n") );
