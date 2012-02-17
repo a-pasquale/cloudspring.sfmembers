@@ -20,12 +20,12 @@ def getHome(context, id=None):
 
 def getBlog(context, id=None):
     d = getToolByName(context, "portal_url")
-    home = getHome(context, id).getPath()
+    home = getHome(context, id)
     if home:
         member_dir_path = MEMBER_DIR_PATH.split("/")
         for dir in member_dir_path:
             d = d.unrestrictedTraverse(dir)
-        return d.unrestrictedTraverse(home)
+        return d.unrestrictedTraverse(home.getPath())
 
 def getHomeUrl(context, id=None, verifyPermission=0):
     home = getHome(context, id)
